@@ -5,15 +5,16 @@ import App from './App'
 import router from './router'
 import Vuesax from 'vuesax'
 
+
 //Если использовать компоненты BootstrapVue включить!
-//import BootstrapVue from 'bootstrap-vue'
-//import 'bootstrap/dist/css/bootstrap.css'
-//import 'bootstrap-vue/dist/bootstrap-vue.css'
+import BootstrapVue from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'vuesax/dist/vuesax.css' //vuesax styles
 
 
 //Если использовать компоненты BootstrapVue включить!
-//Vue.use(BootstrapVue);
+Vue.use(BootstrapVue);
 Vue.use(Vuesax)
 
 Vue.config.productionTip = false
