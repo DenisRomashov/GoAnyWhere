@@ -124,10 +124,13 @@
 
     </b-row>
   </b-container>
+  <p></p>
+  <footerone/>
   </div>
 </template>
 
 <script>
+import footerone from './footerone'
 export default {
   data () {
     return {
@@ -166,6 +169,10 @@ export default {
       this.show = false;
       this.$nextTick(() => { this.show = true });
     }
+  },
+
+  components: {
+    footerone
   }
 }
 </script>
