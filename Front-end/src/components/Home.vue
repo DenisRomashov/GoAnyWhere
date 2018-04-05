@@ -12,7 +12,7 @@
       <b-navbar-nav class="ml-auto">
 
 
-        <div>
+        <!-- <div>
           <b-form inline>
             <label class="sr-only" for="inlineInputUsername">Username</label>
               <b-input class="xs-2 mr-sm-2 mb-sm-0" id="inlineInputUsername" placeholder="Username" />
@@ -26,21 +26,68 @@
                 </router-link>
 
               </b-form>
-            </div>
+            </div> -->
+
+            <div>
+              <b-form inline @submit="onSubmit" v-if="show">
+                <label class="sr-only" for="inlineInputUsername">Username</label>
+                  <b-input class="xs-2 mr-sm-2 mb-sm-0"
+                    id="inlineInputUsername"
+                    type="text"
+                    v-model.trim = "form.username"
+                    placeholder="Username"/>
+                <label class="sr-only" for="inlineInputPassword">Password</label>
+                  <b-input-group left="@" class="mb-2 mr-sm-2 mb-sm-0">
+                      <b-input id="inlineInputPassword"
+                          type="password"
+                          v-model="form.password"
+                          placeholder="Password" />
+                  </b-input-group>
+                    <b-button size="" type="submit" variant="outline-primary">Войти</b-button>
+                    <router-link :to="{ path: 'registration' }">
+                      <b-button size="" variant="outline-danger">Регистрация</b-button>
+                    </router-link>
+
+                  </b-form>
+                </div>
+
+
         </b-navbar-nav>
     </b-navbar>
     <!--Добавление карусели с помощью компонента carousel-->
     <carousel/>
     <!-- /////////////////////////////////////////////// -->
 
+
+    <footerone/>
   </div>
 </template>
 
 <script>
 import Carousel from './Carousel'
+import footerone from './footerone'
 export default {
+  data() {
+    return {
+      form: {
+        username: '',
+        password: ''
+      },
+      show: true
+    }
+  },
+  methods: {
+    onSubmit (evt) {
+      evt.preventDefault();
+      alert(JSON.stringify(this.form));
+      //console.log(JSON.stringify(this.form));
+      //this.show = false; //скрыть после отправки данных
+    }
+  },
+  
   components: {
-    Carousel
+    Carousel,
+    footerone
   }
 }
 </script>
