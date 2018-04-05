@@ -12,16 +12,16 @@
                   <div class="col-sm-2">
                       <h5>Get started</h5>
                       <ul>
-                          <li><a href="#">Home</a></li>
-                          <li><a href="#">Sign up</a></li>
-                          <li><a href="#">Downloads</a></li>
+                          <li><a href="#">Главная</a></li>
+                          <li><a href="#">Зарегистрироваться</a></li>
+                          <li><a href="#">Войти</a></li>
                       </ul>
                   </div>
                   <div class="col-sm-2">
                       <h5>About us</h5>
                       <ul>
-                          <li><a href="#">Company Information</a></li>
-                          <li><a href="#">Contact us</a></li>
+                          <li><a href="#">Информация о нас</a></li>
+                          <li><a href="#">Контакты</a></li>
                           <li><a href="#">Reviews</a></li>
                       </ul>
                   </div>

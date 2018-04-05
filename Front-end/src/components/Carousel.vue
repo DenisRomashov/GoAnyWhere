@@ -14,14 +14,15 @@
     >
 
       <!-- Text slides with image -->
-      <b-carousel-slide caption="First slide"
-                        text="Nulla vitae elit libero, a pharetra augue mollis interdum."
+      <b-carousel-slide caption="GoAnyWhere - Click & Meet"
+                        text="Найди то, что тебе по душе!"
                         img-src="https://lorempixel.com/1024/480/technics/2/"
       ></b-carousel-slide>
 
       <!-- Slides with custom text -->
       <b-carousel-slide img-src="https://lorempixel.com/1024/480/technics/4/">
-        <h1>Hello world!</h1>
+        <h1>GoAnyWhere Project 2018 ©</h1>
+        <h3>Делай, учись, делись, меняй (do, learn, share, change)</h3>
       </b-carousel-slide>
 
       <!-- Slides with image only -->
@@ -36,11 +37,12 @@
       </b-carousel-slide>
 
       <!-- Slide with blank fluid image to maintain slide aspect ratio -->
-      <b-carousel-slide caption="Blank Image" img-blank img-alt="Blank image">
+      <b-carousel-slide caption="Делай что-нибудь" img-blank img-alt="Blank image">
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-          eros felis, tincidunt a tincidunt eget, convallis vel est. Ut pellentesque
-          ut lacus vel interdum.
+          Это значит, что нельзя сидеть на месте и ждать, пока другой реализует интересную идею,
+          родившуюся у тебя в голове. Какой бы сумасбродной ни была мысль – делись ею, ищи единомышленников,
+          думайте как реализовать ее, встречайтесь, организовывайте.
+          Самое главное – это понять, что ты не одинок и в любом случае найдутся люди, готовые тебя поддержать.
         </p>
       </b-carousel-slide>
 
