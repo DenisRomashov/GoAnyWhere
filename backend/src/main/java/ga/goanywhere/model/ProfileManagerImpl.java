@@ -3,10 +3,8 @@ package ga.goanywhere.model;
 
 import ga.goanywhere.dao.UserEntity;
 import lombok.NoArgsConstructor;
-import org.apache.catalina.User;
 import org.hibernate.Session;
 
-import java.util.Date;
 import java.util.List;
 
 @NoArgsConstructor

@@ -15,7 +15,8 @@ public class RegisterController {
 
 
     @PostMapping("/register")
-    public void register(@RequestBody UserEntity user){
+    public @ResponseBody String register(@RequestBody UserEntity user){
         registrationManager.createUser(user.getUsername(),  user.getPassword());
+        return "Done";
     }
 }
