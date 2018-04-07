@@ -25,6 +25,7 @@ public class SessionFactoryUtil {
         catch (Throwable ex) {
             // Make sure you log the exception, as it might be swallowed
             System.err.println("Initial SessionFactory creation failed." + ex);
+            //log.error();
             throw new ExceptionInInitializerError(ex);
         }
     }

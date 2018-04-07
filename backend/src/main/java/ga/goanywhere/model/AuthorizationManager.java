@@ -1,5 +1,7 @@
 package ga.goanywhere.model;
 
+import java.math.BigInteger;
+
 public interface AuthorizationManager {
-    Long logIn(String username, String password);
+    BigInteger logIn(String username, String password);
 }

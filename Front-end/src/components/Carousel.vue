@@ -16,28 +16,25 @@
       <!-- Text slides with image -->
       <b-carousel-slide caption="GoAnyWhere - Click & Meet"
                         text="Найди то, что тебе по душе!"
-                        img-src="https://lorempixel.com/1024/480/technics/2/"
-      ></b-carousel-slide>
+                        class="slide1"
+                        img-blank img-alt="Blank image">
+                        <router-link :to="{ path: 'registration' }">
+                            <b-button size="" variant="danger">Регистрация</b-button>
+                        </router-link>
+      </b-carousel-slide>
 
       <!-- Slides with custom text -->
-      <b-carousel-slide img-src="https://lorempixel.com/1024/480/technics/4/">
+      <b-carousel-slide img-blank img-alt="Blank image" class="slide2">
         <h1>GoAnyWhere Project 2018 ©</h1>
         <h3>Делай, учись, делись, меняй (do, learn, share, change)</h3>
       </b-carousel-slide>
 
       <!-- Slides with image only -->
-      <b-carousel-slide img-src="https://lorempixel.com/1024/480/technics/8/">
-      </b-carousel-slide>
-
-      <!-- Slides with img slot -->
-      <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
-      <b-carousel-slide>
-        <img slot="img" class="d-block img-fluid w-100" width="1024" height="480"
-             src="https://lorempixel.com/1024/480/technics/5/" alt="image slot">
+      <b-carousel-slide img-blank img-alt="Blank image" class="slide3" >
       </b-carousel-slide>
 
       <!-- Slide with blank fluid image to maintain slide aspect ratio -->
-      <b-carousel-slide caption="Делай что-нибудь" img-blank img-alt="Blank image">
+      <b-carousel-slide caption="Делай что-нибудь" img-blank img-alt="Blank image" class="slide4" >
         <p>
           Это значит, что нельзя сидеть на месте и ждать, пока другой реализует интересную идею,
           родившуюся у тебя в голове. Какой бы сумасбродной ни была мысль – делись ею, ищи единомышленников,
@@ -70,3 +67,26 @@ export default {
   }
 }
 </script>
+
+<style lang="css">
+.slide1 {
+  background-image: url("../assets/1.jpg");
+  background-size: cover;
+
+}
+.slide2 {
+  background-image: url("../assets/2.jpg");
+  background-size: cover;
+
+}
+.slide3 {
+  background-image: url("../assets/3.jpg");
+  background-size: cover;
+
+}
+.slide4 {
+  background-image: url("../assets/4.jpg");
+  background-size: cover;
+
+}
+</style>

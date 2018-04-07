@@ -6,6 +6,7 @@ import org.hibernate.Session;
 
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.DatatypeConverter;
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -15,7 +16,8 @@ public class AuthorizationManagerImpl implements AuthorizationManager {
 
 
     @Override
-    public Long logIn(@NotNull String username,@NotNull String password) {
+    public //Long
+    BigInteger logIn(@NotNull String username, @NotNull String password) {
         String hash;
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -25,12 +27,15 @@ public class AuthorizationManagerImpl implements AuthorizationManager {
                     .printHexBinary(digest).toUpperCase();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-            return 0L;
+            return BigInteger.ZERO;
         }
         Session session = SessionFactoryUtil.getSession();
+        //Если мы всегда будем ожидать одного пользователя на выходе - зачем нам тут List?
         List<UserEntity> userEntityList = session.createQuery("from UserEntity where username = \'"
-                + username + "\' and password = \'" + hash + "\'").list();
+                + username + "\' and password = \'" + hash + "\'").list();//Зачем тут нужен на вход пароль? Имя пользователя должно быть уникальным
         session.close();
+        //return userEntityList.size() == 1 ? userEntiryList.get(0) : 0L;
+
         if (userEntityList.size() == 1) {
             return userEntityList.get(0).getId();
         } else {

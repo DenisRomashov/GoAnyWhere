@@ -11,7 +11,7 @@ import java.util.Objects;
 @Setter
 @Entity
 @Table(name = "user", schema = "goanywhere", catalog = "")
-public class UserEntity {
+public class    UserEntity {
     @Id
     @GeneratedValue
     @Column(name = "id")

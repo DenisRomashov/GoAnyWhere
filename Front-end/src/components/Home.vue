@@ -4,7 +4,7 @@
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
 
-        <b-navbar-brand href="#">GoAnyWhere</b-navbar-brand>
+        <b-navbar-brand href="/">GoAnyWhere</b-navbar-brand>
 
       <b-button size="" variant="outline-danger">О нас</b-button>
 
@@ -84,7 +84,7 @@ export default {
       //this.show = false; //скрыть после отправки данных
     }
   },
-  
+
   components: {
     Carousel,
     footerone

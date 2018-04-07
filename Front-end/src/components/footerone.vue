@@ -5,7 +5,7 @@
           <div class="container">
               <div class="row">
                   <div class="col-sm-3">
-                      <h2 class="logo"><a href="#"> GAW </a></h2>
+                      <h2 class="logo"><a href="/"> GAW </a></h2>
                       <h3>GoAnyWhere</h3>
                       <p>Click & meet</p>
                   </div>
