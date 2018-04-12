@@ -1,6 +1,6 @@
-package ga.goanywhere.controller;
+package ga.goanywhere.controllers;
 
-import ga.goanywhere.dao.UserEntity;
+import ga.goanywhere.entities.UserEntity;
 import ga.goanywhere.model.ProfileManager;
 import ga.goanywhere.model.ProfileManagerImpl;
 import org.springframework.stereotype.Controller;
@@ -18,6 +18,6 @@ public class AccountController {
     @PostMapping("/user")
     public @ResponseBody String changeInfo(@RequestBody UserEntity userEntity) {
         profileManager.updateUserInfo(userEntity.getId(), userEntity);
-        return "Salo";
+        return "Done";
     }
 }

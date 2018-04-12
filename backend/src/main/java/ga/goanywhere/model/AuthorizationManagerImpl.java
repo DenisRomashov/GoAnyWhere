@@ -1,40 +1,45 @@
 package ga.goanywhere.model;
 
-import ga.goanywhere.dao.UserEntity;
+import ga.goanywhere.entities.UserEntity;
+import ga.goanywhere.utils.HashUtil;
+import ga.goanywhere.utils.SessionFactoryUtil;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.DatatypeConverter;
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 
+@Slf4j
 @NoArgsConstructor
 public class AuthorizationManagerImpl implements AuthorizationManager {
 
 
     @Override
-    public Long logIn(@NotNull String username,@NotNull String password) {
-        String hash;
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(password.getBytes());
-            byte[] digest = md.digest();
-            hash = DatatypeConverter
-                    .printHexBinary(digest).toUpperCase();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return 0L;
-        }
+    public BigInteger logIn(@NotNull String username, @NotNull String password) {
+        log.info("Authorization of {}", username);
         Session session = SessionFactoryUtil.getSession();
-        List<UserEntity> userEntityList = session.createQuery("from UserEntity where username = \'"
-                + username + "\' and password = \'" + hash + "\'").list();
+        UserEntity userEntity = (UserEntity) session.createQuery("from UserEntity where username = \'"
+                + username + "\'").uniqueResult();
         session.close();
-        if (userEntityList.size() == 1) {
-            return userEntityList.get(0).getId();
-        } else {
-            return 0L;
+        if (userEntity == null) {
+            log.info("No user with such username");
+            return BigInteger.ZERO;
+        }
+        try {
+            if (userEntity.getPassword().equals(HashUtil.hash(password))) {
+                return BigInteger.valueOf(userEntity.getId());
+            } else {
+                log.info("Incorrect password");
+                return BigInteger.ZERO;
+            }
+        } catch (NoSuchAlgorithmException e) {
+            log.info("Error while creating hash of password");
+            e.printStackTrace();
+            return BigInteger.ZERO;
         }
     }
 }

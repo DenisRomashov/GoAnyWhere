@@ -1,7 +1,7 @@
 package ga.goanywhere.model;
 
 
-import ga.goanywhere.dao.UserEntity;
+import ga.goanywhere.entities.UserEntity;
 
 public interface ProfileManager {
     UserEntity getInfo(Long userId);

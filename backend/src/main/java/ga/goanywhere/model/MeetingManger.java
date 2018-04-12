@@ -2,7 +2,7 @@ package ga.goanywhere.model;
 
 
 
-import ga.goanywhere.dao.UserEntity;
+import ga.goanywhere.entities.UserEntity;
 
 import java.util.Date;
 import java.util.List;

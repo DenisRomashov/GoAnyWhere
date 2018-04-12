@@ -1,7 +1,7 @@
-package ga.goanywhere.controller;
+package ga.goanywhere.controllers;
 
-import ga.goanywhere.dao.UserEntity;
-import ga.goanywhere.model.SessionFactoryUtil;
+import ga.goanywhere.entities.UserEntity;
+import ga.goanywhere.utils.SessionFactoryUtil;
 import org.hibernate.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

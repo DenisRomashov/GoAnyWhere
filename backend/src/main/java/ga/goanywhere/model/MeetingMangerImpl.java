@@ -1,6 +1,6 @@
 package ga.goanywhere.model;
 
-import ga.goanywhere.dao.UserEntity;
+import ga.goanywhere.entities.UserEntity;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;

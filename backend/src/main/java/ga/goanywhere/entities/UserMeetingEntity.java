@@ -1,4 +1,4 @@
-package ga.goanywhere.dao;
+package ga.goanywhere.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package ga.goanywhere.model;
 
 
-import ga.goanywhere.dao.MeetingEntity;
+import ga.goanywhere.entities.MeetingEntity;
 import lombok.NoArgsConstructor;
 
 import java.util.List;

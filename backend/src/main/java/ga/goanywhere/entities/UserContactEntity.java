@@ -1,12 +1,9 @@
-package ga.goanywhere.dao;
+package ga.goanywhere.entities;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Getter
@@ -15,11 +12,13 @@ import java.util.Objects;
 @Table(name = "user_contact", schema = "goanywhere", catalog = "")
 public class UserContactEntity {
     @Id
+    @GeneratedValue
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "user_id")
-    private Long userId;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity userId;
 
     @Column(name = "email")
     private String email;

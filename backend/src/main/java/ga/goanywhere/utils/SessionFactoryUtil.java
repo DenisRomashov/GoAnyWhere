@@ -1,4 +1,4 @@
-package ga.goanywhere.model;
+package ga.goanywhere.utils;
 
 
 import org.hibernate.Session;
@@ -29,6 +29,7 @@ public class SessionFactoryUtil {
         }
     }
 
+    //Непотокобезопасно
     public static Session getSession(){
         if(sessionFactory == null) sessionFactory = buildSessionFactory();
         return sessionFactory.openSession();

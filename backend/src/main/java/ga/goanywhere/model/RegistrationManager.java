@@ -1,5 +1,8 @@
 package ga.goanywhere.model;
 
+import java.math.BigInteger;
+
 public interface RegistrationManager {
-    boolean createUser(String username, String password);
+    BigInteger createUser(String username, String password);
+    BigInteger createUser(String username, String password, String email);
 }

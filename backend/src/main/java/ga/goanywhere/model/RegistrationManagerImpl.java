@@ -1,38 +1,62 @@
 package ga.goanywhere.model;
 
-import ga.goanywhere.dao.UserEntity;
+import ga.goanywhere.entities.UserContactEntity;
+import ga.goanywhere.entities.UserEntity;
 import ga.goanywhere.exceptions.UsernameAlreadyUsedException;
+import ga.goanywhere.utils.HashUtil;
+import ga.goanywhere.utils.SessionFactoryUtil;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.DatatypeConverter;
-import java.security.MessageDigest;
+import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 
+@Slf4j
 @NoArgsConstructor
 public class RegistrationManagerImpl implements RegistrationManager {
     @Override
-    public boolean createUser(@NotNull String username,@NotNull String password) {
+    public BigInteger createUser(@NotNull String username, @NotNull String password) {
+        log.info("Creating user: {}", username);
         Session session = SessionFactoryUtil.getSession();
         if (session.createQuery("from UserEntity where username = \'" + username + "\'").list().size() != 0){
+            log.info("Username {} already used", username);
+            session.close();
             throw new UsernameAlreadyUsedException();
         }
         UserEntity userEntity = new UserEntity();
         try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(password.getBytes());
-            byte[] digest = md.digest();
-            String Hash = DatatypeConverter
-                    .printHexBinary(digest).toUpperCase();
             userEntity.setUsername(username);
-            userEntity.setPassword(Hash);
+            userEntity.setPassword(HashUtil.hash(password));
             session.save(userEntity);
+            session.flush();
             session.close();
-            return true;
+            return BigInteger.valueOf(userEntity.getId());
         } catch (NoSuchAlgorithmException e) {
+            log.info("Error while creating hash of password");
             e.printStackTrace();
-            return false;
+            return BigInteger.ZERO;
+        } finally {
+            if (session.isOpen()) session.close();
         }
+    }
+
+    @Override
+    public BigInteger createUser(@NotNull String username, @NotNull String password, @NotNull String email) {
+        BigInteger userId = createUser(username, password);
+        if (userId.equals(BigInteger.ZERO)) {
+            log.info("User was not created");
+            return userId;
+        }
+        log.info("Adding email info of user with id = {}", userId);
+        UserContactEntity userContactEntity = new UserContactEntity();
+        userContactEntity.setUserId(new UserEntity(userId.longValue()));
+        userContactEntity.setEmail(email);
+        Session session = SessionFactoryUtil.getSession();
+        session.save(userContactEntity);
+        session.flush();
+        session.close();
+        return userId;
     }
 }

@@ -1,7 +1,7 @@
 package ga.goanywhere.model;
 
 
-import ga.goanywhere.dao.MeetingEntity;
+import ga.goanywhere.entities.MeetingEntity;
 
 import java.util.List;
 

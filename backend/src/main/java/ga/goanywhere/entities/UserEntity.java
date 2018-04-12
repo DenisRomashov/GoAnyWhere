@@ -1,6 +1,8 @@
-package ga.goanywhere.dao;
+package ga.goanywhere.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -11,6 +13,8 @@ import java.util.Objects;
 @Setter
 @Entity
 @Table(name = "user", schema = "goanywhere", catalog = "")
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserEntity {
     @Id
     @GeneratedValue
@@ -38,6 +42,12 @@ public class UserEntity {
     @Column(name = "address_id")
     private Long addressId;
 
+    @OneToOne(mappedBy = "userId")
+    private UserContactEntity userContact;
+
+    public UserEntity(Long id) {
+        this.id = id;
+    }
 
     @Override
     public boolean equals(Object o) {
