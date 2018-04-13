@@ -130,6 +130,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 import footerone from './footerone'
 export default {
   data () {
@@ -150,9 +152,18 @@ export default {
   },
   methods: {
     onSubmit (evt) {
+    //  evt.preventDefault();
+    //  alert(JSON.stringify(this.form));
+    //  console.log(JSON.stringify(this.form));
+
       evt.preventDefault();
-      alert(JSON.stringify(this.form));
-      console.log(JSON.stringify(this.form));
+      axios.post("/register", this.form)
+      .then(response => {
+        console.log(response);
+      }).catch(function (error) {
+        alert("Error...");
+        console.log(error);
+      });
       //this.show = false; //скрыть после отправки данных
     },
     onReset (evt) {
