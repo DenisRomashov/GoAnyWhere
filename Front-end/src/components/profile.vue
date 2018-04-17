@@ -8,7 +8,7 @@
             <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
 
-            <b-navbar-brand href="/">GoAnyWhere</b-navbar-brand>
+            <b-navbar-brand href="/">GoAnyWhere-!!!</b-navbar-brand>
 
             <b-navbar-nav>
               <router-link :to="{ path: '/' }"><b-button size="" variant="outline-danger" class="my-2 my-sm-0" type="submit">Home</b-button></router-link>
