@@ -8,6 +8,7 @@ import profile from '@/components/profile'
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history', //Убираем решетку из URLa
   routes: [
     {
       path: '/',
