@@ -11,7 +11,6 @@
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
 
-
         <!-- <div>
           <b-form inline>
             <label class="sr-only" for="inlineInputUsername">Username</label>
@@ -64,6 +63,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 import Carousel from './Carousel'
 import footerone from './footerone'
 export default {
@@ -79,7 +80,30 @@ export default {
   methods: {
     onSubmit (evt) {
       evt.preventDefault();
-      alert(JSON.stringify(this.form));
+      axios.post("/register", this.form)
+      .then(response => {
+        console.log(response);
+      }).catch(function (error) {
+        alert("Error...");
+        console.log(error);
+      });
+    //  alert(JSON.stringify(this.form));
+    //  alert(this.form.username);
+    //  axios.post("/register", (JSON.stringify(this.form)));
+/*
+      var username = this.form.username;
+      var password = this.form.lastname;
+              axios.post("/register", {
+                  username: username,
+                  password: password
+              }).then(function (response) {
+                  alert("Done!");
+                  console.log(response);
+              }).catch(function (error) {
+                  alert("Error...");
+                  console.log(error);
+              });
+*/
       //console.log(JSON.stringify(this.form));
       //this.show = false; //скрыть после отправки данных
     }
