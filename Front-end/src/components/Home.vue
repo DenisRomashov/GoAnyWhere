@@ -11,7 +11,6 @@
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
 
-
         <!-- <div>
           <b-form inline>
             <label class="sr-only" for="inlineInputUsername">Username</label>
