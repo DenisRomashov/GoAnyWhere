@@ -1,20 +1,22 @@
 package ga.goanywhere.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Collection;
 import java.util.Objects;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 @Entity
 @Table(name = "address", schema = "goanywhere", catalog = "")
 public class AddressEntity {
     @Id
+    @GeneratedValue
     @Column(name = "id")
     private Long id;
 
@@ -33,23 +35,12 @@ public class AddressEntity {
     @Column(name = "longitude")
     private Double longitude;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "userAddress")
+    private Collection<UserEntity> users;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AddressEntity that = (AddressEntity) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(locality, that.locality) &&
-                Objects.equals(street, that.street) &&
-                Objects.equals(house, that.house) &&
-                Objects.equals(latitude, that.latitude) &&
-                Objects.equals(longitude, that.longitude);
-    }
+    @JsonIgnore
+    @OneToMany(mappedBy = "meetingAddress")
+    private Collection<MeetingEntity> meetings;
 
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(id, locality, street, house, latitude, longitude);
-    }
 }
