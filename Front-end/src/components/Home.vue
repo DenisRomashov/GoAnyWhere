@@ -75,7 +75,7 @@
 
 
 
-      <b-jumbotron bg-variant="outline-danger" header="Делай что-нибудь" id="jumbotron2">
+      <b-jumbotron bg-variant="outline-danger" header="Делай что-нибудь!" id="jumbotron2">
         <p>Это значит, что нельзя сидеть на месте и ждать, пока другой реализует интересную идею,
         родившуюся у тебя в голове. <br> Какой бы сумасбродной ни была мысль – делись ею, ищи единомышленников,
         думайте как реализовать ее, встречайтесь, организовывайте.
@@ -117,7 +117,7 @@ export default {
     //  alert(JSON.stringify(this.form));
     //  alert(this.form.username);
     //  axios.post("/register", (JSON.stringify(this.form)));
-    
+
       //this.show = false; //скрыть после отправки данных
     }
   },

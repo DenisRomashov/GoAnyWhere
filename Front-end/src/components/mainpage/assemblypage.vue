@@ -1,6 +1,6 @@
 <template lang="html">
 <div class="profilepage">
-  <b-container  class="gridFullPage">
+  <b-container fluid class="gridFullPage">
       <b-row>
         <b-col>
           <b-navbar toggleable="md" type="dark" variant="dark" fixed="top">
@@ -53,34 +53,41 @@
         </b-row>
         <b-row>
           <b-col> </b-col>
+
+              <b-col cols="10">
+                <allMeetings v-if="showAll"/>
+                <createMeeting v-if="showCreation"/>
+                <profile v-if="showProfile"/>
+               </b-col>
+
             <!--Создание события  -->
-            <b-container id="creationMeeting" v-if="showCreation">
+            <!-- <b-container id="creationMeeting" v-if="showCreation">
 
               <b-col cols="10">
                 <b-form>
                     <h1>Создание события</h1>
                 </b-form>
               </b-col>
-            </b-container>
+            </b-container> -->
             <!--Все события  -->
-            <b-container id="creationMeeting"  v-if="showAll">
+            <!-- <b-container id="creationMeeting"  v-if="showAll">
 
               <b-col cols="10">
                 <b-form>
                     <h1>Все события</h1>
                 </b-form>
               </b-col>
-            </b-container>
+            </b-container> -->
 
             <!-- Профиль  -->
-            <b-container id="creationMeeting"  v-if="showProfile">
+            <!-- <b-container id="creationMeeting"  v-if="showProfile">
 
               <b-col cols="10">
                 <b-form>
                     <h1>Профиль</h1>
                 </b-form>
               </b-col>
-            </b-container>
+            </b-container> -->
 
 
           <b-col> </b-col>
@@ -90,6 +97,9 @@
 
       <!--Создание события  -->
     </b-container>
+    <!-- <allMeetings v-if="showAll"/>
+    <createMeeting v-if="showCreation"/>
+    <profile v-if="showProfile"/> -->
   <footerone/>
 
 </div>
@@ -99,6 +109,9 @@
 <!-- Script  -->
 <script>
 import footerone from '../footerone'
+import allMeetings from './allMeetings'
+import createMeeting from './createMeeting'
+import profile from './profile'
 export default {
   data () {
     return {
@@ -114,7 +127,10 @@ export default {
 
   },
   components: {
-    footerone
+    footerone,
+    allMeetings,
+    createMeeting,
+    profile
   }
 }
 </script>
