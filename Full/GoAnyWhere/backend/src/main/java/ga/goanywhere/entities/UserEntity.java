@@ -1,16 +1,16 @@
 package ga.goanywhere.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.Collection;
 import java.util.Objects;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 @Entity
 @Table(name = "user", schema = "goanywhere", catalog = "")
 @NoArgsConstructor
@@ -24,6 +24,7 @@ public class UserEntity {
     @Column(name = "username")
     private String username;
 
+    @JsonIgnore
     @Column(name = "password")
     private String password;
 
@@ -39,34 +40,19 @@ public class UserEntity {
     @Column(name = "birthday")
     private Date birthday;
 
-    @Column(name = "address_id")
-    private Long addressId;
+    @ManyToOne
+    @JoinColumn(name = "address_id")
+    private AddressEntity userAddress;
 
     @OneToOne(mappedBy = "userId")
     private UserContactEntity userContact;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "userMeetingPK.participant")
+    private Collection<UserMeetingEntity> meetings;
 
     public UserEntity(Long id) {
         this.id = id;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserEntity that = (UserEntity) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(username, that.username) &&
-                Objects.equals(password, that.password) &&
-                Objects.equals(firstName, that.firstName) &&
-                Objects.equals(lastName, that.lastName) &&
-                Objects.equals(sex, that.sex) &&
-                Objects.equals(birthday, that.birthday) &&
-                Objects.equals(addressId, that.addressId);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(id, username, password, firstName, lastName, sex, birthday, addressId);
-    }
 }

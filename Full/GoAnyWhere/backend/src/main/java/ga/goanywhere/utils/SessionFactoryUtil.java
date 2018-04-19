@@ -9,7 +9,7 @@ import org.hibernate.service.ServiceRegistry;
 
 public class SessionFactoryUtil {
 
-    private static SessionFactory sessionFactory;
+    private static volatile SessionFactory sessionFactory;
 
     private static SessionFactory buildSessionFactory() {
         try {
@@ -29,9 +29,16 @@ public class SessionFactoryUtil {
         }
     }
 
-    //Непотокобезопасно
     public static Session getSession(){
-        if(sessionFactory == null) sessionFactory = buildSessionFactory();
-        return sessionFactory.openSession();
+        SessionFactory localSessionFactory = sessionFactory;
+        if (localSessionFactory == null) {
+            synchronized (SessionFactoryUtil.class) {
+                localSessionFactory = sessionFactory;
+                if (localSessionFactory == null) {
+                    sessionFactory = localSessionFactory = buildSessionFactory();
+                }
+            }
+        }
+        return localSessionFactory.openSession();
     }
 }

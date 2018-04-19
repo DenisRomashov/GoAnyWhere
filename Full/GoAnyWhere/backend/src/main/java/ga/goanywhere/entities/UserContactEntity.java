@@ -1,5 +1,7 @@
 package ga.goanywhere.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +10,7 @@ import java.util.Objects;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 @Entity
 @Table(name = "user_contact", schema = "goanywhere", catalog = "")
 public class UserContactEntity {
@@ -16,6 +19,7 @@ public class UserContactEntity {
     @Column(name = "id")
     private Long id;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "user_id")
     private UserEntity userId;
@@ -39,24 +43,5 @@ public class UserContactEntity {
     private String preferred;
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserContactEntity that = (UserContactEntity) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(userId, that.userId) &&
-                Objects.equals(email, that.email) &&
-                Objects.equals(phoneNumber, that.phoneNumber) &&
-                Objects.equals(vkReference, that.vkReference) &&
-                Objects.equals(facebookReference, that.facebookReference) &&
-                Objects.equals(twitterReference, that.twitterReference) &&
-                Objects.equals(preferred, that.preferred);
-    }
 
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(id, userId, email, phoneNumber, vkReference, facebookReference, twitterReference, preferred);
-    }
 }

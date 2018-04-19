@@ -10,7 +10,7 @@ import page404 from '@/components/page404'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history', //Убираем решетку из URLa
+  // mode: 'history', //Убираем решетку из URLa
   routes: [
     {
       path: '/',

@@ -41,9 +41,9 @@
           <b-col cols="10">
             <div id="ButtonRow">
               <b-button-group size="lg" variant="warning">
-                <b-button v-on:click="showCreation=true, showAll=false, showProfile=false" variant="dark">Создать событие</b-button>
-                <b-button v-on:click="showCreation=false, showAll=true, showProfile=false" variant="dark">Все события</b-button>
                 <b-button v-on:click="showCreation=false, showAll=false, showProfile=true" variant="dark">Профиль</b-button>
+                <b-button v-on:click="showCreation=false, showAll=true, showProfile=false" variant="dark">Все события</b-button>
+                <b-button v-on:click="showCreation=true, showAll=false, showProfile=false" variant="dark">Создать событие</b-button>
               </b-button-group>
             </div>
           </b-col>
@@ -118,9 +118,9 @@ export default {
       form: {
         name: ''
       },
-        showCreation: true,
+        showCreation: false,
         showAll: false,
-        showProfile: false
+        showProfile: true
     }
   },
   methods: {
@@ -141,8 +141,6 @@ export default {
     background-color: #343a40;
     color: white;
     margin-top: -4px;
-
-
 }
 
 #creationMeeting {
