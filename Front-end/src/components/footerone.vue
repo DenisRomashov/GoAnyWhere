@@ -59,13 +59,13 @@ export default {
 
 <style lang="css">
 #myFooter {
-    background-color: #3c3d41;
+    background-color: #343a40;
     color: white;
     padding-top: 30px;
 }
 
 #myFooter .footer-copyright {
-    background-color: #333333;
+    background-color: #343a40;
     padding-top: 3px;
     padding-bottom: 3px;
     text-align: center;

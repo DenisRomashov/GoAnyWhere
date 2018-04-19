@@ -27,7 +27,7 @@
             <p></p>
             <!-- Форма регистрации  -->
             <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-              <!-- Имя польщователя -->
+              <!-- Имя пользователя -->
               <b-form-group id="inputUserNameGroup"
                     label="Имя пользователя:"
                     label-for="inputUserName"

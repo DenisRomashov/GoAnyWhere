@@ -10,14 +10,14 @@ import Vuesax from 'vuesax'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import 'vuesax/dist/vuesax.css' //vuesax styles
+//import 'vuesax/dist/vuesax.css' //vuesax styles
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
 
 //Если использовать компоненты BootstrapVue включить!
 Vue.use(BootstrapVue);
-Vue.use(Vuesax);
+//Vue.use(Vuesax);
 Vue.use(VueAxios, axios);
 
 Vue.config.productionTip = false

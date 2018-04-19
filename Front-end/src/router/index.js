@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
 import registration from '@/components/registration'
+import pr from '@/components/pr'
 import profile from '@/components/profile'
 import page404 from '@/components/page404'
 
@@ -23,6 +24,10 @@ export default new Router({
       path: '/registration',
       name: 'registration',
       component: registration
+    },{
+      path: '/pr',
+      name: 'pr',
+      component: pr
     }, {
       path: '/profile',
       name: 'profile',
