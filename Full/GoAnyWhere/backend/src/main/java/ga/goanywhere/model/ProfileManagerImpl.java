@@ -4,45 +4,52 @@ package ga.goanywhere.model;
 import ga.goanywhere.entities.UserEntity;
 import ga.goanywhere.utils.SessionFactoryUtil;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 
-import java.util.List;
 
-@Slf4j
 @NoArgsConstructor
 public class ProfileManagerImpl implements ProfileManager {
+    private final static Logger log = LogManager.getLogger(ProfileManagerImpl.class);
+
     @Override
     public UserEntity getInfo(Long userId) {
         log.info("Getting information about user with id = {}", userId);
         Session session = SessionFactoryUtil.getSession();
-        UserEntity userEntity = (UserEntity) session.createQuery("from UserEntity where id = "
-        + userId).uniqueResult();
-        session.close();
-        if (userEntity != null) {
-            return userEntity;
-        } else {
-            log.info("No user with id = {] found", userId);
-            return null;
+        try {
+            UserEntity userEntity = (UserEntity) session.createQuery("from UserEntity where id = "
+                    + userId).uniqueResult();
+            if (userEntity != null) {
+                return userEntity;
+            } else {
+                log.info("No user with id = {] found", userId);
+                return null;
+            }
+        } finally {
+            session.close();
         }
     }
 
-    //final для закрытия сессии
     @Override
     public void updateUserInfo(Long userId, UserEntity user){
         log.info("Updating information about user with id = {}", userId);
         Session session = SessionFactoryUtil.getSession();
-        UserEntity userEntity = (UserEntity) session.createQuery("from UserEntity where id = "
-                + userId).uniqueResult();
-        if (userEntity != null) {
-            user.setUsername(userEntity.getUsername());
-            user.setPassword(userEntity.getPassword());
-            session.merge(user);
-            session.flush();
-        } else {
-            log.info("No user with id = {] found", userId);
+        try {
+            UserEntity userEntity = (UserEntity) session.createQuery("from UserEntity where id = "
+                    + userId).uniqueResult();
+            if (userEntity != null) {
+                user.setUsername(userEntity.getUsername());
+                user.setPassword(userEntity.getPassword());
+                session.merge(user);
+                session.flush();
+            } else {
+                log.info("No user with id = {] found", userId);
+            }
+        } finally {
+            session.close();
         }
-        session.close();
 
     }
 }

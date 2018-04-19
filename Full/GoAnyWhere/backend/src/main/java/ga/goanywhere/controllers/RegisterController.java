@@ -1,6 +1,5 @@
 package ga.goanywhere.controllers;
 
-import ga.goanywhere.entities.UserEntity;
 import ga.goanywhere.model.RegistrationManager;
 import ga.goanywhere.model.RegistrationManagerImpl;
 import lombok.AllArgsConstructor;
@@ -21,13 +20,13 @@ public class RegisterController {
 
 
     @PostMapping("/register")
-    public @ResponseBody BigInteger register(@RequestBody UserRegistration user){
+    public @ResponseBody Id register(@RequestBody UserRegistration user){
         if (user.getEmail()!= null) {
-            return registrationManager.createUser(user.getUsername(),
-                    user.getPassword(), user.getEmail());
+            return new Id(registrationManager.createUser(user.getUsername(),
+                    user.getPassword(), user.getEmail()));
         } else {
-            return registrationManager.createUser(user.getUsername(),
-                    user.getPassword());
+            return new Id(registrationManager.createUser(user.getUsername(),
+                    user.getPassword()));
         }
     }
 
@@ -44,5 +43,13 @@ public class RegisterController {
             this.username = username;
             this.password = password;
         }
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    private static class Id {
+        private BigInteger id;
     }
 }

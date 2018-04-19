@@ -2,14 +2,15 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
 import registration from '@/components/registration'
-import profile from '@/components/profile'
+import pr from '@/components/pr'
+import assemblypage from '@/components/mainpage/assemblypage'
 import page404 from '@/components/page404'
 
 
 Vue.use(Router)
 
 export default new Router({
-  //mode: 'history', //Убираем решетку из URLa, со SpringBoot не работает такая тема
+  // mode: 'history', //Убираем решетку из URLa
   routes: [
     {
       path: '/',
@@ -23,10 +24,14 @@ export default new Router({
       path: '/registration',
       name: 'registration',
       component: registration
+    },{
+      path: '/pr',
+      name: 'pr',
+      component: pr
     }, {
       path: '/profile',
       name: 'profile',
-      component: profile
+      component: assemblypage
     },
     //Любой левый URL кидает на Home
     { path: "*", component: page404}

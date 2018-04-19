@@ -1,9 +1,7 @@
 package ga.goanywhere.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,9 +9,11 @@ import java.util.Objects;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 @Entity
 @Table(name = "user_meeting", schema = "goanywhere", catalog = "")
 public class UserMeetingEntity {
+    @JsonIgnore
     @EmbeddedId
     private UserMeetingPK userMeetingPK;
 
@@ -28,55 +28,22 @@ public class UserMeetingEntity {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserMeetingEntity that = (UserMeetingEntity) o;
-        return Objects.equals(userMeetingPK, that.userMeetingPK) &&
-                Objects.equals(privilegeId, that.privilegeId);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(userMeetingPK, privilegeId);
-    }
-
     @Getter
     @Setter
+    @EqualsAndHashCode
     @NoArgsConstructor
     @AllArgsConstructor
+    @ToString
     @Embeddable
     private static class UserMeetingPK implements Serializable{
 
-        @Column(name = "user_id")
-        private Integer user_id;
+        @ManyToOne
+        @JoinColumn(name = "user_id")
+        private UserEntity participant;
 
-        @Column(name = "meeting_id")
-        private Integer meeting_id;
+        @ManyToOne
+        @JoinColumn(name = "meeting_id")
+        private MeetingEntity participantMeeting;
 
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            UserMeetingPK that = (UserMeetingPK) o;
-            return Objects.equals(user_id, that.user_id) &&
-                    Objects.equals(meeting_id, that.meeting_id);
-        }
-
-        @Override
-        public int hashCode() {
-
-            return Objects.hash(user_id, meeting_id);
-        }
-
-        @Override
-        public String toString() {
-            return "UserMeetingPK{" +
-                    "user_id=" + user_id +
-                    ", meeting_id=" + meeting_id +
-                    '}';
-        }
     }
 }
