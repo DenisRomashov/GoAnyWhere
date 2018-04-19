@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import registration from '@/components/registration'
 import pr from '@/components/pr'
-import profile from '@/components/profile'
+import assemblypage from '@/components/mainpage/assemblypage'
 import page404 from '@/components/page404'
 
 
@@ -31,7 +31,7 @@ export default new Router({
     }, {
       path: '/profile',
       name: 'profile',
-      component: profile
+      component: assemblypage
     },
     //Любой левый URL кидает на Home
     { path: "*", component: page404}

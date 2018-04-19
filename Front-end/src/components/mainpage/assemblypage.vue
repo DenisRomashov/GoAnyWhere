@@ -98,7 +98,7 @@
 
 <!-- Script  -->
 <script>
-import footerone from './footerone'
+import footerone from '../footerone'
 export default {
   data () {
     return {
