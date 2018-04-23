@@ -90,6 +90,7 @@
 
       <!--Создание события  -->
     </b-container>
+
   <footerone/>
 
 </div>
@@ -107,11 +108,14 @@ export default {
       },
         showCreation: true,
         showAll: false,
-        showProfile: false
+        showProfile: false,
+        ok: true
     }
   },
   methods: {
-
+    created: function() {
+      alert("BOOM!");
+    }
   },
   components: {
     footerone

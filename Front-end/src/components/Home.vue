@@ -45,7 +45,7 @@
 
     <!-- для теста респонса -->
 
-    <h1>{{ test }}</h1>
+    <!-- <h1>{{ test }}</h1> -->
 
     <!-- --------------------------------  -->
 
@@ -95,6 +95,11 @@ export default {
         username: '',
         password: ''
       },
+
+      userInfo : {
+        userId: 0,
+        userName: ''
+      },
       show: true,
       test: ''
     }
@@ -102,36 +107,32 @@ export default {
   methods: {
     onSubmit (evt) {
       evt.preventDefault();
+
+      window.localStorage.setItem('STORAGE_USER_INFO', JSON.stringify(this.userInfo))
+
+      //Запрос
       axios.post("/auth", this.form)
       .then(response => {
         console.log(response);
-        // this.test =JSON.stringify(this.form);
         if (response.data.id > 0) {
-          this.test = response.data.id;
-          const userId = response.data.id;
+          this.test = response;
+          this.userInfo.userId = response.data.id;
+          //Добавление данных в локал сторедж и переход
+          window.localStorage.setItem('STORAGE_USER_INFO', JSON.stringify(this.userInfo))
           router.push({ path: 'profile' })
-          // router.push({ name: 'profile', params: { userId }})
         } else {
           alert("Неверный пароль или вы еще не зарегистрированы!")
           this.form.username = '';
           this.form.password = '';
-          this.test = response.data;
         }
-        //this.test = response.data.id;
-
       }).catch(function (error) {
         alert("Error...");
         console.log(error);
-        // router.push({ path: 'registration' })
       });
-  
-    //  alert(JSON.stringify(this.form));
-    //  alert(this.form.username);
-    //  axios.post("/register", (JSON.stringify(this.form)));
-
       //this.show = false; //скрыть после отправки данных
     }
   },
+
   router,
   components: {
     Carousel,

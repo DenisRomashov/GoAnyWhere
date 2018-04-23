@@ -5,8 +5,8 @@ import registration from '@/components/registration'
 import pr from '@/components/pr'
 import assemblypage from '@/components/mainpage/assemblypage'
 import page404 from '@/components/page404'
-
-
+import teststore from '@/components/teststore'
+import teststore2 from '@/components/teststore2'
 Vue.use(Router)
 
 export default new Router({
@@ -16,11 +16,13 @@ export default new Router({
       path: '/',
       name: 'Home',
       component: Home
-    }, {
-      path: '/home',
-      name: 'Home',
-      component: Home
-    }, {
+    },
+    /* {
+       path: '/home',
+       name: 'Home',
+       component: Home
+     }, */
+     {
       path: '/registration',
       name: 'registration',
       component: registration
@@ -32,6 +34,15 @@ export default new Router({
       path: '/profile',
       name: 'profile',
       component: assemblypage
+    }, {
+      path: '/store',
+      name: 'store',
+      component: teststore
+    },
+    {
+      path: '/store2',
+      name: 'store2',
+      component: teststore2
     },
     //Любой левый URL кидает на Home
     { path: "*", component: page404}

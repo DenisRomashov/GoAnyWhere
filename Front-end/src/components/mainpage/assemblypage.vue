@@ -41,9 +41,15 @@
           <b-col cols="10">
             <div id="ButtonRow">
               <b-button-group size="lg" variant="warning">
-                <b-button v-on:click="showCreation=false, showAll=false, showProfile=true" variant="dark">Профиль</b-button>
-                <b-button v-on:click="showCreation=false, showAll=true, showProfile=false" variant="dark">Все события</b-button>
-                <b-button v-on:click="showCreation=true, showAll=false, showProfile=false" variant="dark">Создать событие</b-button>
+
+                <!-- Кнопки навигации -->
+                <b-button v-on:click="showCreation=false, showAll=false, showMyMeetings=false, showProfile=true" variant="dark">Профиль</b-button>
+                <b-button v-on:click="showCreation=false, showAll=false, showProfile=false, showMyMeetings=true" variant="dark">Мои события</b-button>
+                <b-button v-on:click="showCreation=false, showAll=true, showProfile=false, showMyMeetings=false" variant="dark">Все события</b-button>
+                <b-button v-on:click="showCreation=true, showAll=false, showProfile=false, showMyMeetings=false" variant="dark">Создать событие</b-button>
+
+                <!-- Кнопка выхода -->
+                <b-button v-on:click="exit()" variant="danger">Выйти</b-button>
               </b-button-group>
             </div>
           </b-col>
@@ -58,48 +64,17 @@
                 <allMeetings v-if="showAll"/>
                 <createMeeting v-if="showCreation"/>
                 <profile v-if="showProfile"/>
+                <myMeetings v-if="showMyMeetings"/>
                </b-col>
-
-            <!--Создание события  -->
-            <!-- <b-container id="creationMeeting" v-if="showCreation">
-
-              <b-col cols="10">
-                <b-form>
-                    <h1>Создание события</h1>
-                </b-form>
-              </b-col>
-            </b-container> -->
-            <!--Все события  -->
-            <!-- <b-container id="creationMeeting"  v-if="showAll">
-
-              <b-col cols="10">
-                <b-form>
-                    <h1>Все события</h1>
-                </b-form>
-              </b-col>
-            </b-container> -->
-
-            <!-- Профиль  -->
-            <!-- <b-container id="creationMeeting"  v-if="showProfile">
-
-              <b-col cols="10">
-                <b-form>
-                    <h1>Профиль</h1>
-                </b-form>
-              </b-col>
-            </b-container> -->
-
 
           <b-col> </b-col>
         </b-row>
       </div>
 
 
-      <!--Создание события  -->
+
     </b-container>
-    <!-- <allMeetings v-if="showAll"/>
-    <createMeeting v-if="showCreation"/>
-    <profile v-if="showProfile"/> -->
+
   <footerone/>
 
 </div>
@@ -111,6 +86,7 @@
 import footerone from '../footerone'
 import allMeetings from './allMeetings'
 import createMeeting from './createMeeting'
+import myMeetings from './myMeetings'
 import profile from './profile'
 export default {
   data () {
@@ -120,16 +96,20 @@ export default {
       },
         showCreation: false,
         showAll: false,
+        showMyMeetings: false,
         showProfile: true
     }
   },
   methods: {
-
+    exit() {
+      window.localStorage.removeItem('STORAGE_USER_INFO');
+    }
   },
   components: {
     footerone,
     allMeetings,
     createMeeting,
+    myMeetings,
     profile
   }
 }
