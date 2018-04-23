@@ -11,6 +11,7 @@
             <b-navbar-brand href="/">GoAnyWhere</b-navbar-brand>
 
             <!-- Кнопка HOME с роутер линк на главную страницу -->
+            <b-collapse is-nav id="nav_collapse">
             <b-navbar-nav>
               <router-link :to="{ path: '/' }"><b-button size="" variant="outline-danger" class="mb-2 mr-sm-2 mb-sm-0" type="submit">Home</b-button></router-link>
             </b-navbar-nav>
@@ -18,7 +19,7 @@
             <b-form-input size="" class="mb-2 mr-sm-2 mb-sm-0" type="text" placeholder="Поиск" />
             <b-button size="" class="mb-2 mr-sm-2 mb-sm-0" type="submit" variant="warning"> Поиск </b-button>
 
-            <b-collapse is-nav id="nav_collapse"></b-collapse>
+          </b-collapse>
 
             <!-- Right aligned nav items -->
             <b-navbar-nav class="ml-auto">
@@ -32,6 +33,8 @@
           </b-navbar>
         </b-col>
       </b-row>
+      </b-container>
+      <b-container fluid class="ProfileNavigation">
       <div class="BlockAfterNavbar">
         <b-row id="FirstRow">
           <!-- left column -->
@@ -49,33 +52,45 @@
                 <b-button v-on:click="showCreation=true, showAll=false, showProfile=false, showMyMeetings=false" variant="dark">Создать событие</b-button>
 
                 <!-- Кнопка выхода -->
-                <b-button v-on:click="exit()" variant="danger">Выйти</b-button>
+                <b-button @click="showModal" variant="danger">Выйти</b-button>
               </b-button-group>
             </div>
           </b-col>
           <b-col>
-
           </b-col>
         </b-row>
-        <b-row>
-          <b-col> </b-col>
-
-              <b-col cols="10">
-                <allMeetings v-if="showAll"/>
-                <createMeeting v-if="showCreation"/>
-                <profile v-if="showProfile"/>
-                <myMeetings v-if="showMyMeetings"/>
-               </b-col>
-
-          <b-col> </b-col>
-        </b-row>
       </div>
-
-
-
     </b-container>
 
+
+      <b-container class="Profile">
+            <b-row>
+                <b-col></b-col>
+
+                <b-col cols="10">
+                    <allMeetings v-if="showAll"/>
+                    <createMeeting v-if="showCreation"/>
+                    <profile v-if="showProfile"/>
+                    <myMeetings v-if="showMyMeetings"/>
+                </b-col>
+
+                <b-col></b-col>
+            </b-row>
+      </b-container>
+
+<!-- Вставка футера -->
   <footerone/>
+
+<!-- Всплывающее окно выхода -->
+  <div>
+    <b-modal ref="Exit" hide-footer title="Уже уходите!? :(">
+      <div class="d-block text-center">
+      </div>
+      <b-btn class="mt-3" variant="primary" block @click="hideModal">Остаться!</b-btn>
+      <b-btn class="mt-3" variant="danger" block @click="exit">Выйти</b-btn>
+    </b-modal>
+  </div>
+
 
 </div>
 </template>
@@ -83,6 +98,7 @@
 
 <!-- Script  -->
 <script>
+import router from '../../router'
 import footerone from '../footerone'
 import allMeetings from './components/allMeetings'
 import createMeeting from './components/createMeeting'
@@ -103,7 +119,16 @@ export default {
   methods: {
     exit() {
       window.localStorage.removeItem('STORAGE_USER_INFO');
-    }
+      router.push({ path: '/' });
+    },
+
+    showModal () {
+      this.$refs.Exit.show()
+    },
+
+    hideModal () {
+     this.$refs.Exit.hide()
+   }
   },
   components: {
     footerone,
@@ -111,7 +136,8 @@ export default {
     createMeeting,
     myMeetings,
     profile
-  }
+  },
+  router
 }
 </script>
 
@@ -130,9 +156,12 @@ export default {
   justify-content: center
 }
 
+
 .profilepage {
   margin-top: -4px;
-  background-color: #DCDCDC;
+  /* background-color: #DCDCDC; */
+  background-image: url("../../assets/background_profile.jpg");
+  background-size: cover;
 }
 
 </style>

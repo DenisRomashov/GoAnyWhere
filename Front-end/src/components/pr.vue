@@ -1,97 +1,57 @@
 <template lang="html">
 <div class="profilepage">
-  <b-container  class="gridFullPage">
-      <b-row>
-        <b-col>
-          <b-navbar toggleable="md" type="dark" variant="dark" fixed="top">
-
-            <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
 
-            <b-navbar-brand href="/">GoAnyWhere</b-navbar-brand>
+  <b-navbar toggleable="md" type="dark" variant="info">
 
-            <!-- Кнопка HOME с роутер линк на главную страницу -->
-            <b-navbar-nav>
-              <router-link :to="{ path: '/' }"><b-button size="" variant="outline-danger" class="mb-2 mr-sm-2 mb-sm-0" type="submit">Home</b-button></router-link>
-            </b-navbar-nav>
+    <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
-            <b-form-input size="" class="mb-2 mr-sm-2 mb-sm-0" type="text" placeholder="Поиск" />
-            <b-button size="" class="mb-2 mr-sm-2 mb-sm-0" type="submit" variant="warning"> Поиск </b-button>
+    <b-navbar-brand href="#">NavBar</b-navbar-brand>
 
-            <b-collapse is-nav id="nav_collapse"></b-collapse>
+    <b-collapse is-nav id="nav_collapse">
 
-            <!-- Right aligned nav items -->
-            <b-navbar-nav class="ml-auto">
+      <b-navbar-nav>
+        <b-nav-item href="#">Link</b-nav-item>
+        <b-nav-item href="#" disabled>Disabled</b-nav-item>
+      </b-navbar-nav>
 
-              <b-nav-form>
-                <!-- Поиск -->
-                <!-- <b-form-input size="" class="mr-sm-2" type="text" placeholder="Поиск" />
-                <b-button size="" class="my-2 my-sm-0" type="submit" variant="warning"> Поиск </b-button> -->
-              </b-nav-form>
-            </b-navbar-nav>
-          </b-navbar>
-        </b-col>
-      </b-row>
-      <div class="BlockAfterNavbar">
-        <b-row id="FirstRow">
-          <!-- left column -->
-          <b-col>
+      <!-- Right aligned nav items -->
+      <b-navbar-nav class="ml-auto">
 
-          </b-col>
-          <b-col cols="10">
-            <div id="ButtonRow">
-              <b-button-group size="lg" variant="warning">
-                <b-button v-on:click="showCreation=true, showAll=false, showProfile=false" variant="dark">Создать событие</b-button>
-                <b-button v-on:click="showCreation=false, showAll=true, showProfile=false" variant="dark">Все события</b-button>
-                <b-button v-on:click="showCreation=false, showAll=false, showProfile=true" variant="dark">Профиль</b-button>
-              </b-button-group>
-            </div>
-          </b-col>
-          <b-col>
+        <b-nav-form>
+          <b-form-input size="sm" class="mr-sm-2" type="text" placeholder="Search"/>
+          <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
+        </b-nav-form>
 
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col> </b-col>
-            <!--Создание события  -->
-            <b-container id="creationMeeting" v-if="showCreation">
+        <b-nav-item-dropdown text="Lang" right>
+          <b-dropdown-item href="#">EN</b-dropdown-item>
+          <b-dropdown-item href="#">ES</b-dropdown-item>
+          <b-dropdown-item href="#">RU</b-dropdown-item>
+          <b-dropdown-item href="#">FA</b-dropdown-item>
+        </b-nav-item-dropdown>
 
-              <b-col cols="10">
-                <b-form>
-                    <h1>Создание события</h1>
-                </b-form>
-              </b-col>
-            </b-container>
-            <!--Все события  -->
-            <b-container id="creationMeeting"  v-if="showAll">
+        <b-nav-item-dropdown right>
+          <!-- Using button-content slot -->
+          <template slot="button-content">
+            <em>User</em>
+          </template>
+          <b-dropdown-item href="#">Profile</b-dropdown-item>
+          <b-dropdown-item href="#">Signout</b-dropdown-item>
+        </b-nav-item-dropdown>
+      </b-navbar-nav>
 
-              <b-col cols="10">
-                <b-form>
-                    <h1>Все события</h1>
-                </b-form>
-              </b-col>
-            </b-container>
-
-            <!-- Профиль  -->
-            <b-container id="creationMeeting"  v-if="showProfile">
-
-              <b-col cols="10">
-                <b-form>
-                    <h1>Профиль</h1>
-                </b-form>
-              </b-col>
-            </b-container>
+    </b-collapse>
+  </b-navbar>
 
 
-          <b-col> </b-col>
-        </b-row>
-      </div>
 
 
-      <!--Создание события  -->
-    </b-container>
 
-  <footerone/>
+
+
+
+
+
 
 </div>
 </template>
