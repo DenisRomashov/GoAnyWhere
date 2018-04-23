@@ -84,10 +84,10 @@
 <!-- Script  -->
 <script>
 import footerone from '../footerone'
-import allMeetings from './allMeetings'
-import createMeeting from './createMeeting'
-import myMeetings from './myMeetings'
-import profile from './profile'
+import allMeetings from './components/allMeetings'
+import createMeeting from './components/createMeeting'
+import myMeetings from './components/myMeetings'
+import profile from './components/profile'
 export default {
   data () {
     return {

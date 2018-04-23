@@ -132,7 +132,7 @@
 <script>
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import footerone from './footerone'
+import footerone from '../footerone'
 export default {
   data () {
     return {
@@ -190,7 +190,7 @@ export default {
 
 <style lang="css">
 .background {
-  background-image: url("../assets/6.jpg");
+  background-image: url("../../assets/6.jpg");
   background-size: cover;
 
 }

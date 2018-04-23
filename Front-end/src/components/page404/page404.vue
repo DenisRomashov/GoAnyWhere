@@ -22,7 +22,7 @@ export default {
 .notfound {
   margin: -60px;
   height: 850px;
-  background-image: url("../assets/404_background.jpg");
+  background-image: url("../../assets/404_background.jpg");
   background-size: cover;
 }
 
