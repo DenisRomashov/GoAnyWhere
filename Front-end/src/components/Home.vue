@@ -1,12 +1,13 @@
 <template>
   <div>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
     <b-navbar toggleable="md" type="dark" variant="dark" fixed="top">
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
 
         <b-navbar-brand href="/">GoAnyWhere</b-navbar-brand>
         <b-collapse is-nav id="nav_collapse">
-            <b-button size="" variant="outline-danger" href="#about">О нас</b-button>
+            <b-button size="" variant="outline-danger" href="#about">О нас <i class="fab fa-angellist"></i></b-button>
             <!-- Right aligned nav items -->
               <b-navbar-nav class="ml-auto">
 
@@ -125,7 +126,7 @@ export default {
           this.form.password = '';
         }
       }).catch(function (error) {
-        alert("Error...");
+        alert("Сервер недоступен! Мы сожалеем :(");
         console.log(error);
       });
       //this.show = false; //скрыть после отправки данных

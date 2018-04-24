@@ -18,6 +18,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
+import YmapPlugin from 'vue-yandex-maps'
+Vue.use(YmapPlugin)
 
 //Если использовать компоненты BootstrapVue включить!
 Vue.use(BootstrapVue);

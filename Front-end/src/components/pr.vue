@@ -2,7 +2,7 @@
 <div class="profilepage">
 
 
-  <b-navbar toggleable="md" type="dark" variant="info">
+  <b-navbar toggleable="md" type="dark" variant="info" >
 
     <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 

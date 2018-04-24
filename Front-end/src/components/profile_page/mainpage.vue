@@ -1,5 +1,6 @@
 <template lang="html">
 <div class="profilepage">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
   <b-container fluid class="gridFullPage">
       <b-row>
         <b-col>
@@ -13,7 +14,7 @@
             <!-- Кнопка HOME с роутер линк на главную страницу -->
             <b-collapse is-nav id="nav_collapse">
             <b-navbar-nav>
-              <router-link :to="{ path: '/' }"><b-button size="" variant="outline-danger" class="mb-2 mr-sm-2 mb-sm-0" type="submit">Home</b-button></router-link>
+              <router-link :to="{ path: '/' }"><b-button size="" variant="outline-danger" class="mb-2 mr-sm-2 mb-sm-0" type="submit">Home <i class="fas fa-home"></i></b-button></router-link>
             </b-navbar-nav>
 
             <b-form-input size="" class="mb-2 mr-sm-2 mb-sm-0" type="text" placeholder="Поиск" />
@@ -56,14 +57,15 @@
               </b-button-group>
             </div>
           </b-col>
-          <b-col>
-          </b-col>
-        </b-row>
-      </div>
-    </b-container>
-
+            <b-col>
+            </b-col>
+          </b-row>
+        </div>
+      </b-container>
 
       <b-container class="Profile">
+        <br>
+        <br>
             <b-row>
                 <b-col></b-col>
 
@@ -78,6 +80,7 @@
             </b-row>
       </b-container>
 
+
 <!-- Вставка футера -->
   <footerone/>
 
@@ -86,7 +89,7 @@
     <b-modal ref="Exit" hide-footer title="Уже уходите!? :(">
       <div class="d-block text-center">
       </div>
-      <b-btn class="mt-3" variant="primary" block @click="hideModal">Остаться!</b-btn>
+      <b-btn class="mt-3" variant="dark" block @click="hideModal">Остаться!</b-btn>
       <b-btn class="mt-3" variant="danger" block @click="exit">Выйти</b-btn>
     </b-modal>
   </div>
@@ -157,11 +160,23 @@ export default {
 }
 
 
+
+.ProfileNavigation {
+  position: fixed;
+  z-index: 1000;
+}
+
+
+
 .profilepage {
   margin-top: -4px;
+  /* position: fixed; */
   /* background-color: #DCDCDC; */
   background-image: url("../../assets/background_profile.jpg");
   background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-position: top;
 }
 
 </style>
