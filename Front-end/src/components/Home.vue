@@ -1,43 +1,43 @@
 <template>
   <div>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
     <b-navbar toggleable="md" type="dark" variant="dark" fixed="top">
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
 
         <b-navbar-brand href="/">GoAnyWhere</b-navbar-brand>
+        <b-collapse is-nav id="nav_collapse">
+            <b-button size="" variant="outline-danger" href="#about">О нас <i class="fab fa-angellist"></i></b-button>
+            <!-- Right aligned nav items -->
+              <b-navbar-nav class="ml-auto">
 
-      <b-button size="" variant="outline-danger" href="#about">О нас</b-button>
-
-      <!-- Right aligned nav items -->
-      <b-navbar-nav class="ml-auto">
-
-            <div>
-              <b-form inline @submit="onSubmit" v-if="show">
-                <label class="sr-only" for="inlineInputUsername">Username</label>
-                  <b-input class="xs-2 mr-sm-2 mb-sm-0"
-                    id="inlineInputUsername"
-                    type="text"
-                    v-model.trim = "form.username"
-                    placeholder="Username"/>
-                <label class="sr-only" for="inlineInputPassword">Password</label>
-                  <b-input-group left="@" class="mb-2 mr-sm-2 mb-sm-0">
+                  <div>
+                    <b-form inline @submit="onSubmit" v-if="show">
+                    <label class="sr-only" for="inlineInputUsername">Username</label>
+                    <b-input class="xs-2 mr-sm-2 mb-sm-0"
+                      id="inlineInputUsername"
+                      type="text"
+                      v-model.trim = "form.username"
+                      placeholder="Username"/>
+                    <label class="sr-only" for="inlineInputPassword">Password</label>
+                    <b-input-group left="@" class="mb-2 mr-sm-2 mb-sm-0">
                       <b-input id="inlineInputPassword"
                           type="password"
                           v-model="form.password"
                           placeholder="Password" />
-                  </b-input-group>
-
+                    </b-input-group>
 
                     <b-button class="mb-2 mr-sm-2 mb-sm-0" size="" type="submit" variant="outline-primary">Войти</b-button>
                     <router-link :to="{ path: 'registration' }">
                       <b-button class="mb-2 mr-sm-2 mb-sm-0" size="" variant="outline-danger">Регистрация</b-button>
                     </router-link>
 
-                  </b-form>
-                </div>
+                    </b-form>
+                  </div>
 
 
-        </b-navbar-nav>
+              </b-navbar-nav>
+        </b-collapse>
     </b-navbar>
     <!--Добавление карусели с помощью компонента carousel-->
     <carousel id="Carousel"/>
@@ -45,7 +45,7 @@
 
     <!-- для теста респонса -->
 
-    <h1>{{ test }}</h1>
+    <!-- <h1>{{ test }}</h1> -->
 
     <!-- --------------------------------  -->
 
@@ -95,6 +95,11 @@ export default {
         username: '',
         password: ''
       },
+
+      userInfo : {
+        userId: 0,
+        userName: ''
+      },
       show: true,
       test: ''
     }
@@ -102,36 +107,32 @@ export default {
   methods: {
     onSubmit (evt) {
       evt.preventDefault();
+
+      window.localStorage.setItem('STORAGE_USER_INFO', JSON.stringify(this.userInfo))
+
+      //Запрос
       axios.post("/auth", this.form)
       .then(response => {
         console.log(response);
-        // this.test =JSON.stringify(this.form);
         if (response.data.id > 0) {
-          this.test = response.data.id;
-          const userId = response.data.id;
+          this.test = response;
+          this.userInfo.userId = response.data.id;
+          //Добавление данных в локал сторедж и переход
+          window.localStorage.setItem('STORAGE_USER_INFO', JSON.stringify(this.userInfo))
           router.push({ path: 'profile' })
-          // router.push({ name: 'profile', params: { userId }})
         } else {
           alert("Неверный пароль или вы еще не зарегистрированы!")
           this.form.username = '';
           this.form.password = '';
-          this.test = response.data;
         }
-        //this.test = response.data.id;
-
       }).catch(function (error) {
-        alert("Error...");
+        alert("Сервер недоступен! Мы сожалеем :(");
         console.log(error);
-        // router.push({ path: 'registration' })
       });
-  
-    //  alert(JSON.stringify(this.form));
-    //  alert(this.form.username);
-    //  axios.post("/register", (JSON.stringify(this.form)));
-
       //this.show = false; //скрыть после отправки данных
     }
   },
+
   router,
   components: {
     Carousel,
