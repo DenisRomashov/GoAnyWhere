@@ -373,7 +373,7 @@ export default {
   },
 
   created: function () {
-   if (localStorage.getItem('STORAGE_USER_INFO') !== null) { //проверяем есть ли такой ключ, если нет отправляем на главную
+   if (localStorage.getItem('STORAGE_USER_INFO') !== null && JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userId != 0) { //проверяем есть ли такой ключ, если нет отправляем на главную
         var storageInfo = JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO'));
         //this.create = storageInfo;
         if (storageInfo.userId != 0) {

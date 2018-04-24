@@ -19,7 +19,8 @@
               <b-navbar-nav class="ml-auto">
 
                   <div>
-                    <b-form inline @submit="onSubmit" v-if="showSingIn">
+                    <!-- <b-form inline @submit="onSubmit" v-if="showSingIn"> -->
+                    <b-form inline v-if="showSingIn">
                     <!-- <label class="sr-only" for="inlineInputUsername">Username</label>
                     <b-input class="xs-2 mr-sm-2 mb-sm-0"
                       id="inlineInputUsername"
@@ -35,7 +36,7 @@
                     </b-input-group> -->
 
                       <b-button-group >
-                        <b-button  size="" type="submit" variant="dark">Войти <i class="fas fa-sign-in-alt"></i></b-button>
+                        <b-button   @click="showSingInForm=true" variant="dark">Войти <i class="fas fa-sign-in-alt"></i></b-button>
                         <router-link :to="{ path: 'registration' }">
                           <b-button  size="" variant="dark">Регистрация <i class="fas fa-user-plus"></i></b-button>
                         </router-link>
@@ -61,8 +62,10 @@
                     </b-nav-item-dropdown> -->
 
                     <b-nav-form v-if="showProfile">
-                        <b-button-group >
-                        <b-button variant="dark">Search <i class="fas fa-user"></i></b-button>
+                        <b-button-group>
+                          <router-link :to="{ path: 'profile' }">
+                            <b-button variant="dark"><i class="fas fa-user"></i> {{ userProfileName }}</b-button>
+                          </router-link>
                         <b-button variant="dark">Выйти <i class="fas fa-sign-out-alt"></i></b-button>
                       </b-button-group>
 
@@ -115,8 +118,6 @@
 
       <!-- singInForm -->
       <div class="singInForm">
-        <b-btn @click="showSingInForm=true" variant="primary">Show Modal</b-btn>
-
         <b-modal v-model="showSingInForm"
                  title="Вход"
                  header-bg-variant="white"
@@ -134,7 +135,9 @@
                        <b-input-group-prepend>
                            <b-btn  variant="dark">Username <i class="fas fa-user"></i></b-btn>
                        </b-input-group-prepend>
-                       <b-form-input   type="text">
+                       <b-form-input
+                          v-model.trim = "form.username"
+                          type="text">
                      </b-form-input>
                    </b-input-group>
                  </div>
@@ -150,7 +153,9 @@
                        <b-input-group-prepend>
                            <b-btn  variant="dark"> Password <i class="fas fa-unlock-alt"></i></b-btn>
                        </b-input-group-prepend>
-                       <b-form-input   type="password">
+                       <b-form-input
+                         type="password"
+                         v-model="form.password">
                      </b-form-input>
                    </b-input-group>
                  </div>
@@ -161,7 +166,7 @@
 
            <div slot="modal-footer" class="w-100">
              <p class="float-left">© GoAnyWhere Project 2018</p>
-             <b-btn size="" class="float-right" variant="dark" @click="show=false">Войти</b-btn>
+             <b-btn @click="onSubmit" size="" class="float-right" variant="dark">Войти</b-btn>
            </div>
         </b-modal>
       </div>
@@ -189,14 +194,15 @@ export default {
       showSingIn: true,
       showProfile: false,
       showSingInForm: false,
+      userProfileName: '',
       test: ''
     }
   },
   methods: {
     onSubmit () {
-      evt.preventDefault();
-
-      window.localStorage.setItem('STORAGE_USER_INFO', JSON.stringify(this.userInfo))
+      // evt.preventDefault();
+      this.showSingInForm = false;
+      window.localStorage.setItem('STORAGE_USER_INFO', JSON.stringify(this.userInfo));
 
       //Запрос
       axios.post("/auth", this.form)
@@ -221,11 +227,13 @@ export default {
     }
   },
 
-  // created: function() {
-  //   if (window.localStorage.getItem('STORAGE_USER_INFO') !== null && JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userId != 0)  {
-  //     this.showSingIn = false;
-  //   }
-  // },
+  created: function() {
+    if (window.localStorage.getItem('STORAGE_USER_INFO') !== null && JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userId != 0)  {
+      this.userProfileName = JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userName;
+      this.showSingIn = false;
+      this.showProfile = true;
+    }
+  },
 
   router,
   components: {

@@ -123,7 +123,7 @@ export default {
         showAll: false,
         showMyMeetings: false,
         showProfile: true,
-        titleExitModal: JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userName + ', уже уходите!? :('
+        titleExitModal: ''
     }
   },
   methods: {
@@ -133,6 +133,7 @@ export default {
     },
 
     showModal () {
+      this.titleExitModal = JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userName + ', уже уходите!? :(';
       this.$refs.Exit.show()
     },
 
