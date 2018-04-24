@@ -4,7 +4,6 @@ bithday<template lang="html">
     <br>
     <b-container fluid class="profileInfo">
       <div class="profileInfodiv">
-
       <b-card-header header-bg-variant="dark" header-text-variant="white" header-tag="header">
           Информация профиля
           <i class="fas fa-info-circle"></i>
@@ -327,7 +326,7 @@ export default {
       editContactButton: {
         button_state: false,
         variant: 'dark',
-        title: 'Редактировать контактную информацию',
+        title: 'Редактировать данные',
         variant_prepend: 'dark'
       },
 
@@ -360,7 +359,7 @@ export default {
         this.editContactButton.variant_prepend = 'dark';
         this.editContactInfo = !this.editContactInfo;
         this.editContactButton.variant = 'dark';
-        this.editContactButton.title = 'Редактировать контактную информацию';
+        this.editContactButton.title = 'Редактировать данные';
         this.editContactButton.button_state = !this.editContactButton.button_state;
       }else {
         this.editContactButton.variant_prepend = 'outline-dark'

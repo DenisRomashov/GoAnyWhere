@@ -44,16 +44,22 @@
           </b-col>
           <b-col cols="10">
             <div id="ButtonRow">
-              <b-button-group size="lg" variant="warning">
-
+                <b-button-group size="lg" variant="warning">
                 <!-- Кнопки навигации -->
+                <!-- <b-row> -->
+                  <!-- <b-col><b-button v-on:click="showCreation=false, showAll=false, showMyMeetings=false, showProfile=true" size="lg" variant="dark">Профиль</b-button></b-col>
+                  <b-col><b-button v-on:click="showCreation=false, showAll=false, showProfile=false, showMyMeetings=true" size="lg" variant="dark">Мои события</b-button></b-col>
+                  <b-col><b-button v-on:click="showCreation=false, showAll=true, showProfile=false, showMyMeetings=false" size="lg" variant="dark">Все события</b-button></b-col>
+                  <b-col><b-button v-on:click="showCreation=true, showAll=false, showProfile=false, showMyMeetings=false" size="lg" variant="dark">Создать событие</b-button></b-col> -->
                 <b-button v-on:click="showCreation=false, showAll=false, showMyMeetings=false, showProfile=true" variant="dark">Профиль</b-button>
                 <b-button v-on:click="showCreation=false, showAll=false, showProfile=false, showMyMeetings=true" variant="dark">Мои события</b-button>
                 <b-button v-on:click="showCreation=false, showAll=true, showProfile=false, showMyMeetings=false" variant="dark">Все события</b-button>
                 <b-button v-on:click="showCreation=true, showAll=false, showProfile=false, showMyMeetings=false" variant="dark">Создать событие</b-button>
 
                 <!-- Кнопка выхода -->
-                <b-button @click="showModal" variant="danger">Выйти</b-button>
+                <b-button @click="showModal" size="lg" variant="dark">Выйти <i class="fas fa-sign-out-alt"></i></b-button>
+                <!-- <b-col><b-button @click="showModal" size="lg" variant="dark">Выйти</b-button></b-col> -->
+                <!-- </b-row> -->
               </b-button-group>
             </div>
           </b-col>
@@ -86,7 +92,7 @@
 
 <!-- Всплывающее окно выхода -->
   <div>
-    <b-modal ref="Exit" hide-footer title="Уже уходите!? :(">
+    <b-modal ref="Exit" hide-footer :title="titleExitModal">
       <div class="d-block text-center">
       </div>
       <b-btn class="mt-3" variant="dark" block @click="hideModal">Остаться!</b-btn>
@@ -116,7 +122,8 @@ export default {
         showCreation: false,
         showAll: false,
         showMyMeetings: false,
-        showProfile: true
+        showProfile: true,
+        titleExitModal: JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userName + ', уже уходите!? :('
     }
   },
   methods: {

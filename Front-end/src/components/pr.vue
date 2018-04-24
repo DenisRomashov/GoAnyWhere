@@ -1,108 +1,64 @@
-<template lang="html">
-<div class="profilepage">
+<template>
+  <div>
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+    <b-btn @click="showSingInForm=true" variant="primary">Show Modal</b-btn>
 
+    <b-modal v-model="show"
+             title="Вход"
+             header-bg-variant="white"
+             header-text-variant="dark"
+             body-bg-variant="light"
+             body-text-variant="dark"
+             footer-bg-variant="dark"
+             footer-text-variant="light">
+       <b-container fluid>
+         <b-row>
+           <b-col cols="1"></b-col>
+           <b-col cols="9">
+             <div class="usernameinput">
+               <b-input-group >
+                   <b-input-group-prepend>
+                       <b-btn  variant="dark">Username <i class="fas fa-user"></i></b-btn>
+                   </b-input-group-prepend>
+                   <b-form-input   type="text">
+                 </b-form-input>
+               </b-input-group>
+             </div>
+           </b-col>
+           <b-col cols="3"></b-col>
+         </b-row>
+         <br>
+         <b-row>
+           <b-col cols="1"></b-col>
+           <b-col cols="9">
+             <div class="passwordinput">
+               <b-input-group >
+                   <b-input-group-prepend>
+                       <b-btn  variant="dark"> Password <i class="fas fa-unlock-alt"></i></b-btn>
+                   </b-input-group-prepend>
+                   <b-form-input   type="password">
+                 </b-form-input>
+               </b-input-group>
+             </div>
+           </b-col>
+           <b-col cols="3"></b-col>
+         </b-row>
+       </b-container>
 
-  <b-navbar toggleable="md" type="dark" variant="info" >
-
-    <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-
-    <b-navbar-brand href="#">NavBar</b-navbar-brand>
-
-    <b-collapse is-nav id="nav_collapse">
-
-      <b-navbar-nav>
-        <b-nav-item href="#">Link</b-nav-item>
-        <b-nav-item href="#" disabled>Disabled</b-nav-item>
-      </b-navbar-nav>
-
-      <!-- Right aligned nav items -->
-      <b-navbar-nav class="ml-auto">
-
-        <b-nav-form>
-          <b-form-input size="sm" class="mr-sm-2" type="text" placeholder="Search"/>
-          <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
-        </b-nav-form>
-
-        <b-nav-item-dropdown text="Lang" right>
-          <b-dropdown-item href="#">EN</b-dropdown-item>
-          <b-dropdown-item href="#">ES</b-dropdown-item>
-          <b-dropdown-item href="#">RU</b-dropdown-item>
-          <b-dropdown-item href="#">FA</b-dropdown-item>
-        </b-nav-item-dropdown>
-
-        <b-nav-item-dropdown right>
-          <!-- Using button-content slot -->
-          <template slot="button-content">
-            <em>User</em>
-          </template>
-          <b-dropdown-item href="#">Profile</b-dropdown-item>
-          <b-dropdown-item href="#">Signout</b-dropdown-item>
-        </b-nav-item-dropdown>
-      </b-navbar-nav>
-
-    </b-collapse>
-  </b-navbar>
-
-
-
-
-
-
-
-
-
-
-
-</div>
+       <div slot="modal-footer" class="w-100">
+         <p class="float-left">© GoAnyWhere Project 2018</p>
+         <b-btn size="" class="float-right" variant="dark" @click="show=false">Войти</b-btn>
+       </div>
+    </b-modal>
+  </div>
 </template>
 
-
-<!-- Script  -->
 <script>
-import footerone from './footerone'
 export default {
   data () {
     return {
-      form: {
-        name: ''
-      },
-        showCreation: true,
-        showAll: false,
-        showProfile: false,
-        ok: true
+      show: false,
     }
-  },
-  methods: {
-    created: function() {
-      alert("BOOM!");
-    }
-  },
-  components: {
-    footerone
   }
 }
 </script>
-
-<!-- Style -->
-<style lang="css">
-#FirstRow {
-    background-color: #343a40;
-    color: white;
-    margin-top: -4px;
-
-
-}
-
-#creationMeeting {
-  /* height: 10em; */
-  display: flex;
-  align-items: center;
-  justify-content: center
-}
-
-.profilepage {
-  margin-top: -4px;
-  background-color: #DCDCDC;
-}
-
-</style>
