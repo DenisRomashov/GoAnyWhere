@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
 
 
 @Controller
@@ -20,10 +21,17 @@ public class RegisterController {
 
 
     @PostMapping("/register")
-    public @ResponseBody Id register(@RequestBody UserRegistration user){
+    public @ResponseBody Id register(@RequestBody UserRegistration user) throws NoSuchAlgorithmException{
         if (user.getEmail()!= null) {
-            return new Id(registrationManager.createUser(user.getUsername(),
-                    user.getPassword(), user.getEmail()));
+            if (user.getFirstName() != null) {
+                return new Id(registrationManager.createUser(user.getUsername(),
+                        user.getPassword(), user.getEmail(), user.getFirstName(),
+                        user.getLastName(), user.getSex()));
+
+            } else {
+                return new Id(registrationManager.createUser(user.getUsername(),
+                        user.getPassword(), user.getEmail()));
+            }
         } else {
             return new Id(registrationManager.createUser(user.getUsername(),
                     user.getPassword()));
@@ -38,11 +46,9 @@ public class RegisterController {
         private String username;
         private String password;
         private String email;
-
-        public UserRegistration(String username, String password) {
-            this.username = username;
-            this.password = password;
-        }
+        private String firstName;
+        private String lastName;
+        private String sex;
     }
 
     @Getter
