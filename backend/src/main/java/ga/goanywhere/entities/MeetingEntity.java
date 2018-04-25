@@ -1,5 +1,6 @@
 package ga.goanywhere.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,7 @@ import java.util.Objects;
 @Table(name = "meeting", schema = "goanywhere", catalog = "")
 public class MeetingEntity {
     @Id
+    @GeneratedValue
     @Column(name = "id")
     private Long id;
 
@@ -45,6 +47,7 @@ public class MeetingEntity {
     @Column(name = "attachment")
     private byte[] attachment;
 
-    @OneToMany(mappedBy = "userMeetingPK.participantMeeting")
+    @JsonIgnore
+    @OneToMany(mappedBy = "userMeetingPK.participantMeeting", cascade = CascadeType.ALL)
     private Collection<UserMeetingEntity> participants;
 }

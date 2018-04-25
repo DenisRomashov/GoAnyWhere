@@ -4,13 +4,12 @@ package ga.goanywhere.model;
 
 import ga.goanywhere.entities.UserEntity;
 
-import java.util.Date;
 import java.util.List;
 
 public interface MeetingManger {
-    boolean createMeeting(Long categoryId, Date start_time, Long addressId);
+    void createMeeting(Long creatorId,String category, Long start_time, Long end_time);
     void deleteMeeting(Long userId, Long meetingId);
-    boolean applyMeeting(Long userId, Long meetingId);
+    void applyMeeting(Long userId, Long meetingId, String privilege);
     void exitMeeting(Long userId, Long meetingId);
     List<UserEntity> getMeetingParticipants(Long meetingId);
 

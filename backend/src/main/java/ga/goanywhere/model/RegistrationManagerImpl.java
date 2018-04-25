@@ -4,9 +4,8 @@ import ga.goanywhere.entities.UserContactEntity;
 import ga.goanywhere.entities.UserEntity;
 import ga.goanywhere.exceptions.UsernameAlreadyUsedException;
 import ga.goanywhere.utils.HashUtil;
-import ga.goanywhere.utils.SessionFactoryUtil;
+import ga.goanywhere.dbutils.SessionFactoryUtil;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -20,7 +19,7 @@ public class RegistrationManagerImpl implements RegistrationManager {
     private final static Logger log = LogManager.getLogger(RegistrationManagerImpl.class);
 
     @Override
-    public BigInteger createUser(@NotNull String username, @NotNull String password) {
+    public BigInteger createUser(@NotNull final String username, @NotNull final String password) {
         log.info("Creating user: {}", username);
         Session session = SessionFactoryUtil.getSession();
         try {
@@ -46,7 +45,7 @@ public class RegistrationManagerImpl implements RegistrationManager {
     }
 
     @Override
-    public BigInteger createUser(@NotNull String username, @NotNull String password, @NotNull String email) {
+    public BigInteger createUser(@NotNull final String username, @NotNull final String password, @NotNull final String email) {
         BigInteger userId = createUser(username, password);
         if (userId.equals(BigInteger.ZERO)) {
             log.info("User was not created");
