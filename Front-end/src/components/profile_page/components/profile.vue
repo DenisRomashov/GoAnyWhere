@@ -4,7 +4,7 @@ bithday<template lang="html">
     <br>
     <b-container fluid class="profileInfo">
       <div class="profileInfodiv">
-      <b-card-header header-bg-variant="dark" header-text-variant="white" header-tag="header">
+      <b-card-header header-bg-variant="light" header-text-variant="dark" header-tag="header">
           Информация профиля
           <i class="fas fa-info-circle"></i>
       </b-card-header>
@@ -110,7 +110,7 @@ bithday<template lang="html">
 
   <b-container fluid class="profileContactInfo">
     <div class="ContactInfo">
-        <b-card-header header-bg-variant="dark" header-text-variant="white">
+        <b-card-header header-bg-variant="light" header-text-variant="dark">
           Контактные данные <i class="fas fa-address-book"></i>
       </b-card-header>
     <b-card>

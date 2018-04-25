@@ -44,7 +44,7 @@
           </b-col>
           <b-col cols="10">
             <div id="ButtonRow">
-                <b-button-group size="lg" variant="warning">
+                <b-button-group size="lg">
                 <!-- Кнопки навигации -->
                 <!-- <b-row> -->
                   <!-- <b-col><b-button v-on:click="showCreation=false, showAll=false, showMyMeetings=false, showProfile=true" size="lg" variant="dark">Профиль</b-button></b-col>
@@ -90,13 +90,27 @@
 <!-- Вставка футера -->
   <footerone/>
 
-<!-- Всплывающее окно выхода -->
-  <div>
-    <b-modal ref="Exit" hide-footer :title="titleExitModal">
-      <div class="d-block text-center">
-      </div>
-      <b-btn class="mt-3" variant="dark" block @click="hideModal">Остаться!</b-btn>
-      <b-btn class="mt-3" variant="danger" block @click="exit">Выйти</b-btn>
+  <!-- ExitModalForm -->
+  <div class="ExitModalForm">
+      <!-- <b-btn @click="show=true" variant="primary">Show Modal</b-btn> -->
+    <b-modal ref="Exit"
+             :title="titleExitModal"
+             header-bg-variant="white"
+             header-text-variant="dark"
+             body-bg-variant="light"
+             body-text-variant="dark"
+             footer-bg-variant="dark"
+             footer-text-variant="light">
+       <b-container fluid>
+         <div class="d-block text-center">
+         </div>
+         <b-btn size="" class="mt-3" variant="outline-dark" block @click="hideModal">Остаться!</b-btn>
+         <b-btn size=""class="mt-3" variant="outline-danger" block @click="exit">Выйти</b-btn>
+       </b-container>
+
+       <div slot="modal-footer" class="w-100">
+         <p class="float-left">© GoAnyWhere Project 2018</p>
+       </div>
     </b-modal>
   </div>
 
