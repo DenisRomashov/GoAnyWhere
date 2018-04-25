@@ -30,7 +30,7 @@ public class MeetingController {
 
     @PostMapping("/meeting")
     public @ResponseBody String createMeeting(@RequestBody NewMeeting meeting){
-        meetingManger.createMeeting(meeting.getCreatorId(), meeting.getCategory(),
+        meetingManger.createMeeting(meeting.getCreatorId(), meeting.getCategory(), meeting.getName(),
                 meeting.getStartTime(), meeting.getEndTime());
         return "Done";
     }
@@ -66,6 +66,7 @@ public class MeetingController {
     private static class NewMeeting {
         private Long creatorId;
         private String category;
+        private String name;
         private Long startTime;
         private Long endTime;
     }

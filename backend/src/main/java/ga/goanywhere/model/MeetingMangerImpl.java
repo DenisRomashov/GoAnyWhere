@@ -20,7 +20,8 @@ public class MeetingMangerImpl implements MeetingManger {
 
     //Входные параметры - final
     @Override
-    public void createMeeting(final Long creatorId, final String category, final Long startTime, final Long endTime) {
+    public void createMeeting(final Long creatorId, final String category, final String name,
+                              final Long startTime, final Long endTime) {
         Session session = SessionFactoryUtil.getSession();
         try {
             log.info("Find or create category {}", category);
@@ -35,6 +36,7 @@ public class MeetingMangerImpl implements MeetingManger {
             log.info("Creating new meeting by user with id = {}", creatorId);
             MeetingEntity meetingEntity = new MeetingEntity();
             meetingEntity.setCategoryId(categoryEntity.getId());
+            meetingEntity.setName(name);
             meetingEntity.setStartTime(new Timestamp(startTime));
             meetingEntity.setEndTime(new Timestamp(endTime));
             //easy adding address

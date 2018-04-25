@@ -29,6 +29,9 @@ public class MeetingEntity {
     @JoinColumn(name = "address_id")
     private AddressEntity meetingAddress;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "start_time")
     private Timestamp startTime;
 
