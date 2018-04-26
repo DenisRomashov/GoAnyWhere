@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 
@@ -21,7 +22,8 @@ public class RegisterController {
 
 
     @PostMapping("/register")
-    public @ResponseBody Id register(@RequestBody UserRegistration user) throws NoSuchAlgorithmException{
+    public @ResponseBody Id register(@RequestBody UserRegistration user)
+            throws NoSuchAlgorithmException{
         if (user.getEmail()!= null) {
             if (user.getFirstName() != null) {
                 return new Id(registrationManager.createUser(user.getUsername(),

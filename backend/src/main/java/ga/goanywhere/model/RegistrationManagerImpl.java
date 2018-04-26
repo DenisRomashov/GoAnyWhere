@@ -67,6 +67,7 @@ public class RegistrationManagerImpl implements RegistrationManager {
                                  @NotNull final String lastName, @NotNull final String sex)
             throws  NoSuchAlgorithmException{
         BigInteger userId = createUser(username, password, email);
+        log.info("Adding info about user with id = {}", userId);
         Session session = SessionFactoryUtil.getSession();
         try {
             UserEntity userEntity = (UserEntity) session.get(UserEntity.class, userId.longValue());
