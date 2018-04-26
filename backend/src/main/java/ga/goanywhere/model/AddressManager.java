@@ -4,6 +4,6 @@ import ga.goanywhere.entities.AddressEntity;
 
 public interface AddressManager {
 
-    Long createOrGetAddress(AddressEntity addressEntity);
+    Long getOrCreateAddress(AddressEntity addressEntity);
 
 }

@@ -18,7 +18,6 @@ import java.util.List;
 public class MeetingMangerImpl implements MeetingManger {
     private final static Logger log = LogManager.getLogger(MeetingMangerImpl.class);
 
-    //Входные параметры - final
     @Override
     public void createMeeting(final Long creatorId, final String category, final String name,
                               final Long startTime, final Long endTime) {

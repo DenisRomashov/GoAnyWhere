@@ -1,6 +1,7 @@
 package ga.goanywhere.model;
 
 import ga.goanywhere.entities.UserEntity;
+import ga.goanywhere.exceptions.UserNotFoundException;
 import ga.goanywhere.utils.HashUtil;
 import ga.goanywhere.dbutils.SessionFactoryUtil;
 import lombok.NoArgsConstructor;
@@ -30,7 +31,7 @@ public class AuthorizationManagerImpl implements AuthorizationManager {
         }
         if (userEntity == null) {
             log.info("No user with such username");
-            return BigInteger.ZERO;
+            throw new UserNotFoundException("There is no user with username = " + username);
         }
         if (userEntity.getPassword().equals(HashUtil.hash(password))) {
             return BigInteger.valueOf(userEntity.getId());

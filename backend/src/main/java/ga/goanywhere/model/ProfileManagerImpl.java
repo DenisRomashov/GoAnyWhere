@@ -3,6 +3,7 @@ package ga.goanywhere.model;
 
 import ga.goanywhere.entities.UserEntity;
 import ga.goanywhere.dbutils.SessionFactoryUtil;
+import ga.goanywhere.exceptions.UserNotFoundException;
 import lombok.NoArgsConstructor;
 
 import org.apache.logging.log4j.LogManager;
@@ -19,13 +20,13 @@ public class ProfileManagerImpl implements ProfileManager {
         log.info("Getting information about user with id = {}", userId);
         Session session = SessionFactoryUtil.getSession();
         try {
-            UserEntity userEntity = (UserEntity) session.createQuery("from UserEntity where id = "
-                    + userId).uniqueResult();
+            UserEntity userEntity = (UserEntity) session.createQuery("from UserEntity where id = :userId")
+                    .setParameter("userId", userId).uniqueResult();
             if (userEntity != null) {
                 return userEntity;
             } else {
                 log.info("No user with id = {] found", userId);
-                return null;
+                throw new UserNotFoundException("There is no user with id = " + userId);
             }
         } finally {
             session.close();
@@ -37,8 +38,8 @@ public class ProfileManagerImpl implements ProfileManager {
         log.info("Updating information about user with id = {}", userId);
         Session session = SessionFactoryUtil.getSession();
         try {
-            UserEntity userEntity = (UserEntity) session.createQuery("from UserEntity where id = "
-                    + userId).uniqueResult();
+            UserEntity userEntity = (UserEntity) session.createQuery("from UserEntity where id = :userId")
+                    .setParameter("userId", userId).uniqueResult();
             if (userEntity != null) {
                 user.setUsername(userEntity.getUsername());
                 user.setPassword(userEntity.getPassword());
@@ -46,6 +47,7 @@ public class ProfileManagerImpl implements ProfileManager {
                 session.flush();
             } else {
                 log.info("No user with id = {] found", userId);
+                throw new UserNotFoundException("There is no user with id = " + userId);
             }
         } finally {
             session.close();
