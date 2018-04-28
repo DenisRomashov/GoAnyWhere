@@ -1,4 +1,4 @@
-<template lang="html">
+bithday<template lang="html">
   <div class="profile">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
     <br>
@@ -20,7 +20,7 @@
 
                 <b-form-input  v-model.trim="form.username"
                 type="text"
-                disabled></b-form-input>
+                :disabled="editform"></b-form-input>
 
             </b-input-group>
           </div>
@@ -303,22 +303,17 @@ export default {
    // ],
 
       form: {
-          id: '',
-          username: '',
-          firstName: '',
-          lastName: '',
+          username: 'denisrom',
+          firstName: 'Denis',
+          lastName: 'Romashov',
           sex: '',
           bithday: '',
-          email: '',
-          phoneNumber: '',
+          email: 'qwerty@gmail.com',
+          phoneNumber: '+79110245391',
           vkReference: 'https://vk.com',
           facebookReference: 'https://www.facebook.com',
           twitterReference: 'https://twitter.com',
-          // userAddress: ''
-      },
-
-      adress: {
-        userAddress: ''
+          userAddress: 'Валерия Гаврилина 3 к 1'
       },
 
       editInfoButton: {
@@ -343,21 +338,6 @@ export default {
 
   },
   methods: {
-    sendInfo() {
-      axios.post("/user", this.form)
-      .then(response => {
-
-        if (response.status === 200) {
-
-          console.log(response);
-        }
-
-      }).catch(function (error) {
-        alert("Error...");
-        console.log(error);
-      });
-    },
-
     editinfo() {
       if (this.editInfoButton.button_state) {
         this.editInfoButton.variant_prepend = 'dark';
@@ -365,9 +345,6 @@ export default {
         this.editInfoButton.variant = 'dark';
         this.editInfoButton.title = 'Редактировать данные';
         this.editInfoButton.button_state = !this.editInfoButton.button_state;
-
-        this.sendInfo();
-
       }else {
         this.editInfoButton.variant_prepend = 'outline-dark'
         this.editform = !this.editform;
@@ -384,9 +361,6 @@ export default {
         this.editContactButton.variant = 'dark';
         this.editContactButton.title = 'Редактировать данные';
         this.editContactButton.button_state = !this.editContactButton.button_state;
-
-        this.sendInfo();
-
       }else {
         this.editContactButton.variant_prepend = 'outline-dark'
         this.editContactInfo = !this.editContactInfo;
@@ -416,7 +390,6 @@ export default {
             //this.create = response.data.userContact.facebookReference;
 
             // Заполнение форм по респонсу
-            this.form.id = response.data.id;
             this.form.username = response.data.username;
             this.form.firstName = response.data.firstName;
             this.form.lastName = response.data.lastName;

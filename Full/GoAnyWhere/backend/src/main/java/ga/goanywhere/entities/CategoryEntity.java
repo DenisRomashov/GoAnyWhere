@@ -4,7 +4,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
 @Getter
@@ -14,7 +17,6 @@ import java.util.Objects;
 @Table(name = "category", schema = "goanywhere", catalog = "")
 public class CategoryEntity {
     @Id
-    @GeneratedValue
     @Column(name = "id")
     private Long id;
 

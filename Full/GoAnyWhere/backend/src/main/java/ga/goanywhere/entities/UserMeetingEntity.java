@@ -35,7 +35,7 @@ public class UserMeetingEntity {
     @AllArgsConstructor
     @ToString
     @Embeddable
-    public static class UserMeetingPK implements Serializable{
+    private static class UserMeetingPK implements Serializable{
 
         @ManyToOne
         @JoinColumn(name = "user_id")

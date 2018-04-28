@@ -84,12 +84,12 @@
                     description="Поля Фамилия и Имя можно оставить пустыми">
                     <b-form-input id="inpurtFirstName"
                       type="text"
-                      v-model.trim="form.firstName"
+                      v-model.trim="form.firstname"
                       placeholder="Введите имя">
                     </b-form-input>
                     <b-form-input id="inputLastName"
                       type="text"
-                      v-model.trim="form.lastName"
+                      v-model.trim="form.lastname"
                       placeholder="Введите фамилию">
                     </b-form-input>
               </b-form-group>
@@ -177,12 +177,12 @@ export default {
         password: '',
         repassword: '',
         email: '',
-        firstName: '',
-        lastName: ''
+        firstname: '',
+        lastname: ''
       },
       sex: [
         { text: 'Выбирите пол'},
-        'm', 'f'],
+        'male', 'female'],
       show: true,
 
       userInfo : {
@@ -197,7 +197,7 @@ export default {
       window.localStorage.setItem('STORAGE_USER_INFO', JSON.stringify(this.userInfo));
       axios.post("/register", this.form)
       .then(response => {
-
+        
         if (response.status === 200) {
           this.userInfo.userId = response.data.id;
           window.localStorage.setItem('STORAGE_USER_INFO', JSON.stringify(this.userInfo));
@@ -218,9 +218,9 @@ export default {
       this.form.password = '';
       this.form.repassword = '';
       this.form.email = '';
-      this.form.firstName = '';
-      this.form.lastName= '';
-      this.form.sex = this.sex.text;
+      this.form.firstname = '';
+      this.form.lastname= '';
+      this.form.sex = null;
       /* Trick to reset/clear native browser form validation state */
       this.show = false;
       this.$nextTick(() => { this.show = true });

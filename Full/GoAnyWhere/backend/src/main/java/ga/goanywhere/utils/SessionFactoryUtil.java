@@ -1,4 +1,4 @@
-package ga.goanywhere.dbutils;
+package ga.goanywhere.utils;
 
 
 import org.hibernate.Session;

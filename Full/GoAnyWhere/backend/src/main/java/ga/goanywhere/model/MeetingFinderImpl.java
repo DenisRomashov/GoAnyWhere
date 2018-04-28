@@ -13,27 +13,27 @@ public class MeetingFinderImpl implements MeetingFinder {
     private final static Logger log = LogManager.getLogger(MeetingFinderImpl.class);
 
     @Override
-    public List<MeetingEntity> findMeetingsByCategory(final String category) {
+    public List<MeetingEntity> findMeetingsByCategory(String category) {
         return null;
     }
 
     @Override
-    public List<MeetingEntity> findMeetingByUser(final Long userId) {
+    public List<MeetingEntity> findMeetingByUser(Long userId) {
         return null;
     }
 
     @Override
-    public List<MeetingEntity> findMeetingCreatedByUser(final Long userId) {
+    public List<MeetingEntity> findMeetingCreatedByUser(Long userId) {
         return null;
     }
 
     @Override
-    public List<MeetingEntity> findActualMeetingForUser(final Long userId) {
+    public List<MeetingEntity> findActualMeetingForUser(Long userId) {
         return null;
     }
 
     @Override
-    public List<MeetingEntity> findMeetingByLocality(final String locality) {
+    public List<MeetingEntity> findMeetingByLocality(String locality) {
         return null;
     }
 }
