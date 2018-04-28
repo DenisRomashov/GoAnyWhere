@@ -19,7 +19,6 @@
 
             <b-form-input size="" class="mb-2 mr-sm-2 mb-sm-0" type="text" placeholder="Поиск" />
             <b-button size="" class="mb-2 mr-sm-2 mb-sm-0" type="submit" variant="warning"> Поиск </b-button>
-
           </b-collapse>
 
             <!-- Right aligned nav items -->
@@ -35,22 +34,24 @@
         </b-col>
       </b-row>
       </b-container>
+
+
       <b-container fluid class="ProfileNavigation">
       <div class="BlockAfterNavbar">
         <b-row id="FirstRow">
           <!-- left column -->
-          <b-col>
-
-          </b-col>
+          <b-col></b-col>
+          <!-- central culumn -->
           <b-col cols="10">
             <div id="ButtonRow">
                 <b-button-group size="lg">
                 <!-- Кнопки навигации -->
-                <!-- <b-row> -->
-                  <!-- <b-col><b-button v-on:click="showCreation=false, showAll=false, showMyMeetings=false, showProfile=true" size="lg" variant="dark">Профиль</b-button></b-col>
+                <!-- <b-row>
+                  <b-col><b-button v-on:click="showCreation=false, showAll=false, showMyMeetings=false, showProfile=true" size="lg" variant="dark">Профиль</b-button></b-col>
                   <b-col><b-button v-on:click="showCreation=false, showAll=false, showProfile=false, showMyMeetings=true" size="lg" variant="dark">Мои события</b-button></b-col>
                   <b-col><b-button v-on:click="showCreation=false, showAll=true, showProfile=false, showMyMeetings=false" size="lg" variant="dark">Все события</b-button></b-col>
                   <b-col><b-button v-on:click="showCreation=true, showAll=false, showProfile=false, showMyMeetings=false" size="lg" variant="dark">Создать событие</b-button></b-col> -->
+
                 <b-button v-on:click="showCreation=false, showAll=false, showMyMeetings=false, showProfile=true" variant="dark">Профиль</b-button>
                 <b-button v-on:click="showCreation=false, showAll=false, showProfile=false, showMyMeetings=true" variant="dark">Мои события</b-button>
                 <b-button v-on:click="showCreation=false, showAll=true, showProfile=false, showMyMeetings=false" variant="dark">Все события</b-button>
@@ -63,13 +64,14 @@
               </b-button-group>
             </div>
           </b-col>
-            <b-col>
-            </b-col>
+          <!-- righ culumn -->
+            <b-col></b-col>
           </b-row>
         </div>
+
       </b-container>
 
-      <b-container class="Profile">
+      <!-- <b-container class="Profile">
         <br>
         <br>
             <b-row>
@@ -84,7 +86,34 @@
 
                 <b-col></b-col>
             </b-row>
+      </b-container> -->
+
+
+    <div class="content">
+      <b-container class="Profile" v-if="showProfile">
+            <b-row>
+                <b-col></b-col>
+                <b-col cols="10">
+                  <!-- Страница профайла -->
+                    <profile/>
+                  <!-- ___________________________    -->
+                </b-col>
+                <b-col></b-col>
+            </b-row>
       </b-container>
+      <b-container fluid class="myMeetings" v-if="showMyMeetings">
+                  <!-- Мои события -->
+                  <myMeetings/>
+      </b-container>
+      <b-container fluid class="allMeetings" v-if="showAll">
+                  <!-- Все события -->
+                  <allMeetings/>
+      </b-container>
+      <b-container fluid class="creationMeeting" v-if="showCreation">
+                  <!-- Страница создания события -->
+                  <createMeeting/>
+      </b-container>
+    </div>
 
 
 <!-- Вставка футера -->
@@ -92,7 +121,6 @@
 
   <!-- ExitModalForm -->
   <div class="ExitModalForm">
-      <!-- <b-btn @click="show=true" variant="primary">Show Modal</b-btn> -->
     <b-modal ref="Exit"
              :title="titleExitModal"
              header-bg-variant="white"
@@ -174,11 +202,15 @@ export default {
     margin-top: -4px;
 }
 
-#creationMeeting {
-  /* height: 10em; */
-  display: flex;
-  align-items: center;
-  justify-content: center
+.content {
+  margin-top: 55px;
+  margin-bottom: -35px;
+}
+.creationMeeting {
+  /* margin-top: -12px;
+  margin-bottom: -55px;
+
+ background-color: red; */
 }
 
 

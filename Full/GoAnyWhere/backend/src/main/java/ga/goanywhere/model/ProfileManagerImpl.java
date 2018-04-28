@@ -2,7 +2,7 @@ package ga.goanywhere.model;
 
 
 import ga.goanywhere.entities.UserEntity;
-import ga.goanywhere.utils.SessionFactoryUtil;
+import ga.goanywhere.dbutils.SessionFactoryUtil;
 import lombok.NoArgsConstructor;
 
 import org.apache.logging.log4j.LogManager;
@@ -15,7 +15,7 @@ public class ProfileManagerImpl implements ProfileManager {
     private final static Logger log = LogManager.getLogger(ProfileManagerImpl.class);
 
     @Override
-    public UserEntity getInfo(Long userId) {
+    public UserEntity getInfo(final Long userId) {
         log.info("Getting information about user with id = {}", userId);
         Session session = SessionFactoryUtil.getSession();
         try {
@@ -33,7 +33,7 @@ public class ProfileManagerImpl implements ProfileManager {
     }
 
     @Override
-    public void updateUserInfo(Long userId, UserEntity user){
+    public void updateUserInfo(final Long userId, final UserEntity user){
         log.info("Updating information about user with id = {}", userId);
         Session session = SessionFactoryUtil.getSession();
         try {
