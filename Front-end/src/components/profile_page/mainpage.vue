@@ -1,5 +1,5 @@
 <template lang="html">
-<div class="profilepage">
+<div class="mainpage">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
   <b-container fluid class="gridFullPage">
       <b-row>
@@ -84,7 +84,40 @@
 
                 <b-col></b-col>
             </b-row>
+<<<<<<< Updated upstream
       </b-container>
+=======
+      </b-container> -->
+
+
+    <div class="content">
+      <div class="profilepage">
+      <b-container class="Profile" v-if="showProfile">
+            <b-row>
+                <b-col></b-col>
+                <b-col cols="10">
+                  <!-- Страница профайла -->
+                    <profile/>
+                  <!-- ___________________________    -->
+                </b-col>
+                <b-col></b-col>
+            </b-row>
+      </b-container>
+      </div>
+      <b-container fluid class="myMeetings" v-if="showMyMeetings">
+                  <!-- Мои события -->
+                  <myMeetings/>
+      </b-container>
+      <b-container fluid class="allMeetings" v-if="showAll">
+                  <!-- Все события -->
+                  <allMeetings/>
+      </b-container>
+      <b-container fluid class="creationMeeting" v-if="showCreation">
+                  <!-- Страница создания события -->
+                  <createMeeting/>
+      </b-container>
+    </div>
+>>>>>>> Stashed changes
 
 
 <!-- Вставка футера -->
@@ -174,14 +207,30 @@ export default {
     margin-top: -4px;
 }
 
+<<<<<<< Updated upstream
 #creationMeeting {
   /* height: 10em; */
   display: flex;
   align-items: center;
   justify-content: center
+=======
+.content {
+  margin-top: 55px;
+  /* margin-bottom: -35px; */
+
+}
+.creationMeeting {
+  /* margin-top: -12px;
+  margin-bottom: -55px;
+
+ background-color: red; */
+>>>>>>> Stashed changes
 }
 
 
+.mainpage {
+    margin-top: -4px;
+}
 
 .ProfileNavigation {
   position: fixed;
@@ -189,9 +238,9 @@ export default {
 }
 
 
-
 .profilepage {
-  margin-top: -4px;
+  margin-top: -11px;
+  margin-bottom: -55px;
   /* position: fixed; */
   /* background-color: #DCDCDC; */
   background-image: url("../../assets/background_profile.jpg");
