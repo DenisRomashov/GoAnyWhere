@@ -4,9 +4,8 @@ import ga.goanywhere.entities.UserContactEntity;
 import ga.goanywhere.entities.UserEntity;
 import ga.goanywhere.exceptions.UsernameAlreadyUsedException;
 import ga.goanywhere.utils.HashUtil;
-import ga.goanywhere.utils.SessionFactoryUtil;
+import ga.goanywhere.dbutils.SessionFactoryUtil;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -20,25 +19,23 @@ public class RegistrationManagerImpl implements RegistrationManager {
     private final static Logger log = LogManager.getLogger(RegistrationManagerImpl.class);
 
     @Override
-    public BigInteger createUser(@NotNull String username, @NotNull String password) {
+    public BigInteger createUser(@NotNull final String username, @NotNull final String password)
+            throws NoSuchAlgorithmException {
         log.info("Creating user: {}", username);
         Session session = SessionFactoryUtil.getSession();
         try {
-            if (session.createQuery("from UserEntity where username = \'" + username + "\'").list().size() != 0) {
-                log.info("Username {} already used", username);
-                throw new UsernameAlreadyUsedException();
-            }
-            UserEntity userEntity = new UserEntity();
-            try {
+            synchronized (this) {
+                if (session.createQuery("from UserEntity where username = :username")
+                        .setString("username", username).uniqueResult() != null) {
+                    log.info("Username {} already used", username);
+                    throw new UsernameAlreadyUsedException();
+                }
+                UserEntity userEntity = new UserEntity();
                 userEntity.setUsername(username);
                 userEntity.setPassword(HashUtil.hash(password));
                 session.save(userEntity);
                 session.flush();
                 return BigInteger.valueOf(userEntity.getId());
-            } catch (NoSuchAlgorithmException e) {
-                log.info("Error while creating hash of password");
-                e.printStackTrace();
-                return BigInteger.ZERO;
             }
         } finally {
             session.close();
@@ -46,12 +43,10 @@ public class RegistrationManagerImpl implements RegistrationManager {
     }
 
     @Override
-    public BigInteger createUser(@NotNull String username, @NotNull String password, @NotNull String email) {
+    public BigInteger createUser(@NotNull final String username, @NotNull final String password,
+                                 @NotNull final String email)
+            throws NoSuchAlgorithmException {
         BigInteger userId = createUser(username, password);
-        if (userId.equals(BigInteger.ZERO)) {
-            log.info("User was not created");
-            return userId;
-        }
         log.info("Adding email info of user with id = {}", userId);
         UserContactEntity userContactEntity = new UserContactEntity();
         userContactEntity.setUserId(new UserEntity(userId.longValue()));
@@ -59,6 +54,27 @@ public class RegistrationManagerImpl implements RegistrationManager {
         Session session = SessionFactoryUtil.getSession();
         try {
             session.save(userContactEntity);
+            session.flush();
+            return userId;
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public BigInteger createUser(@NotNull final String username, @NotNull final String password,
+                                 @NotNull final String email, @NotNull final String firstName,
+                                 @NotNull final String lastName, @NotNull final String sex)
+            throws  NoSuchAlgorithmException{
+        BigInteger userId = createUser(username, password, email);
+        log.info("Adding info about user with id = {}", userId);
+        Session session = SessionFactoryUtil.getSession();
+        try {
+            UserEntity userEntity = (UserEntity) session.get(UserEntity.class, userId.longValue());
+            userEntity.setFirstName(firstName);
+            userEntity.setLastName(lastName);
+            userEntity.setSex(sex);
+            session.update(userEntity);
             session.flush();
             return userId;
         } finally {

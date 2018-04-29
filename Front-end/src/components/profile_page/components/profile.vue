@@ -70,8 +70,6 @@
                 v-model.trim="form.sex"
                 :disabled="editform"></b-form-input>
 
-
-
             </b-input-group>
           </div>
         </b-col>

@@ -12,16 +12,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
 
 @Controller
 public class AuthorizationController {
     private AuthorizationManager authorizationManager = new AuthorizationManagerImpl();
 
     @PostMapping("/auth")
-    public @ResponseBody Id authorize(@RequestBody UserAuth user){
+    public @ResponseBody Id authorize(@RequestBody UserAuth user) throws NoSuchAlgorithmException{
         return new Id(authorizationManager.logIn(user.getUsername(), user.getPassword()));
     }
-
 
     @Getter
     @Setter
