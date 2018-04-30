@@ -17,11 +17,13 @@ public class MeetingFinderImpl implements MeetingFinder {
         return null;
     }
 
+    // /meeting/user?id=5
     @Override
     public List<MeetingEntity> findMeetingByUser(final Long userId) {
         return null;
     }
 
+    // /meeting/creator?id=5
     @Override
     public List<MeetingEntity> findMeetingCreatedByUser(final Long userId) {
         return null;
