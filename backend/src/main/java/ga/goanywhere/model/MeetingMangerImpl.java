@@ -20,32 +20,34 @@ public class MeetingMangerImpl implements MeetingManger {
     private final static String CREATOR_PRIVILEGE = "creator";
 
     @Override
-    public void createMeeting(final Long creatorId, final String category, final Long addressId,
-                              final String name, final Long startTime, final Long endTime) {
+    public Long createMeeting(final Long id, final Long creatorId, final Long categoryId,
+                              final Long addressId, final String name, final Long startTime,
+                              final Long endTime, final String description, final Long maxParticipants,
+                              final Long minAge, final byte[] attachment) {
         Session session = SessionFactoryUtil.getSession();
         try {
-            CategoryEntity categoryEntity;
-            log.info("Find or create category {}", category);
-            synchronized (this) {
-                categoryEntity = (CategoryEntity) session.createQuery("from CategoryEntity where name = :category")
-                        .setString("category", category).uniqueResult();
-                if (categoryEntity == null) {
-                    categoryEntity = new CategoryEntity();
-                    categoryEntity.setName(category);
-                    session.save(categoryEntity);
-                    session.flush();
-                }
-            }
             log.info("Creating new meeting by user with id = {}", creatorId);
-            MeetingEntity meetingEntity = new MeetingEntity();
-            meetingEntity.setCategoryId(categoryEntity.getId());
+            MeetingEntity meetingEntity;
+            boolean b = true;
+            if (id == null) {
+                meetingEntity = new MeetingEntity();
+            } else {
+                meetingEntity = (MeetingEntity) session.get(MeetingEntity.class, id);
+                b = false;
+            }
+            meetingEntity.setCategoryId(categoryId);
             meetingEntity.setMeetingAddress((AddressEntity) session.get(AddressEntity.class, addressId));
             meetingEntity.setName(name);
             meetingEntity.setStartTime(new Timestamp(startTime));
             meetingEntity.setEndTime(new Timestamp(endTime));
-            session.save(meetingEntity);
+            meetingEntity.setDescription(description);
+            meetingEntity.setMaxParticipants(maxParticipants);
+            meetingEntity.setMinAge(minAge);
+            meetingEntity.setAttachment(attachment);
+            session.saveOrUpdate(meetingEntity);
             session.flush();
-            applyMeeting(creatorId, meetingEntity.getId(), CREATOR_PRIVILEGE);
+            if (b) applyMeeting(creatorId, meetingEntity.getId(), CREATOR_PRIVILEGE);
+            return meetingEntity.getId();
         } finally {
             session.close();
         }
@@ -150,6 +152,16 @@ public class MeetingMangerImpl implements MeetingManger {
             meeting.getParticipants().forEach((participant) ->
                     participants.add(participant.getUserMeetingPK().getParticipant()));
             return participants;
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public List<CategoryEntity> getCategories(){
+        Session session = SessionFactoryUtil.getSession();
+        try {
+            return session.createQuery("from CategoryEntity").list();
         } finally {
             session.close();
         }
