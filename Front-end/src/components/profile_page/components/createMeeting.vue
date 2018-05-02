@@ -83,7 +83,7 @@
                           <b-btn  variant="dark">Время начала: </b-btn>
                         </b-input-group-prepend>
 
-                        <b-form-input  v-model.trim="form.name"
+                        <b-form-input  v-model.trim="form.startTime"
                           type="datetime-local">
                         </b-form-input>
 
@@ -95,7 +95,7 @@
                           <b-btn  variant="dark">Время окончанияx: </b-btn>
                         </b-input-group-prepend>
 
-                        <b-form-input  v-model.trim="form.name"
+                        <b-form-input  v-model.trim="form.endTime"
                           type="datetime-local">
                         </b-form-input>
 
@@ -107,13 +107,13 @@
 
               <b-card-footer footer-bg-variant="dark" footer-border-variant="dark" footer-text-variant="white">
                 <b-row>
-                  <b-col class="maxPerson">
+                  <b-col class="maxParticipants">
                     <b-input-group size="" >
                         <b-input-group-prepend>
                           <b-btn  variant="dark">Максимальное количество человек: </b-btn>
                         </b-input-group-prepend>
 
-                        <b-form-input  v-model.trim="form.name"
+                        <b-form-input  v-model.trim="form.maxParticipants"
                           type="number">
                         </b-form-input>
 
@@ -125,7 +125,7 @@
                           <b-btn  variant="dark">Минимальный возвраст: </b-btn>
                         </b-input-group-prepend>
 
-                        <b-form-input  v-model.trim="form.name"
+                        <b-form-input  v-model.trim="form.minAge"
                           type="number">
                         </b-form-input>
 
@@ -163,27 +163,64 @@
         <b-col>
           <b-card-header header-bg-variant="secondary" header-text-variant="white" header-tag="header">
             <p>Где будет проходит ваше событие?</p>
-            <b-input-group size="" >
-                <b-input-group-prepend>
-                  <b-btn  variant="dark">Название: </b-btn>
-                </b-input-group-prepend>
+            <gmap-autocomplete
+              @place_changed="setPlace">
 
-                <b-form-input  v-model.trim="form.name"
-                  type="text"
-                  placeholder="Введите название события">
-                </b-form-input>
-            </b-input-group>
+            </gmap-autocomplete>
+
+            <b-button  variant="primary"  @click="addMarker">
+                Добавить на карту
+            </b-button>
+
           </b-card-header>
         </b-col>
       </b-row>
       <b-row>
         <b-col>
           <b-card bg-variant="white" >
-            Карта
+            <gmap-map
+              :center="center"
+              :zoom="14"
+              style="width:100%;  height: 400px;"
+            >
+
+
+              <gmap-marker
+                :position="marker"
+                @click="center=marker"
+              ></gmap-marker>
+
+            </gmap-map>
+            <br>
+            <h1>{{ this.form }}</h1>
+            <h5> Форм адрес долгота: {{ formAddress.latitude }}</h5>
+            <h5> Форм адрес широта: {{ formAddress.longitude }}</h5>
+            <h2>{{ center.lat }}</h2>
+            <h2>{{ center.lng }}</h2>
+            <br>
+            <h2>marker: {{ marker }}</h2>
+            <h2>place: {{ place.address_components }}</h2>
           </b-card>
         </b-col>
       </b-row>
+      <b-row>
+        <b-col>
+          <b-card-footer footer-bg-variant="dark" footer-border-variant="dark">
 
+                <b-btn size="lg"
+                        variant="outline-danger"
+                        @click="createMeeting"> Создать событие!
+                </b-btn>
+                <b-popover ref="popoverOne" target="editinfobutton"
+                 placement="left"
+                 title="Нажми!"
+                 triggers="hover focus"
+                 content="И мы создадим событие :)">
+               </b-popover>
+
+          </b-card-footer>
+        </b-col>
+      </b-row>
     </b-container>
 
     <br>
@@ -198,21 +235,35 @@ import axios from 'axios'
 export default {
   data () {
     return {
+      center: { lat: 59.9342802, lng: 30.335098600000038  },
+      marker: {},
+      place: {},
+      currentPlace: null,
 
-      
       form: {
-        creatorId: 7,
+        creatorId: 0,
         categoryId: 1,
-        addressId: 1,
+        addressId: null,
         name: '',
-        startTime: '',
-        endTime: '',
-        description: ''
+        startTime: 100000,
+        endTime: 200000,
+        description: '',
+        maxParticipants: '',
+        minAge: ''
       },
 
       pageform: {
         category: 'пусто',
         file: null
+      },
+
+      formAddress: {
+        locality: '',
+        street: '',
+        house: '',
+        latitude: 1,
+        longitude: 1
+
       },
 
       showStartCreate: true,
@@ -244,7 +295,78 @@ export default {
 
     }
   },
+
+
+  mounted() {
+    this.geolocate();
+
+      if (window.localStorage.getItem('STORAGE_USER_INFO') !== null) {
+      this.form.creatorId = JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userId;
+    }
+
+  },
+
+
   methods: {
+    // Работа с картой
+    // receives a place object via the autocomplete component
+    setPlace(place) {
+      this.currentPlace = place;
+    },
+    addMarker() {
+      if (this.currentPlace) {
+        const marker = {
+          lat: this.currentPlace.geometry.location.lat(),
+          lng: this.currentPlace.geometry.location.lng()
+        };
+        this.marker = marker;
+        this.place = this.currentPlace;
+        this.center = marker;
+        this.currentPlace = null;
+
+        //Добавление в formAddress широты и долготы
+         this.formAddress.latitude = marker.lat;
+         this.formAddress.longitude = marker.lng;
+
+       //Отправляем выбранный адресс и получаем addressId из базы
+        axios.post("/address", this.formAddress)
+        .then(response => {
+
+          if (response.status === 200) {
+            this.form.addressId = response.data.id;
+            console.log(response);
+          }
+
+        }).catch(function (error) {
+          alert("Error...");
+          console.log(error);
+        });
+
+      }
+    },
+    geolocate: function() {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.center = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+      });
+    },
+
+    createMeeting() {
+      axios.post("/meeting", this.form)
+      .then(response => {
+
+        if (response.status === 200) {
+          alert("Событие создано!");
+          console.log(response);
+        }
+
+      }).catch(function (error) {
+        alert("Error...");
+        console.log(error);
+      });
+    }
   }
 }
 </script>

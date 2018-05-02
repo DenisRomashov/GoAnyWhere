@@ -1,5 +1,6 @@
 package ga.goanywhere.controllers;
 
+import ga.goanywhere.entities.CategoryEntity;
 import ga.goanywhere.entities.MeetingEntity;
 import ga.goanywhere.entities.UserEntity;
 import ga.goanywhere.model.MeetingManger;
@@ -29,10 +30,10 @@ public class MeetingController {
     }
 
     @PostMapping("/meeting")
-    public @ResponseBody String createMeeting(@RequestBody NewMeeting meeting){
-        meetingManger.createMeeting(meeting.getCreatorId(), meeting.getCategory(), meeting.getName(),
-                meeting.getStartTime(), meeting.getEndTime());
-        return "Done";
+    public @ResponseBody Id createMeeting(@RequestBody Meeting meeting){
+        return  new Id(meetingManger.createMeeting(meeting.getId(),meeting.getCreatorId(), meeting.getCategoryId(),
+                meeting.getAddressId(), meeting.getName(), meeting.getStartTime(), meeting.getEndTime(),
+                meeting.getDescription(), meeting.getMaxParticipants(), meeting.getMinAge(), meeting.getAttachment()));
     }
 
     @PostMapping("/meeting/apply")
@@ -58,17 +59,35 @@ public class MeetingController {
         return meetingManger.getMeetingParticipants(Id);
     }
 
+    @GetMapping("/categories")
+    public @ResponseBody List<CategoryEntity> getCategories(){
+        return meetingManger.getCategories();
+    }
 
     @Getter
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    private static class NewMeeting {
+    private static class Id {
+        private Long id;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    private static class Meeting {
+        private Long Id;
         private Long creatorId;
-        private String category;
+        private Long categoryId;
+        private Long addressId;
         private String name;
         private Long startTime;
         private Long endTime;
+        private String description;
+        private Long maxParticipants;
+        private Long minAge;
+        private byte[] attachment;
     }
 
     @Getter

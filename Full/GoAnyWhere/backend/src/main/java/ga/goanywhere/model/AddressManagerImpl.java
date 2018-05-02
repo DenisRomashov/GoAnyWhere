@@ -13,7 +13,7 @@ public class AddressManagerImpl implements AddressManager {
 
     @Override
     public Long getOrCreateAddress(AddressEntity addressEntity) {
-        log.info("Creating new address");
+        log.info("Finding or creating new address");
         Session session = SessionFactoryUtil.getSession();
         try {
             synchronized (this) {

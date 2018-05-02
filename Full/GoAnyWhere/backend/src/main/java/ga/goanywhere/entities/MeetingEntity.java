@@ -42,10 +42,10 @@ public class MeetingEntity {
     private String description;
 
     @Column(name = "max_participants")
-    private Integer maxParticipants;
+    private Long maxParticipants;
 
     @Column(name = "min_age")
-    private Integer minAge;
+    private Long minAge;
 
     @Column(name = "attachment")
     private byte[] attachment;

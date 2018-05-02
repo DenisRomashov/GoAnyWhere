@@ -2,15 +2,22 @@ package ga.goanywhere.model;
 
 
 
+import ga.goanywhere.entities.CategoryEntity;
 import ga.goanywhere.entities.UserEntity;
 
 import java.util.List;
 
 public interface MeetingManger {
-    void createMeeting(Long creatorId, String category, String name, Long start_time, Long end_time);
+
+    Long createMeeting(Long id, Long creatorId, Long categoryId,
+                       Long addressId, String name, Long startTime,
+                       Long endTime, String description, Long maxParticipants,
+                       Long minAge, byte[] attachment);
+
     void deleteMeeting(Long userId, Long meetingId);
     void applyMeeting(Long userId, Long meetingId, String privilege);
     void exitMeeting(Long userId, Long meetingId);
     List<UserEntity> getMeetingParticipants(Long meetingId);
 
+    List<CategoryEntity> getCategories();
 }

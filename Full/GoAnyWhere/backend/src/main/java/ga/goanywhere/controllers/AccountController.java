@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
+import java.sql.Date;
 
 @Controller
 public class AccountController {
@@ -22,9 +23,12 @@ public class AccountController {
     }
 
     @PostMapping("/user")
-    public @ResponseBody Id changeInfo(@RequestBody UserEntity userEntity) {
-        profileManager.updateUserInfo(userEntity.getId(), userEntity);
-        return new Id(userEntity.getId());
+    public @ResponseBody Id changeInfo(@RequestBody UserInfo userInfo) {
+        profileManager.updateUserInfo(userInfo.getId(), userInfo.getAddressId(), userInfo.getEmail(),
+                userInfo.getPhoneNumber(), userInfo.getFacebookReference(), userInfo.getTwitterReference(),
+                userInfo.getVkReference(), userInfo.getBirthday(), userInfo.getFirstName(), userInfo.getLastName(),
+                userInfo.getSex());
+        return new Id(userInfo.getId());
     }
 
     @Getter
@@ -33,5 +37,23 @@ public class AccountController {
     @AllArgsConstructor
     private static class Id {
         private Long Id;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    private static class UserInfo {
+        private Long id;
+        private Long addressId;
+        private String email;
+        private String phoneNumber;
+        private String facebookReference;
+        private String twitterReference;
+        private String vkReference;
+        private Date birthday;
+        private String firstName;
+        private String lastName;
+        private String sex;
     }
 }
