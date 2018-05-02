@@ -80,7 +80,7 @@
                     <b-btn :variant="editInfoButton.variant_prepend"> Дата рождения <i class="fas fa-calendar-alt"></i></b-btn>
                 </b-input-group-prepend>
 
-                <b-form-input  :disabled="editform"></b-form-input>
+                <b-form-input v-model.trim="form.birthday" :disabled="editform"></b-form-input>
 
             </b-input-group>
           </div>
@@ -172,16 +172,7 @@
 
     <b-row>
       <b-col>
-        <!-- <yandex-map
-          :coords="[59.9386300, 30.3141300]"
-          zoom="10"
-          style="width: auto; height: 300px;"
-          :cluster-options="{1: {clusterDisableClickZoom: true}}"
-          :behaviors="['ruler']"
-          :placemarks="placemarks"
-          map-type="map"
-          >
-        </yandex-map> -->
+
         <h1> <strong>КАРТА</strong> </h1>
       </b-col>
     </b-row>
@@ -291,24 +282,13 @@ import router from '../../../router'
 export default {
   data () {
     return {
-   //    placemarks: [
-   //   {
-   //     coords: [54.8, 39.8],
-   //     properties: {}, // define properties here
-   //     options: {}, // define options here
-   //     clusterName: "1",
-   //     balloonTemplate: '<div>"Your custom template"</div>',
-   //     callbacks: { click: function() {} }
-   //   }
-   // ],
-
       form: {
           id: '',
           username: '',
           firstName: '',
           lastName: '',
           sex: '',
-          bithday: '',
+          birthday: '',
           email: '',
           phoneNumber: '',
           vkReference: 'https://vk.com',

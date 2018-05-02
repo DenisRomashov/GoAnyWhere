@@ -18,8 +18,15 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
-import YmapPlugin from 'vue-yandex-maps'
-Vue.use(YmapPlugin)
+//Google карты
+import * as VueGoogleMaps from "vue2-google-maps";
+
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: "AIzaSyCW3_RWKRoPUehZdyjK5DYMNPjwGkxL-rI",
+    libraries: "places" // necessary for places input
+  }
+});
 
 //Если использовать компоненты BootstrapVue включить!
 Vue.use(BootstrapVue);
