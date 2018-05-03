@@ -99,7 +99,7 @@
                     label="Ваш пол:"
                     label-for="inputSex">
                     <b-form-select id="exampleInput3"
-                        :options="sex"
+                        :options="sexOptions"
                         v-model="form.sex">
                     </b-form-select>
               </b-form-group>
@@ -178,11 +178,14 @@ export default {
         repassword: '',
         email: '',
         firstName: '',
-        lastName: ''
+        lastName: '',
+        sex: null
       },
-      sex: [
-        { text: 'Выбирите пол'},
-        'm', 'f'],
+      sexOptions: [{ value: null, text: 'Выберите ваш пол' },
+            { value: 'm', text: 'Мужской' },
+            { value: 'f', text: 'Женский' }
+      ],
+
       show: true,
 
       userInfo : {
@@ -220,7 +223,7 @@ export default {
       this.form.email = '';
       this.form.firstName = '';
       this.form.lastName= '';
-      this.form.sex = this.sex.text;
+      this.form.sex = null;
       /* Trick to reset/clear native browser form validation state */
       this.show = false;
       this.$nextTick(() => { this.show = true });
