@@ -26,7 +26,7 @@
       <b-container fluid class="meetingInfo">
         <div class="profileInfodiv">
           <br>
-            <b-card-header header-bg-variant="warning" header-text-variant="white" header-tag="header">
+            <b-card-header header-bg-variant="danger" header-text-variant="white" header-tag="header">
               <h5>Создание события <i class="fas fa-plus"></i></h5>
             </b-card-header>
           </div>

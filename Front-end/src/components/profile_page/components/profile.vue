@@ -80,7 +80,11 @@
                     <b-btn :variant="editInfoButton.variant_prepend"> Дата рождения <i class="fas fa-calendar-alt"></i></b-btn>
                 </b-input-group-prepend>
 
-                <b-form-input v-model.trim="form.birthday" :disabled="editform"></b-form-input>
+                <b-form-input
+                  v-model.trim="form.birthday"
+                  :disabled="editform"
+                  type="date">
+                </b-form-input>
 
             </b-input-group>
           </div>
@@ -401,7 +405,7 @@ export default {
             this.form.firstName = response.data.firstName;
             this.form.lastName = response.data.lastName;
             this.form.sex = response.data.sex;
-            this.form.bithday = response.data.bithday;
+            this.form.birthday = response.data.birthday;
             this.form.email = response.data.userContact.email;
             this.form.phoneNumber = response.data.userContact.phoneNumber;
             this.form.vkReference = response.data.userContact.vkReference;
