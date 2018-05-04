@@ -92,7 +92,7 @@
                   <b-col class="EndTimeMeeting">
                     <b-input-group size="" >
                         <b-input-group-prepend>
-                          <b-btn  variant="dark">Время окончанияx: </b-btn>
+                          <b-btn  variant="dark">Время окончания: </b-btn>
                         </b-input-group-prepend>
 
                         <b-form-input  v-model.trim="form.endTime"

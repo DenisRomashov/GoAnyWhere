@@ -108,7 +108,7 @@
       <div class="myMeetings" v-if="showMyMeetings">
         <b-container fluid>
                   <!-- Мои события -->
-                    <myMeetings/>
+                      <myMeetings/>
         </b-container>
       </div>
 
@@ -237,7 +237,14 @@ export default {
 }
 
 .myMeetings {
-    margin-top: 50px;
+    /* margin-top: 50px; */
+    margin-top: 40px;
+    margin-bottom: -10px;
+    background-image: url("../../assets/background_profile.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: top;
 }
 
 .allMeetings {

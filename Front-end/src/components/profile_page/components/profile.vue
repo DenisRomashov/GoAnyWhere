@@ -69,7 +69,12 @@
                 <b-form-input
                 v-model.trim="form.sex"
                 :disabled="editform"></b-form-input>
-
+                
+                <!-- Доработать -->
+                <!-- <b-input-group-append>
+                  <b-btn variant="dark">Мужской</b-btn>
+                  <b-btn variant="outline-dark">Женский</b-btn>
+                </b-input-group-append> -->
             </b-input-group>
           </div>
         </b-col>
