@@ -29,12 +29,10 @@ public class MeetingMangerImpl implements MeetingManger {
             log.info("Creating new meeting by user with id = {}", creatorId);
             MeetingEntity meetingEntity;
             boolean b = true;
-            if (id == null) {
+            if (id == null)
                 meetingEntity = new MeetingEntity();
-            } else {
+            else
                 meetingEntity = (MeetingEntity) session.get(MeetingEntity.class, id);
-                b = false;
-            }
             meetingEntity.setCategoryId(categoryId);
             meetingEntity.setMeetingAddress((AddressEntity) session.get(AddressEntity.class, addressId));
             meetingEntity.setName(name);
@@ -46,7 +44,7 @@ public class MeetingMangerImpl implements MeetingManger {
             meetingEntity.setAttachment(attachment);
             session.saveOrUpdate(meetingEntity);
             session.flush();
-            if (b) applyMeeting(creatorId, meetingEntity.getId(), CREATOR_PRIVILEGE);
+            if (id == null) applyMeeting(creatorId, meetingEntity.getId(), CREATOR_PRIVILEGE);
             return meetingEntity.getId();
         } finally {
             session.close();
@@ -77,13 +75,15 @@ public class MeetingMangerImpl implements MeetingManger {
         }
     }
 
+    private Object applyMeetingLock = new Object();
+
     @Override
     public void applyMeeting(final Long userId, final Long meetingId, final String privilege) {
         Session session = SessionFactoryUtil.getSession();
         try {
             log.info("Find or create privilege {}", privilege);
             PrivilegeEntity privilegeEntity;
-            synchronized (this) {
+            synchronized (applyMeetingLock) {
                 privilegeEntity = (PrivilegeEntity) session.createQuery("from PrivilegeEntity where type = :privilege")
                         .setString("privilege", privilege).uniqueResult();
                 if (privilegeEntity == null) {
@@ -106,6 +106,8 @@ public class MeetingMangerImpl implements MeetingManger {
         }
     }
 
+    private final Object exitMeetingLock = new Object();
+
     @Override
     public void exitMeeting(final Long userId, final Long meetingId) {
         Session session = SessionFactoryUtil.getSession();
@@ -125,7 +127,7 @@ public class MeetingMangerImpl implements MeetingManger {
                         .setParameter("meetingId", meetingId);
                 query.setFirstResult(0);
                 query.setMaxResults(1);
-                synchronized (this) {
+                synchronized (exitMeetingLock) {
                     List<UserMeetingEntity> meetingFirstParticipant = query.list();
                     if (meetingFirstParticipant.size() == 0) {
                         log.info("No other participants, delete meeting");

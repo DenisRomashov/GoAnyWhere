@@ -20,15 +20,6 @@ import java.util.List;
 public class MeetingController {
     private MeetingManger meetingManger = new MeetingMangerImpl();
 
-    @GetMapping("/meeting")
-    public @ResponseBody MeetingEntity meeting(@RequestParam Long id){
-        Session session = SessionFactoryUtil.getSession();
-        MeetingEntity meetingEntity = (MeetingEntity) session.createQuery("from MeetingEntity where " +
-                "id = " + id).uniqueResult();
-        session.close();
-        return meetingEntity;
-    }
-
     @PostMapping("/meeting")
     public @ResponseBody Id createMeeting(@RequestBody Meeting meeting){
         return  new Id(meetingManger.createMeeting(meeting.getId(),meeting.getCreatorId(), meeting.getCategoryId(),
