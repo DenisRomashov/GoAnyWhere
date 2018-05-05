@@ -10,6 +10,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import java.math.BigInteger;
+import java.util.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,14 +22,13 @@ public class MeetingMangerImpl implements MeetingManger {
 
     @Override
     public Long createMeeting(final Long id, final Long creatorId, final Long categoryId,
-                              final Long addressId, final String name, final Long startTime,
-                              final Long endTime, final String description, final Long maxParticipants,
+                              final Long addressId, final String name, final Date startTime,
+                              final Date endTime, final String description, final Long maxParticipants,
                               final Long minAge, final byte[] attachment) {
         Session session = SessionFactoryUtil.getSession();
         try {
             log.info("Creating new meeting by user with id = {}", creatorId);
             MeetingEntity meetingEntity;
-            boolean b = true;
             if (id == null)
                 meetingEntity = new MeetingEntity();
             else
@@ -36,8 +36,8 @@ public class MeetingMangerImpl implements MeetingManger {
             meetingEntity.setCategoryId(categoryId);
             meetingEntity.setMeetingAddress((AddressEntity) session.get(AddressEntity.class, addressId));
             meetingEntity.setName(name);
-            meetingEntity.setStartTime(new Timestamp(startTime));
-            meetingEntity.setEndTime(new Timestamp(endTime));
+            meetingEntity.setStartTime(new Timestamp(startTime.getTime()));
+            meetingEntity.setEndTime(new Timestamp(endTime.getTime()));
             meetingEntity.setDescription(description);
             meetingEntity.setMaxParticipants(maxParticipants);
             meetingEntity.setMinAge(minAge);
