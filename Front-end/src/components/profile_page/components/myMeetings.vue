@@ -51,7 +51,7 @@ export default {
               "longitude": 30.314559700000018
           },
           "name": "Встреча на Невском",
-          "startTime": "25.05.2018",
+          "startTime": "1995-03-09",
           "endTime": 200000,
           "description": "Клаасно провести время в большой компании",
           "maxParticipants": 25,
@@ -91,18 +91,23 @@ export default {
 
   },
     created: function () {
-      axios.get("/meeting/user?id=2")
-      .then(response => {
+      if (localStorage.getItem('STORAGE_USER_INFO') !== null && JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userId != 0) { //проверяем есть ли такой ключ, если нет отправляем на главную
+           var storageInfo = JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO'));
 
-        if (response.status === 200) {
-          this.meetings = response.data;
-          console.log(response);
-        }
+               axios.get("/meeting/user?id="+storageInfo.userId)
+               .then(response => {
 
-      }).catch(function (error) {
-        alert("Error...");
-        console.log(error);
-      });
+                 if (response.status === 200) {
+                     this.meetings = response.data;
+                     console.log(response);
+                    }
+
+               }).catch(function (error) {
+                 alert("OOPSSS!! myMeetings получение митингов не сработало!")
+                 console.log(error);
+               });
+
+      }
     },
 
     components:{

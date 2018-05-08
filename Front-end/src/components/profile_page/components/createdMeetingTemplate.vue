@@ -11,6 +11,11 @@
               Категория: {{ meeting.categoryId }}
             </b-badge>
             <b-badge variant="warning">
+               <!-- <b-form-input size="sm" v-model="meeting.startTime"
+                            type="date"
+                            disabled
+
+              ></b-form-input> -->
               Дата: {{ meeting.startTime }}
             </b-badge>
           </p>

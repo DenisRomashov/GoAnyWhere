@@ -1,33 +1,22 @@
 package ga.goanywhere.controllers;
 
 import ga.goanywhere.entities.CategoryEntity;
-import ga.goanywhere.entities.MeetingEntity;
 import ga.goanywhere.entities.UserEntity;
 import ga.goanywhere.model.MeetingManger;
 import ga.goanywhere.model.MeetingMangerImpl;
-import ga.goanywhere.dbutils.SessionFactoryUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Controller
 public class MeetingController {
     private MeetingManger meetingManger = new MeetingMangerImpl();
-
-    @GetMapping("/meeting")
-    public @ResponseBody MeetingEntity meeting(@RequestParam Long id){
-        Session session = SessionFactoryUtil.getSession();
-        MeetingEntity meetingEntity = (MeetingEntity) session.createQuery("from MeetingEntity where " +
-                "id = " + id).uniqueResult();
-        session.close();
-        return meetingEntity;
-    }
 
     @PostMapping("/meeting")
     public @ResponseBody Id createMeeting(@RequestBody Meeting meeting){
@@ -82,8 +71,8 @@ public class MeetingController {
         private Long categoryId;
         private Long addressId;
         private String name;
-        private Long startTime;
-        private Long endTime;
+        private Date startTime;
+        private Date endTime;
         private String description;
         private Long maxParticipants;
         private Long minAge;

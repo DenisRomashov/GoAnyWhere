@@ -14,9 +14,34 @@ import java.util.List;
 public class MeetingFinderController {
     private MeetingFinder meetingFinder = new MeetingFinderImpl();
 
+    @GetMapping("/meeting")
+    public @ResponseBody MeetingEntity meeting(@RequestParam Long id){
+        return meetingFinder.findMeetingById(id);
+    }
+
     @GetMapping("/meeting/user")
-    private @ResponseBody List<MeetingEntity> meetings(@RequestParam Long id) {
-        return meetingFinder.findMeetingByUser(id);
+    public @ResponseBody List<MeetingEntity> meetingsByUser(@RequestParam Long id) {
+        return meetingFinder.findMeetingsByUser(id);
+    }
+
+    @GetMapping("meeting/creator")
+    public @ResponseBody List<MeetingEntity> meetingsByCreator(@RequestParam Long id){
+        return meetingFinder.findMeetingsCreatedByUser(id);
+    }
+
+    @GetMapping("meeting/category")
+    public @ResponseBody List<MeetingEntity> meetingsByCategory(@RequestParam Long id){
+        return meetingFinder.findMeetingsByCategory(id);
+    }
+
+    @GetMapping("meeting/locality")
+    public @ResponseBody List<MeetingEntity> meetingsByLocality(@RequestParam String locality){
+        return meetingFinder.findMeetingsByLocality(locality);
+    }
+
+    @GetMapping("meeting/actual")
+    public @ResponseBody List<MeetingEntity> meetingsByActuality(@RequestParam Long id){
+        return meetingFinder.findActualMeetingsForUser(id);
     }
 
 }

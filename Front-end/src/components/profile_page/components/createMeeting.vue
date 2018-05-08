@@ -83,7 +83,7 @@
                           <b-btn  variant="dark">Время начала: </b-btn>
                         </b-input-group-prepend>
 
-                        <b-form-input  v-model.trim="form.startTime"
+                        <b-form-input  v-model="form.startTime"
                           type="datetime-local">
                         </b-form-input>
 
@@ -95,7 +95,7 @@
                           <b-btn  variant="dark">Время окончания: </b-btn>
                         </b-input-group-prepend>
 
-                        <b-form-input  v-model.trim="form.endTime"
+                        <b-form-input  v-model="form.endTime"
                           type="datetime-local">
                         </b-form-input>
 
