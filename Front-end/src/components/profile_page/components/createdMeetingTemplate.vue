@@ -8,7 +8,7 @@
           <h5>{{ meeting.name}}</h5>
           <p>
             <b-badge variant="danger">
-              Категория: {{ meeting.categoryId }}
+              Категория: {{ category[meeting.categoryId - 1].text }}
             </b-badge>
             <b-badge variant="warning">
                <!-- <b-form-input size="sm" v-model="meeting.startTime"
@@ -68,12 +68,27 @@ export default {
   data() {
     return {
       showCollapse: false,
-      description: "Мы пойдем на шашлыки!",
-      counter:2,
-      max: 10,
-      name: "Шашлыки у дяди Феди",
-      text: "Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon"
-
+      category: [
+        { value: '1', text: 'Активный отдых и приключения' },
+        { value: '2', text: 'Еда и напитки' },
+        { value: '3', text: 'Здоровье' },
+        { value: '4', text: 'Карьера и бизнес'},
+        { value: '5', text: 'Мода и красота'},
+        { value: '6', text: 'Хобби'},
+        { value: '7', text: 'Технологии'},
+        { value: '8', text: 'Язык и культура'},
+        { value: '9', text: 'Спорт'},
+        { value: '10', text: 'Музыка'},
+        { value: '11', text: 'Домашние животные'},
+        { value: '12', text: 'Искусство'},
+        { value: '13', text: 'Семья'},
+        { value: '14', text: 'Музыка'},
+        { value: '15', text: 'Кино'},
+        { value: '16', text: 'Фотография'},
+        { value: '17', text: 'Танцы'},
+        { value: '18', text: 'Книги'},
+        { value: '19', text: 'Другое'},
+      ]
     }
   },
 

@@ -146,8 +146,8 @@
                   text-variant="white"
                   header="Выберите категорию:"
                   class="text-center">
-                  <p class="card-text"> <h6> Категория вашего события: {{ selected}}</h6></p>
-                    <b-form-select v-model="selected" :options="options" class="mb-3" :select-size="12" />
+                  <p class="card-text"> <h6> Категория вашего события: {{ options[form.categoryId - 1].text }}</h6></p>
+                    <b-form-select v-model="form.categoryId" :options="options" class="mb-3" :select-size="12" />
 
               </b-card>
 
@@ -270,7 +270,6 @@ export default {
       showNewMeeting: false,
       srcImage: require('../../../assets/square.jpg'),
 
-      selected: 'Бум Бум',
      options: [
        { value: '1', text: 'Активный отдых и приключения' },
        { value: '2', text: 'Еда и напитки' },
