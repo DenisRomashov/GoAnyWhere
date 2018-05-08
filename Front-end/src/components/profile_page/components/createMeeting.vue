@@ -237,7 +237,7 @@ export default {
     return {
       center: { lat: 59.9342802, lng: 30.335098600000038  },
       marker: {},
-      place: {},
+      place: [],
       currentPlace: null,
 
       form: {
