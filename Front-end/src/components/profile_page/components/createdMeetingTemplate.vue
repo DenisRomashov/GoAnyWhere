@@ -4,25 +4,26 @@
 
     <b-card  bg-variant="white" text-variant="dark">
         <b-row>
-          <b-col cols="" md="auto">
-          <h5>{{ meeting.name}}</h5>
-          <p>
-            <b-badge variant="danger">
-              Категория: {{ category[meeting.categoryId - 1].text }}
-            </b-badge>
-            <b-badge variant="warning">
-               <!-- <b-form-input size="sm" v-model="meeting.startTime"
+          <b-col sm="10">
+            <div class="" align="left">
+
+              <h5>{{ meeting.name}}</h5>
+              <p>
+                  <b-badge variant="danger">
+                    Категория: {{ category[meeting.categoryId - 1].text }}
+                  </b-badge>
+                  <b-badge variant="warning">
+                    <!-- <b-form-input size="sm" v-model="meeting.startTime"
                             type="date"
                             disabled
 
-              ></b-form-input> -->
-              Дата: {{ meeting.startTime }}
-            </b-badge>
-          </p>
+                          ></b-form-input> -->
+                Дата: {{ meeting.startTime }}
+                </b-badge>
+            </p>
+          </div>
           </b-col>
-          <b-col>
-          </b-col>
-          <b-col cols="2">
+          <b-col sm="2">
             <div>
               <b-button-group vertical size="sm">
                 <b-button variant="dark" v-on:click="startEditMeeting(index)">Редактировать</b-button>
