@@ -20,9 +20,139 @@
     v-bind:key="meeting.id"
     v-bind:meeting="meeting"
     v-bind:index="index"
-      v-on:meetingchange="change"
+    v-on:editmeeting="editMeeting"
     ></createdMeetingTemplate>
 
+    <!-- Всплывающая модель редактирования -->
+    <div class="MeetingEditModalForm">
+    <!-- <b-modal v-model="showEditingMeeting" centered size="lg" title="Редактирование события"> -->
+      <b-modal centered v-model="showEditingMeeting"
+               size="lg" :title="titleEditingModal + meeting.name"
+               header-bg-variant="white"
+               header-text-variant="dark"
+               body-bg-variant="light"
+               body-text-variant="dark"
+               footer-bg-variant="dark"
+               footer-text-variant="light">
+
+        <b-container fluid class="editingData">
+          <b-row>
+            <b-col>
+              <div class="nameMeeting">
+                <b-input-group size="">
+                    <b-input-group-prepend>
+                        <b-btn  variant="dark">Название события: </b-btn>
+                    </b-input-group-prepend>
+                    <b-form-input  v-model.trim="meeting.name"
+                    type="text">
+                  </b-form-input>
+                </b-input-group>
+              </div>
+            </b-col>
+          </b-row>
+          <br>
+          <b-row>
+            <b-col cols="2">
+              <br>
+              Описание:
+            </b-col>
+            <b-col cols="10">
+              <b-form-textarea
+                   v-model="meeting.description"
+                   :rows="3"></b-form-textarea>
+            </b-col>
+          </b-row>
+          <br>
+          <b-row>
+            <b-col>
+              <b-card
+              bg-variant="dark"
+                text-variant="white"
+                header="Категория вашего события:"
+                class="text-center">
+                  <b-form-select size="" v-model="meeting.categoryId" :options="options" class="mb-3" :select-size="3" />
+            </b-card>
+            </b-col>
+          </b-row>
+          <br>
+
+
+
+          <b-row>
+            <b-col class="startTimeMeeting">
+              <b-input-group size="sm" >
+                  <b-input-group-prepend>
+                    <b-btn  variant="success">Время начала: </b-btn>
+                  </b-input-group-prepend>
+
+                  <b-form-input  v-model="meeting.startTime"
+                    type="date">
+                  </b-form-input>
+
+              </b-input-group>
+            </b-col>
+            <b-col class="EndTimeMeeting">
+              <b-input-group size="sm" >
+                  <b-input-group-prepend>
+                    <b-btn  variant="danger">Время окончания: </b-btn>
+                  </b-input-group-prepend>
+
+                  <b-form-input  v-model="meeting.endTime"
+                    type="datetime-local">
+                  </b-form-input>
+
+              </b-input-group>
+            </b-col>
+          </b-row>
+
+          <br>
+
+
+          <b-row>
+            <b-col>
+            </b-col>
+            <b-col class="maxParticipants" cols="8">
+              <b-input-group size="sm" >
+                  <b-input-group-prepend>
+                    <b-btn  variant="dark">Максимальное количество человек: </b-btn>
+                  </b-input-group-prepend>
+
+                  <b-form-input  v-model.trim="meeting.maxParticipants"
+                    type="number">
+                  </b-form-input>
+
+              </b-input-group>
+            </b-col>
+            <b-col>
+            </b-col>
+          </b-row>
+          <br>
+          <b-row>
+            <b-col>
+            </b-col>
+            <b-col class="minAge" cols="8">
+              <b-input-group size="sm" >
+                  <b-input-group-prepend>
+                    <b-btn  variant="dark">Минимальный возвраст: </b-btn>
+                  </b-input-group-prepend>
+
+                  <b-form-input  v-model.trim="meeting.minAge"
+                    type="number">
+                  </b-form-input>
+
+              </b-input-group>
+            </b-col>
+            <b-col>
+            </b-col>
+          </b-row>
+        </b-container>
+
+      <div slot="modal-footer" class="w-100">
+        <p class="float-left">© GoAnyWhere Project 2018</p>
+      </div>
+            {{ meeting }}
+    </b-modal>
+  </div>
   </b-container>
 <!--
 <b-container fluid class="participateMeetings">
@@ -78,16 +208,38 @@ export default {
           "attachment": null
       }
     ],
-    meeting: {}
+    meeting: {name:""},
+    titleEditingModal: "Редактирование события: ",
+    showEditingMeeting: false,
+
+    options: [
+      { value: '1', text: 'Активный отдых и приключения' },
+      { value: '2', text: 'Еда и напитки' },
+      { value: '3', text: 'Здоровье' },
+      { value: '4', text: 'Карьера и бизнес'},
+      { value: '5', text: 'Мода и красота'},
+      { value: '6', text: 'Хобби'},
+      { value: '7', text: 'Технологии'},
+      { value: '8', text: 'Язык и культура'},
+      { value: '9', text: 'Спорт'},
+      { value: '10', text: 'Музыка'},
+      { value: '11', text: 'Домашние животные'},
+      { value: '12', text: 'Искусство'},
+      { value: '13', text: 'Семья'},
+      { value: '14', text: 'Музыка'},
+      { value: '15', text: 'Кино'},
+      { value: '16', text: 'Фотография'},
+      { value: '17', text: 'Танцы'},
+      { value: '18', text: 'Книги'},
+      { value: '19', text: 'Другое'},
+    ]
     }
   },
   methods: {
-    // Переименовать и изменить
-    change: function(index){
-          this.meeting = this.meetings[index];
-          this.meetings[index].name = "BOOOOOOOOOOOOOOOOOOOM!"
-          this.meetings[index].meetingAddress.locality = "Санкт-Петербург"
-      }
+    editMeeting: function(index){
+      this.meeting = this.meetings[index];
+      this.showEditingMeeting = true;
+    },
 
   },
     created: function () {

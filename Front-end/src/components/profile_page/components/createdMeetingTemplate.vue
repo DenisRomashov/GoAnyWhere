@@ -22,10 +22,10 @@
           </b-col>
           <b-col>
           </b-col>
-          <b-col cols="">
+          <b-col cols="2">
             <div>
               <b-button-group vertical size="sm">
-                <b-button variant="dark">Редактировать</b-button>
+                <b-button variant="dark" v-on:click="startEditMeeting(index)">Редактировать</b-button>
                 <b-button variant="dark">Удалить</b-button>
               </b-button-group>
             </div>
@@ -55,9 +55,12 @@
 
           </b-col>
         </b-row>
-
-
       </b-card>
+
+      <!-- <b-modal v-model="showEditingMeeting" centered size="lg" title="Large Modal">
+        Hello Modal!
+      </b-modal> -->
+
   </div>
 
 </template>
@@ -68,6 +71,7 @@ export default {
   data() {
     return {
       showCollapse: false,
+      showEditingMeeting: false,
       category: [
         { value: '1', text: 'Активный отдых и приключения' },
         { value: '2', text: 'Еда и напитки' },
@@ -95,7 +99,11 @@ export default {
   methods: {
     meetingChange: function(index){
           this.$emit('meetingchange', index);
-      }
+      },
+    //передаем какой индекс митинга для редактирования
+    startEditMeeting: function(index){
+      this.$emit('editmeeting', index);
+    }
   }
 }
 </script>
