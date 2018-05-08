@@ -26,7 +26,8 @@ public class MeetingFinderImpl implements MeetingFinder {
         Session session = SessionFactoryUtil.getSession();
         try {
             log.info("Finding meeting by id = {}", meetingId);
-            return  (MeetingEntity) session.get(MeetingEntity.class, meetingId);
+            MeetingEntity meetingEntity = (MeetingEntity) session.get(MeetingEntity.class, meetingId);
+            return meetingEntity.setNumberOfParticipants();
         } finally {
             session.close();
         }
@@ -37,8 +38,13 @@ public class MeetingFinderImpl implements MeetingFinder {
         Session session = SessionFactoryUtil.getSession();
         try {
             log.info("Finding meetings by category with id = {}", categoryId);
-            return  session.createQuery("from MeetingEntity where categoryId = :categoryId")
-                    .setParameter("categoryId", categoryId).list();
+            List<MeetingEntity> meetings = session.createQuery
+                    ("from MeetingEntity where categoryId = :categoryId").setParameter("categoryId", categoryId)
+                    .list();
+            for (MeetingEntity meeting : meetings) {
+                meeting.setNumberOfParticipants();
+            }
+            return meetings;
         } finally {
             session.close();
         }
@@ -52,7 +58,7 @@ public class MeetingFinderImpl implements MeetingFinder {
             UserEntity user = (UserEntity) session.get(UserEntity.class, userId);
             List<MeetingEntity> response = new ArrayList<>();
             for (UserMeetingEntity userMeeting : user.getMeetings()) {
-                response.add(userMeeting.getUserMeetingPK().getParticipantMeeting());
+                response.add(userMeeting.getUserMeetingPK().getParticipantMeeting().setNumberOfParticipants());
             }
             return response;
         } finally {
@@ -71,7 +77,7 @@ public class MeetingFinderImpl implements MeetingFinder {
                     .setString("creator", CREATOR_PRIVILEGE).uniqueResult();
             for (UserMeetingEntity userMeeting : user.getMeetings()) {
                 if (userMeeting.getPrivilegeId().equals(creatorPrivilege.getId()))
-                    response.add(userMeeting.getUserMeetingPK().getParticipantMeeting());
+                    response.add(userMeeting.getUserMeetingPK().getParticipantMeeting().setNumberOfParticipants());
             }
             return response;
         } finally {
@@ -81,19 +87,15 @@ public class MeetingFinderImpl implements MeetingFinder {
 
     @Override
     public List<MeetingEntity> findActualMeetingsForUser(final Long userId) {
-        Session session = SessionFactoryUtil.getSession();
-        try {
-            log.info("Finding actual meetings for user with id = {}", userId);
-            List<MeetingEntity> meetingsOfUser = findMeetingsByUser(userId);
-            List<MeetingEntity> response = new ArrayList<>();
-            Timestamp now = new Timestamp(System.currentTimeMillis());
-            for (MeetingEntity meetingOfUser : meetingsOfUser) {
-                if (meetingOfUser.getEndTime().after(now)) response.add(meetingOfUser);
-            }
-            return response;
-        } finally {
-            session.close();
+        log.info("Finding actual meetings for user with id = {}", userId);
+        List<MeetingEntity> meetingsOfUser = findMeetingsByUser(userId);
+        List<MeetingEntity> response = new ArrayList<>();
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        for (MeetingEntity meetingOfUser : meetingsOfUser) {
+            if (meetingOfUser.getEndTime().after(now)) response.add(meetingOfUser.setNumberOfParticipants());
         }
+        return response;
+
     }
 
     @Override
@@ -101,8 +103,13 @@ public class MeetingFinderImpl implements MeetingFinder {
         Session session = SessionFactoryUtil.getSession();
         try {
             log.info("Finding meetings with locality = {}", locality);
-            return session.createQuery("from MeetingEntity where meetingAddress.locality = :locality")
+            List<MeetingEntity> meetings =  session.createQuery
+                    ("from MeetingEntity where meetingAddress.locality = :locality")
                     .setString("locality", locality).list();
+            for (MeetingEntity meeting : meetings) {
+                meeting.setNumberOfParticipants();
+            }
+            return meetings;
         } finally {
             session.close();
         }

@@ -237,7 +237,7 @@ export default {
     return {
       center: { lat: 59.9342802, lng: 30.335098600000038  },
       marker: {},
-      place: [],
+      place: {},
       currentPlace: null,
 
       form: {
@@ -326,6 +326,24 @@ export default {
         //Добавление в formAddress широты и долготы
          this.formAddress.latitude = marker.lat;
          this.formAddress.longitude = marker.lng;
+
+         //Добавление в formAddress города, улицы и номера
+         var json = this.place.address_components;
+
+         for (var i = 0; i < json.length; i++) {
+            var current_type = json[i].types[0];
+            switch(current_type) {
+              case ("street_number"):
+                  this.formAddress.house = json[i].long_name;
+                  break;
+             case ("route"):
+                  this.formAddress.street = json[i].long_name;
+                  break;
+            case ("locality"):
+                this.formAddress.locality = json[i].long_name;
+                break;
+              }
+            }
 
        //Отправляем выбранный адресс и получаем addressId из базы
         axios.post("/address", this.formAddress)

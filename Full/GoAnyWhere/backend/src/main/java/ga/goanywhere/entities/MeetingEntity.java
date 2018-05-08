@@ -51,4 +51,13 @@ public class MeetingEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "userMeetingPK.participantMeeting", cascade = CascadeType.ALL)
     private Collection<UserMeetingEntity> participants;
+
+    @Transient
+    private Integer numberOfParticipants;
+
+    public MeetingEntity setNumberOfParticipants() {
+        if (participants != null) numberOfParticipants = participants.size();
+        else numberOfParticipants = 0;
+        return this;
+    }
 }

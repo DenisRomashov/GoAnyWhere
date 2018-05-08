@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class MeetingController {
     private MeetingManger meetingManger = new MeetingMangerImpl();
 
     @PostMapping("/meeting")
-    public @ResponseBody Id createMeeting(@RequestBody Meeting meeting){
+    public @ResponseBody Id createMeeting(@RequestBody Meeting meeting) throws ParseException{
         return  new Id(meetingManger.createMeeting(meeting.getId(),meeting.getCreatorId(), meeting.getCategoryId(),
                 meeting.getAddressId(), meeting.getName(), meeting.getStartTime(), meeting.getEndTime(),
                 meeting.getDescription(), meeting.getMaxParticipants(), meeting.getMinAge(), meeting.getAttachment()));
@@ -71,8 +72,8 @@ public class MeetingController {
         private Long categoryId;
         private Long addressId;
         private String name;
-        private Date startTime;
-        private Date endTime;
+        private String startTime;
+        private String endTime;
         private String description;
         private Long maxParticipants;
         private Long minAge;
