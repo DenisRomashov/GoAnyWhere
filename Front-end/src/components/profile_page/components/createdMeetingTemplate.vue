@@ -4,10 +4,11 @@
 
     <b-card  bg-variant="white" text-variant="dark">
         <b-row>
-          <b-col sm="10">
+          <b-col sm="9">
             <div class="" align="left">
 
-              <h5>{{ meeting.name}}</h5>
+              <h5>{{ meeting.name}} <b-badge variant="secondary"> Участников: {{meeting.numberOfParticipants}}/{{ meeting.maxParticipants }} </b-badge> </h5>
+
               <p>
                   <b-badge variant="danger">
                     Категория: {{ category[meeting.categoryId - 1].text }}
@@ -23,11 +24,11 @@
             </p>
           </div>
           </b-col>
-          <b-col sm="2">
+          <b-col sm="3">
             <div>
               <b-button-group vertical size="sm">
-                <b-button variant="dark" v-on:click="startEditMeeting(index)">Редактировать</b-button>
-                <b-button variant="dark">Удалить</b-button>
+                <b-button variant="outline-secondary" v-on:click="startEditMeeting(index)"><span style='padding-left:30px;'></span> Редактировать <span style='padding-right:30px;'></span></b-button>
+                <b-button variant="outline-secondary">Удалить</b-button>
               </b-button-group>
             </div>
           </b-col>

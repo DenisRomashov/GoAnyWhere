@@ -185,6 +185,7 @@ export default {
           "endTime": 200000,
           "description": "Клаасно провести время в большой компании",
           "maxParticipants": 25,
+          "numberOfParticipants": 5,
           "minAge": 12,
           "attachment": null
       },
@@ -204,6 +205,7 @@ export default {
           "endTime": 200000,
           "description": "Будем делать Шашлык!",
           "maxParticipants": 10,
+          "numberOfParticipants": 3,
           "minAge": 14,
           "attachment": null
       }
