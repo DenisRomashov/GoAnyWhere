@@ -10,6 +10,8 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -22,9 +24,9 @@ public class MeetingMangerImpl implements MeetingManger {
 
     @Override
     public Long createMeeting(final Long id, final Long creatorId, final Long categoryId,
-                              final Long addressId, final String name, final Date startTime,
-                              final Date endTime, final String description, final Long maxParticipants,
-                              final Long minAge, final byte[] attachment) {
+                              final Long addressId, final String name, final String startTime,
+                              final String endTime, final String description, final Long maxParticipants,
+                              final Long minAge, final byte[] attachment) throws ParseException {
         Session session = SessionFactoryUtil.getSession();
         try {
             log.info("Creating new meeting by user with id = {}", creatorId);
@@ -36,8 +38,11 @@ public class MeetingMangerImpl implements MeetingManger {
             meetingEntity.setCategoryId(categoryId);
             meetingEntity.setMeetingAddress((AddressEntity) session.get(AddressEntity.class, addressId));
             meetingEntity.setName(name);
-            meetingEntity.setStartTime(new Timestamp(startTime.getTime()));
-            meetingEntity.setEndTime(new Timestamp(endTime.getTime()));
+
+            meetingEntity.setStartTime(new Timestamp(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm")
+                    .parse(startTime).getTime()));
+            meetingEntity.setEndTime(new Timestamp(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm")
+                    .parse(endTime).getTime()));
             meetingEntity.setDescription(description);
             meetingEntity.setMaxParticipants(maxParticipants);
             meetingEntity.setMinAge(minAge);
