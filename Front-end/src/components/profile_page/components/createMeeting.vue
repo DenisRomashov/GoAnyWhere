@@ -207,7 +207,7 @@
         <b-col>
           <b-card-footer footer-bg-variant="dark" footer-border-variant="dark">
 
-                <b-btn size="lg"
+                <b-btn  block size="lg"
                         variant="outline-danger"
                         @click="createMeeting"> Создать событие!
                 </b-btn>
