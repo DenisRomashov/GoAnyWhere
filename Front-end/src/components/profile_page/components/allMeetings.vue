@@ -1,5 +1,7 @@
 <template lang="html">
-  <h1>allMeetings.vue</h1>
+  <div class="allMeetings">
+      <h1>allMeetings.vue</h1>
+  </div>
 </template>
 
 <script>

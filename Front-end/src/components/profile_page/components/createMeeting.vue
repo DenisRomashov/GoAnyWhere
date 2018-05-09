@@ -1,6 +1,7 @@
 <template lang="html">
-<div class="createMeeting">
-
+<div class="creationMeeting">
+<b-container fluid>
+<br>
   <div class="startCreate" v-if="showStartCreate">
         <b-card overlay
             :img-src="require('../../../assets/13.jpg')"
@@ -226,7 +227,8 @@
     <br>
 
   </div>
-
+<br>
+</b-container>
 </div>
 </template>
 

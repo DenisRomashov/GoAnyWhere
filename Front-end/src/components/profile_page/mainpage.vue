@@ -46,21 +46,12 @@
             <div id="ButtonRow">
                 <b-button-group size="lg">
                 <!-- Кнопки навигации -->
-                <!-- <b-row>
-                  <b-col><b-button v-on:click="showCreation=false, showAll=false, showMyMeetings=false, showProfile=true" size="lg" variant="dark">Профиль</b-button></b-col>
-                  <b-col><b-button v-on:click="showCreation=false, showAll=false, showProfile=false, showMyMeetings=true" size="lg" variant="dark">Мои события</b-button></b-col>
-                  <b-col><b-button v-on:click="showCreation=false, showAll=true, showProfile=false, showMyMeetings=false" size="lg" variant="dark">Все события</b-button></b-col>
-                  <b-col><b-button v-on:click="showCreation=true, showAll=false, showProfile=false, showMyMeetings=false" size="lg" variant="dark">Создать событие</b-button></b-col> -->
-
-                <b-button v-on:click="showCreation=false, showAll=false, showMyMeetings=false, showProfile=true" variant="dark">Профиль</b-button>
-                <b-button v-on:click="showCreation=false, showAll=false, showProfile=false, showMyMeetings=true" variant="dark">Мои события</b-button>
-                <b-button v-on:click="showCreation=false, showAll=true, showProfile=false, showMyMeetings=false" variant="dark">Все события</b-button>
-                <b-button v-on:click="showCreation=true, showAll=false, showProfile=false, showMyMeetings=false" variant="dark">Создать событие</b-button>
-
+                <b-button v-on:click="goToProfile()" variant="dark">Профиль</b-button>
+                <b-button v-on:click="goToMyMeetings()" variant="dark">Мои события</b-button>
+                <b-button v-on:click="goToAllMeetings()" variant="dark">Все события</b-button>
+                <b-button v-on:click="goToCreationMeeting()" variant="dark">Создать событие</b-button>
                 <!-- Кнопка выхода -->
                 <b-button @click="showModal" size="lg" variant="dark">Выйти <i class="fas fa-sign-out-alt"></i></b-button>
-                <!-- <b-col><b-button @click="showModal" size="lg" variant="dark">Выйти</b-button></b-col> -->
-                <!-- </b-row> -->
               </b-button-group>
             </div>
           </b-col>
@@ -70,63 +61,8 @@
         </div>
 
       </b-container>
-
-      <!-- <b-container class="Profile">
-        <br>
-        <br>
-            <b-row>
-                <b-col></b-col>
-
-                <b-col cols="10">
-                    <allMeetings v-if="showAll"/>
-                    <createMeeting v-if="showCreation"/>
-                    <profile v-if="showProfile"/>
-                    <myMeetings v-if="showMyMeetings"/>
-                </b-col>
-
-                <b-col></b-col>
-            </b-row>
-      </b-container> -->
-
-
-      <div class="profilepage" v-if="showProfile">
-        <b-container >
-              <b-row>
-                  <b-col></b-col>
-                  <b-col cols="10">
-                  <!-- Страница профайла -->
-                  <br>
-                      <profile/>
-                  <br>
-                  <!-- ___________________________    -->
-                  </b-col>
-                  <b-col></b-col>
-                </b-row>
-              </b-container>
-        </div>
-
-      <div class="myMeetings" v-if="showMyMeetings">
-        <b-container fluid>
-                  <!-- Мои события -->
-                      <myMeetings/>
-        </b-container>
-      </div>
-
-      <div class="allMeetings" v-if="showAll">
-        <b-container fluid>
-                  <!-- Все события -->
-                    <allMeetings/>
-        </b-container>
-      </div>
-
-      <div class="creationMeeting" v-if="showCreation">
-        <b-container fluid>
-                  <!-- Страница создания события -->
-                  <br>
-                    <createMeeting/>
-                  <br>
-        </b-container>
-      </div>
+      <!-- Навигация по компонентам -->
+      <router-view></router-view>
 
 
 <!-- Вставка футера -->
@@ -174,10 +110,6 @@ export default {
       form: {
         name: ''
       },
-        showCreation: false,
-        showAll: false,
-        showMyMeetings: false,
-        showProfile: true,
         titleExitModal: ''
     }
   },
@@ -194,6 +126,18 @@ export default {
 
     hideModal () {
      this.$refs.Exit.hide()
+   },
+   goToProfile () {
+     router.push({ path: '/profile/info' });
+   },
+   goToMyMeetings() {
+     router.push({ path: '/profile/my_meetings' });
+   },
+   goToAllMeetings() {
+     router.push({ path: '/profile/all_meetings' });
+   },
+   goToCreationMeeting() {
+     router.push({ path: '/profile/new_meeting' });
    }
   },
   components: {

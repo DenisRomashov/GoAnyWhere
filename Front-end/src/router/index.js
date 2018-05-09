@@ -2,7 +2,13 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
 import registration from '@/components/registration/registration'
+
 import profile_page from '@/components/profile_page/mainpage'
+import profile from '@/components/profile_page/components/profile'
+import myMeetings from '@/components/profile_page/components/myMeetings'
+import allMeetings from '@/components/profile_page/components/allMeetings'
+import createMeeting from '@/components/profile_page/components/createMeeting'
+
 import page404 from '@/components/page404/page404'
 
 //Эксперементальное, удалить при готовности
@@ -37,7 +43,14 @@ export default new Router({
     }, {
       path: '/profile',
       name: 'profile',
-      component: profile_page
+      redirect: '/profile/info',
+      component: profile_page,
+      children: [
+        { path: 'info', component: profile},
+        { path: 'my_meetings', component: myMeetings},
+        { path: 'all_meetings', component: allMeetings},
+        { path: 'new_meeting', component: createMeeting}
+      ]
     }, {
       path: '/store',
       name: 'store',

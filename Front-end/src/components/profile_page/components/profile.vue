@@ -1,5 +1,13 @@
 <template lang="html">
-  <div class="profile">
+
+  <div class="profilepage">
+    <b-container>
+      <b-row>
+        <b-col></b-col>
+        <b-col cols="10">
+    <!-- Страница профайла -->
+    <br>
+
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
     <br>
     <b-container fluid class="profileInfo">
@@ -69,7 +77,7 @@
                 <b-form-input
                 v-model.trim="form.sex"
                 :disabled="editform"></b-form-input>
-                
+
                 <!-- Доработать -->
                 <!-- <b-input-group-append>
                   <b-btn variant="dark">Мужской</b-btn>
@@ -273,16 +281,12 @@
     <br>
     </div>
   </b-container>
-
-
-
-
-
-
-
-    <!-- test variable -->
-    <!-- <h1>{{ create }}</h1> -->
-  </div>
+      <br>
+      </b-col>
+      <b-col></b-col>
+    </b-row>
+  </b-container>
+</div>
 </template>
 
 <script>
