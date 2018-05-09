@@ -4,7 +4,7 @@
 
     <b-card  bg-variant="white" text-variant="dark">
         <b-row>
-          <b-col sm="9">
+          <b-col sm="8">
             <div class="" align="left">
 
               <h5>{{ meeting.name}} <b-badge variant="secondary"> Участников: {{meeting.numberOfParticipants}}/{{ meeting.maxParticipants }} </b-badge> </h5>
@@ -24,11 +24,11 @@
             </p>
           </div>
           </b-col>
-          <b-col sm="3">
+          <b-col sm="4">
             <div>
               <b-button-group vertical size="sm">
-                <b-button variant="outline-secondary" v-on:click="startEditMeeting(index)"><span style='padding-left:30px;'></span> Редактировать <span style='padding-right:30px;'></span></b-button>
-                <b-button variant="outline-secondary">Удалить</b-button>
+                <b-button variant="outline-secondary" v-on:click="startEditMeeting(index)"> Редактировать </b-button>
+                <b-button variant="outline-secondary" v-on:click="deleteOrUnsubscribe(index)">Удалить / Отказаться от участия</b-button>
               </b-button-group>
             </div>
           </b-col>
@@ -105,6 +105,10 @@ export default {
     //передаем какой индекс митинга для редактирования
     startEditMeeting: function(index){
       this.$emit('editmeeting', index);
+    },
+
+    deleteOrUnsubscribe: function(index){
+      this.$emit('deleteorunsubscribe', index);
     }
   }
 }

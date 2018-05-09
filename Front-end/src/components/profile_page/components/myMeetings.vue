@@ -1,14 +1,7 @@
 <template lang="html">
   <div class="myMeetings">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
-
-
-
-  <h1>myMeetings.vue</h1>
-  <br>
-  <h5>{{ meetings }}</h5>
-  <br>
-
+<br>
   <b-container class="createdMeetings">
     <b-card-header header-bg-variant="light" header-text-variant="dark" header-tag="header">
         Созданные события
@@ -21,6 +14,8 @@
     v-bind:meeting="meeting"
     v-bind:index="index"
     v-on:editmeeting="editMeeting"
+    v-on:deleteorunsubscribe="deleteOrUnsubscribe"
+
     ></createdMeetingTemplate>
 
     <!-- Всплывающая модель редактирования -->
@@ -86,7 +81,7 @@
                   </b-input-group-prepend>
 
                   <b-form-input  v-model="meeting.startTime"
-                    type="date">
+                    type="datetime-local">
                   </b-form-input>
 
               </b-input-group>
@@ -148,23 +143,64 @@
         </b-container>
 
       <div slot="modal-footer" class="w-100">
-        <p class="float-left">© GoAnyWhere Project 2018</p>
+        <b-btn  block size="lg"
+                variant="outline-danger"
+                @click="upDateMeeting()"
+                > Подтвердить изменения!
+        </b-btn>
       </div>
             {{ meeting }}
     </b-modal>
+
+
+
+
+
+    <!-- Delete or Unsubscribe Modal Form -->
+    <div class="DeleteOrUnsubscribe">
+      <b-modal centered v-model="showDeleteOrUnsubscribe"
+               :title="titleDeleteOrUnsubscribeModal + meeting.name"
+               header-bg-variant="white"
+               header-text-variant="dark"
+               body-bg-variant="white"
+               body-text-variant="dark"
+               footer-bg-variant="white"
+               footer-text-variant="dark">
+         <b-container fluid>
+           <div class="d-block text-center">
+           </div>
+           <b-btn size="" class="mt-3" variant="outline-dark" block @click="unSubscribeMeeting()">Отказаться от участия</b-btn>
+           <b-btn size=""class="mt-3" variant="outline-danger" block @click="deleteMeeting()" >Удалить!</b-btn>
+         </b-container>
+
+         <div slot="modal-footer" class="w-100">
+           <p class="float-left">© GoAnyWhere Project 2018</p>
+         </div>
+      </b-modal>
+    </div>
+
+
+
+
+
+
   </div>
   </b-container>
-<!--
-<b-container fluid class="participateMeetings">
-  события в которых пользователь принимает участие
-</b-container> -->
+  <br>
+  <b-container  class="participateMeetings">
+    <b-card-header header-bg-variant="light" header-text-variant="dark" header-tag="header">
+        События, в которых вы принимаете участие
+        <i class="far fa-handshake"></i>
+    </b-card-header>
+  </b-container>
 <br>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-import createdMeetingTemplate from './createdMeetingTemplate'
+import router from '../../../router'
+import createdMeetingTemplate from './templates/createdMeetingTemplate'
 export default {
   data () {
     return {
@@ -212,7 +248,9 @@ export default {
     ],
     meeting: {name:""},
     titleEditingModal: "Редактирование события: ",
+    titleDeleteOrUnsubscribeModal: "Событие: ",
     showEditingMeeting: false,
+    showDeleteOrUnsubscribe: false,
 
     options: [
       { value: '1', text: 'Активный отдых и приключения' },
@@ -238,9 +276,41 @@ export default {
     }
   },
   methods: {
-    editMeeting: function(index){
+    editMeeting: function(index) {
       this.meeting = this.meetings[index];
       this.showEditingMeeting = true;
+    },
+
+    deleteOrUnsubscribe: function(index) {
+      this.meeting = this.meetings[index];
+      this.showDeleteOrUnsubscribe = true;
+    },
+
+    deleteMeeting: function() {
+      alert("Надо сделать удаление!");
+    },
+
+    unSubscribeMeeting: function() {
+      alert("Надо сделать отписку!");
+    },
+
+    upDateMeeting: function() {
+      this.meeting.creatorId = JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userId;
+      this.meeting.addressId = this.meeting.meetingAddress.id;
+        axios.post("/meeting", this.meeting)
+        .then(response => {
+
+          if (response.status === 200) {
+            alert("Событие Обновлено! Поздравляем!");
+            // Принудительная перезагрузка страницы
+            location.reload();
+            console.log(response);
+          }
+        }).catch(function (error) {
+          alert("Error...");
+          console.log(error);
+        });
+
     },
 
   },
@@ -266,7 +336,8 @@ export default {
 
     components:{
       createdMeetingTemplate
-    }
+    },
+    router
 }
 </script>
 
