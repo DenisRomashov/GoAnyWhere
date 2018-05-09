@@ -314,6 +314,7 @@ export default {
     },
 
   },
+
     created: function () {
       if (localStorage.getItem('STORAGE_USER_INFO') !== null && JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userId != 0) { //проверяем есть ли такой ключ, если нет отправляем на главную
            var storageInfo = JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO'));
@@ -322,7 +323,29 @@ export default {
                .then(response => {
 
                  if (response.status === 200) {
-                     this.meetings = response.data;
+
+                    function timeConverter(timestamp){
+                      var a = new Date(timestamp);
+                       var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+                        var year = a.getFullYear();
+                         var month = months[a.getMonth()];
+                          var date = a.getDate();
+                           var hour = a.getHours();
+                            var min = a.getMinutes();
+                             var sec = a.getSeconds();
+                             if (min === 0) {
+                               min += "0";
+                             }
+                              var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min;
+                               return time;
+                             }
+
+                   for (var i = 0; i < response.data.length; i++) {
+                      response.data[i].startTime = timeConverter(response.data[i].startTime);
+                      response.data[i].endTime = timeConverter(response.data[i].endTime);
+                    }
+                    this.meetings = response.data;
+
                      console.log(response);
                     }
 
