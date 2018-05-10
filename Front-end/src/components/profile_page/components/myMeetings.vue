@@ -5,11 +5,13 @@
   <b-container class="createdMeetings">
     <b-card-header header-bg-variant="light" header-text-variant="dark" header-tag="header">
         Созданные события
-        <i class="fab fa-angellist"></i>
+        <i class="fab fa-angellist"></i> <b-badge variant="secondary">
+          Показано: {{ limitCreatedMeeting }} из {{ meetings.length }}
+        </b-badge>
     </b-card-header>
 
     <createdMeetingTemplate
-    v-for="(meeting, index) in meetings"
+    v-for="(meeting, index) in limitedMeetings"
     v-bind:key="meeting.id"
     v-bind:meeting="meeting"
     v-bind:index="index"
@@ -17,6 +19,24 @@
     v-on:deleteorunsubscribe="deleteOrUnsubscribe"
 
     ></createdMeetingTemplate>
+
+    <b-card-footer footer-bg-variant="white" footer-border-variant="dark">
+
+          <b-btn block class="showMoreCreatedMeetings"
+                 @click="limitCreatedMeeting += 1"
+                 :disabled="disabledShowMoreCreatedMeetings"
+                  variant="outline-secondary"> {{ counCreatedMeetingItems }}
+          </b-btn>
+          <b-popover ref="popoverOne" target="editinfobutton"
+           placement="left"
+           title="Нажми!"
+           triggers="hover focus"
+           content="И ты сможешь отредактировать информацию :)">
+         </b-popover>
+
+    </b-card-footer>
+
+
 
     <!-- Всплывающая модель редактирования -->
     <div class="MeetingEditModalForm">
@@ -204,6 +224,8 @@ import createdMeetingTemplate from './templates/createdMeetingTemplate'
 export default {
   data () {
     return {
+      limitCreatedMeeting: 1,
+      disabledShowMoreCreatedMeetings: false,
       meetings: [
         {
           "id": 1,
@@ -275,6 +297,22 @@ export default {
     ]
     }
   },
+
+  computed: {
+    counCreatedMeetingItems() {
+      if (this.meetings.length - this.limitCreatedMeeting > 0 ) {
+          return "Показать еще! Осталось "+(this.meetings.length - this.limitCreatedMeeting)+" из "+this.meetings.length
+      } else {
+        this.disabledShowMoreCreatedMeetings = true;
+        return "Показаны все созданные события!"
+      }
+    },
+
+    limitedMeetings() {
+      return this.meetings.slice(0,this.limitCreatedMeeting)
+    }
+  },
+
   methods: {
     editMeeting: function(index) {
       this.meeting = this.meetings[index];

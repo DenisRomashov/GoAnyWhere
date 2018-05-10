@@ -9,7 +9,7 @@
 </b-button>
 
 <meeting
-v-for="(meeting, index) in meetings"
+v-for="(meeting, index) in limitedItems"
 v-bind:key="meeting.id"
 v-bind:meeting="meeting"
 v-bind:index="index"
@@ -21,7 +21,7 @@ v-on:meetingchange="change"
 
 
 ></meeting>
-
+  <button @click="limitNumber += 1">Show more</button>
 <!-- <todo v-for="(todo, index) in filteredTodos" :key="index" :todo="todo"></todo> -->
 
 
@@ -39,6 +39,12 @@ import meeting from './meeting'
 export default {
   data () {
     return {
+      allMeetings: [],
+      totalMeetings: 0,
+      perPage: 3,
+      currentpage: 1,
+      limitNumber: 1,
+
       meetings: [
         {
           "id": 1,
@@ -77,49 +83,55 @@ export default {
           "maxParticipants": 10,
           "minAge": 14,
           "attachment": null
+      },
+      {
+          "id": 3,
+          "categoryId": 1,
+          "meetingAddress": {
+              "id": 6,
+              "locality": "",
+              "street": "",
+              "house": "",
+              "latitude": 59.944539,
+              "longitude": 30.359720100000004
+          },
+          "name": "Тест3",
+          "startTime": 100000,
+          "endTime": 200000,
+          "description": "Это тест!",
+          "maxParticipants": 25,
+          "minAge": 12,
+          "attachment": null
+      },
+      {
+          "id": 4,
+          "categoryId": 1,
+          "meetingAddress": {
+              "id": 7,
+              "locality": "",
+              "street": "",
+              "house": "",
+              "latitude": 55.755826,
+              "longitude": 37.617299900000035
+          },
+          "name": "Абравдьым",
+          "startTime": 100000,
+          "endTime": 200000,
+          "description": "БУБУБУБУБУБУБУБУ",
+          "maxParticipants": 12,
+          "minAge": 10,
+          "attachment": null
       }
-      // {
-      //     "id": 3,
-      //     "categoryId": 1,
-      //     "meetingAddress": {
-      //         "id": 6,
-      //         "locality": "",
-      //         "street": "",
-      //         "house": "",
-      //         "latitude": 59.944539,
-      //         "longitude": 30.359720100000004
-      //     },
-      //     "name": "Тест3",
-      //     "startTime": 100000,
-      //     "endTime": 200000,
-      //     "description": "Это тест!",
-      //     "maxParticipants": 25,
-      //     "minAge": 12,
-      //     "attachment": null
-      // },
-      // {
-      //     "id": 4,
-      //     "categoryId": 1,
-      //     "meetingAddress": {
-      //         "id": 7,
-      //         "locality": "",
-      //         "street": "",
-      //         "house": "",
-      //         "latitude": 55.755826,
-      //         "longitude": 37.617299900000035
-      //     },
-      //     "name": "Абравдьым",
-      //     "startTime": 100000,
-      //     "endTime": 200000,
-      //     "description": "БУБУБУБУБУБУБУБУ",
-      //     "maxParticipants": 12,
-      //     "minAge": 10,
-      //     "attachment": null
-      // }
     ],
 
     meeting: {}
 
+    }
+  },
+
+  computed: {
+    limitedItems() {
+      return this.meetings.slice(0,this.limitNumber)
     }
   },
 
@@ -132,6 +144,10 @@ export default {
             this.meeting = this.meetings[index];
             this.meetings[index].name = "BOOOOOOOOOOOOOOOOOOOM!"
             this.meetings[index].meetingAddress.locality = "Санкт-Петербург"
+        },
+
+        fetchMeetings: function(page) {
+
         }
     },
 

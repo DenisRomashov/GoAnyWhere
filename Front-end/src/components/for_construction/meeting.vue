@@ -26,6 +26,9 @@ export default {
 
       }
     },
+
+     computed: {},
+     
     methods: {
       meetingChange: function(index){
             this.$emit('meetingchange', index);
