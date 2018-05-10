@@ -2,7 +2,7 @@
   <div class="meeting">
 
 
-    <b-card  bg-variant="white" text-variant="dark">
+    <b-card  bg-variant="white" text-variant="dark" v-show="true">
         <b-row>
           <b-col sm="8">
             <div class="" align="left">
@@ -27,8 +27,7 @@
           <b-col sm="4">
             <div>
               <b-button-group vertical size="sm">
-                <b-button variant="outline-secondary" v-on:click="startEditMeeting(index)"> Редактировать </b-button>
-                <b-button variant="outline-secondary" v-on:click="deleteOrUnsubscribe(index)">Удалить / Отказаться от участия</b-button>
+                <b-button variant="outline-secondary" v-on:click="unSubscribe(index)">Отказаться от участия</b-button>
               </b-button-group>
             </div>
           </b-col>
@@ -99,16 +98,8 @@ export default {
   },
 
   methods: {
-    meetingChange: function(index){
-          this.$emit('meetingchange', index);
-      },
-    //передаем какой индекс митинга для редактирования
-    startEditMeeting: function(index){
-      this.$emit('editmeeting', index);
-    },
-
-    deleteOrUnsubscribe: function(index){
-      this.$emit('deleteorunsubscribe', index);
+    unSubscribe: function(index){
+      this.$emit('unSubscribe', index);
     }
   }
 }
