@@ -192,10 +192,14 @@ export default {
 }
 
 .allMeetings {
-  margin-top: 44px;
-    background-image: url("../../assets/1.jpg");
-    height: 500px;
-    background-size: cover;
+  margin-top: 40px;
+  margin-bottom: -10px;
+  background-image: url("../../assets/background_profile.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-position: top;
+
 }
 
 .creationMeeting {

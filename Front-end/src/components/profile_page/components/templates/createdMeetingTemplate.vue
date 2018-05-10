@@ -2,7 +2,7 @@
   <div class="meeting">
 
 
-    <b-card  bg-variant="white" text-variant="dark">
+    <b-card  bg-variant="white" text-variant="dark" v-show="true">
         <b-row>
           <b-col sm="8">
             <div class="" align="left">

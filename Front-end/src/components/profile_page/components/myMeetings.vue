@@ -23,7 +23,7 @@
     <b-card-footer footer-bg-variant="white" footer-border-variant="dark">
 
           <b-btn block class="showMoreCreatedMeetings"
-                 @click="limitCreatedMeeting += 1"
+                 @click="limitCreatedMeeting += 2"
                  :disabled="disabledShowMoreCreatedMeetings"
                   variant="outline-secondary"> {{ counCreatedMeetingItems }}
           </b-btn>
@@ -224,7 +224,7 @@ import createdMeetingTemplate from './templates/createdMeetingTemplate'
 export default {
   data () {
     return {
-      limitCreatedMeeting: 1,
+      limitCreatedMeeting: 2,
       disabledShowMoreCreatedMeetings: false,
       meetings: [
         {
@@ -245,6 +245,66 @@ export default {
           "maxParticipants": 25,
           "numberOfParticipants": 5,
           "minAge": 12,
+          "attachment": null
+      },
+      {
+          "id": 2,
+          "categoryId": 2,
+          "meetingAddress": {
+              "id": 5,
+              "locality": "Москва",
+              "street": "Льва Толстого",
+              "house": "125",
+              "latitude": 59.93816109999999,
+              "longitude": 30.31553489999999
+          },
+          "name": "Майские",
+          "startTime": 100000,
+          "endTime": 200000,
+          "description": "Будем делать Шашлык!",
+          "maxParticipants": 10,
+          "numberOfParticipants": 3,
+          "minAge": 14,
+          "attachment": null
+      },
+      {
+          "id": 2,
+          "categoryId": 2,
+          "meetingAddress": {
+              "id": 5,
+              "locality": "Москва",
+              "street": "Льва Толстого",
+              "house": "125",
+              "latitude": 59.93816109999999,
+              "longitude": 30.31553489999999
+          },
+          "name": "Майские",
+          "startTime": 100000,
+          "endTime": 200000,
+          "description": "Будем делать Шашлык!",
+          "maxParticipants": 10,
+          "numberOfParticipants": 3,
+          "minAge": 14,
+          "attachment": null
+      },
+      {
+          "id": 2,
+          "categoryId": 2,
+          "meetingAddress": {
+              "id": 5,
+              "locality": "Москва",
+              "street": "Льва Толстого",
+              "house": "125",
+              "latitude": 59.93816109999999,
+              "longitude": 30.31553489999999
+          },
+          "name": "Майские",
+          "startTime": 100000,
+          "endTime": 200000,
+          "description": "Будем делать Шашлык!",
+          "maxParticipants": 10,
+          "numberOfParticipants": 3,
+          "minAge": 14,
           "attachment": null
       },
       {
@@ -303,6 +363,9 @@ export default {
       if (this.meetings.length - this.limitCreatedMeeting > 0 ) {
           return "Показать еще! Осталось "+(this.meetings.length - this.limitCreatedMeeting)+" из "+this.meetings.length
       } else {
+        if (this.limitCreatedMeeting > this.meetings.length) {
+          this.limitCreatedMeeting = this.meetings.length;
+        }
         this.disabledShowMoreCreatedMeetings = true;
         return "Показаны все созданные события!"
       }
@@ -325,11 +388,37 @@ export default {
     },
 
     deleteMeeting: function() {
-      alert("Надо сделать удаление!");
+      axios.delete("/meeting", {
+        data: { userId: JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userId, meetingId: this.meeting.id }})
+      .then(response => {
+
+        if (response.status === 200) {
+          // Принудительная перезагрузка
+          location.reload();
+          console.log(response);
+        }
+
+      }).catch(function (error) {
+        alert("Error: Unsubscribe");
+        console.log(error);
+      });
     },
 
     unSubscribeMeeting: function() {
-      alert("Надо сделать отписку!");
+      axios.delete("/meeting/exit", {
+        data: { userId: JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userId, meetingId: this.meeting.id }})
+      .then(response => {
+
+        if (response.status === 200) {
+          // Принудительная перезагрузка
+          location.reload();
+          console.log(response);
+        }
+
+      }).catch(function (error) {
+        alert("Error: Unsubscribe");
+        console.log(error);
+      });
     },
 
     upDateMeeting: function() {
