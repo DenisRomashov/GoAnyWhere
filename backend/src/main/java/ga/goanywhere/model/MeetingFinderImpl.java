@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.sql.Timestamp;
 
@@ -28,23 +29,6 @@ public class MeetingFinderImpl implements MeetingFinder {
             log.info("Finding meeting by id = {}", meetingId);
             MeetingEntity meetingEntity = (MeetingEntity) session.get(MeetingEntity.class, meetingId);
             return meetingEntity.setNumberOfParticipants();
-        } finally {
-            session.close();
-        }
-    }
-
-    @Override
-    public List<MeetingEntity> findMeetingsByCategory(final Long categoryId) {
-        Session session = SessionFactoryUtil.getSession();
-        try {
-            log.info("Finding meetings by category with id = {}", categoryId);
-            List<MeetingEntity> meetings = session.createQuery
-                    ("from MeetingEntity where categoryId = :categoryId").setParameter("categoryId", categoryId)
-                    .list();
-            for (MeetingEntity meeting : meetings) {
-                meeting.setNumberOfParticipants();
-            }
-            return meetings;
         } finally {
             session.close();
         }
@@ -99,19 +83,52 @@ public class MeetingFinderImpl implements MeetingFinder {
     }
 
     @Override
-    public List<MeetingEntity> findMeetingsByLocality(final String locality) {
+    public List<MeetingEntity> meetingSearch(Long searcherId, Long categoryId, String locality) {
         Session session = SessionFactoryUtil.getSession();
         try {
-            log.info("Finding meetings with locality = {}", locality);
-            List<MeetingEntity> meetings =  session.createQuery
-                    ("from MeetingEntity where meetingAddress.locality = :locality")
-                    .setString("locality", locality).list();
+            log.info("Search meetings without participantId = {}", searcherId);
+            List<MeetingEntity> meetings = session.createQuery("from MeetingEntity").list();
+            List<MeetingEntity> response = new LinkedList<>();
             for (MeetingEntity meeting : meetings) {
+                boolean searcherIsParticipant = false;
+                for (UserMeetingEntity userMeeting : meeting.getParticipants()) {
+                    if (userMeeting.getUserMeetingPK().getParticipant().getId().equals(searcherId)) {
+                        searcherIsParticipant = true;
+                        break;
+                    }
+                }
+                if (!searcherIsParticipant) response.add(meeting);
+            }
+            response = filterMeetingsByCategory(response, categoryId);
+            response = filterMeetingsByLocality(response, locality);
+            for (MeetingEntity meeting : response) {
                 meeting.setNumberOfParticipants();
             }
-            return meetings;
+            return response;
         } finally {
             session.close();
         }
+    }
+
+    @Override
+    public List<MeetingEntity> filterMeetingsByCategory(final List<MeetingEntity> meetings, final Long categoryId) {
+        log.info("Filter meetings by category with id = {}", categoryId);
+        List<MeetingEntity> filteredMeetings = new LinkedList<>();
+        for (MeetingEntity meeting : meetings) {
+            if (meeting.getCategoryId().equals(categoryId))
+                filteredMeetings.add(meeting);
+        }
+        return filteredMeetings;
+    }
+
+    @Override
+    public List<MeetingEntity> filterMeetingsByLocality(final List<MeetingEntity> meetings, final String locality) {
+        log.info("Filter meetings with locality = {}", locality);
+        List<MeetingEntity> filteredMeetings = new LinkedList<>();
+        for (MeetingEntity meeting : meetings) {
+            if (meeting.getMeetingAddress().getLocality().equals(locality))
+                filteredMeetings.add(meeting);
+        }
+        return filteredMeetings;
     }
 }
