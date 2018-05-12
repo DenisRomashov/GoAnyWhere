@@ -8,7 +8,6 @@
 
             <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
-
             <b-navbar-brand href="/">GoAnyWhere</b-navbar-brand>
 
             <!-- Кнопка HOME с роутер линк на главную страницу -->
@@ -17,8 +16,20 @@
               <router-link :to="{ path: '/' }"><b-button size="" variant="outline-danger" class="mb-2 mr-sm-2 mb-sm-0" type="submit">Home <i class="fas fa-home"></i></b-button></router-link>
             </b-navbar-nav>
 
-            <b-form-input size="" class="mb-2 mr-sm-2 mb-sm-0" type="text" placeholder="Поиск" />
-            <b-button size="" class="mb-2 mr-sm-2 mb-sm-0" type="submit" variant="warning"> Поиск </b-button>
+              <div id="ButtonRow">
+                  <!-- Кнопки навигации -->
+                  <b-button v-on:click="goToProfile()" variant="dark" size="lg">Профиль</b-button>
+                  <b-button v-on:click="goToMyMeetings()" variant="dark" size="lg">Мои события</b-button>
+                  <b-button v-on:click="goToAllMeetings()" variant="dark" size="lg">Все события</b-button>
+                  <b-button v-on:click="goToCreationMeeting()" variant="dark" size="lg">Создать событие</b-button>
+              </div>
+              <!-- Кнопка выхода -->
+              <b-navbar-nav class="ml-auto">
+                  <b-button @click="showModal" size="lg" variant="dark">Выйти <i class="fas fa-sign-out-alt"></i></b-button>
+              </b-navbar-nav class="ml-auto">
+                <!-- </b-button-group> -->
+              <!-- </div> -->
+            <!-- </b-navbar-nav> -->
           </b-collapse>
 
             <!-- Right aligned nav items -->
@@ -36,37 +47,13 @@
       </b-container>
 
 
-      <b-container fluid class="ProfileNavigation">
-      <div class="BlockAfterNavbar">
-        <b-row id="FirstRow">
-          <!-- left column -->
-          <b-col></b-col>
-          <!-- central culumn -->
-          <b-col cols="10">
-            <div id="ButtonRow">
-                <b-button-group size="lg">
-                <!-- Кнопки навигации -->
-                <b-button v-on:click="goToProfile()" variant="dark">Профиль</b-button>
-                <b-button v-on:click="goToMyMeetings()" variant="dark">Мои события</b-button>
-                <b-button v-on:click="goToAllMeetings()" variant="dark">Все события</b-button>
-                <b-button v-on:click="goToCreationMeeting()" variant="dark">Создать событие</b-button>
-                <!-- Кнопка выхода -->
-                <b-button @click="showModal" size="lg" variant="dark">Выйти <i class="fas fa-sign-out-alt"></i></b-button>
-              </b-button-group>
-            </div>
-          </b-col>
-          <!-- righ culumn -->
-            <b-col></b-col>
-          </b-row>
-        </div>
-
-      </b-container>
       <!-- Навигация по компонентам -->
+
+    <transition :name="transitionName">
       <router-view></router-view>
-
-
-<!-- Вставка футера -->
-  <footerone/>
+      </transition>
+      <!-- Вставка футера -->
+      <footerone/>
 
   <!-- ExitModalForm -->
   <div class="ExitModalForm">
@@ -110,7 +97,8 @@ export default {
       form: {
         name: ''
       },
-        titleExitModal: ''
+        titleExitModal: '',
+        transitionName: 'slide-left'
     }
   },
   methods: {
@@ -159,6 +147,11 @@ export default {
     margin-top: -4px;
 }
 
+#ButtonRow {
+  margin-left: 12%;
+  margin-right: auto;
+}
+
 .mainpage {
     margin-top: -4px;
 }
@@ -169,8 +162,7 @@ export default {
 }
 
 .profilepage {
-  margin-top: 25px;
-  margin-bottom: -10px;
+
   /* position: fixed; */
   /* background-color: #DCDCDC; */
   background-image: url("../../assets/background_profile.jpg");
@@ -182,7 +174,7 @@ export default {
 
 .myMeetings {
     /* margin-top: 50px; */
-    margin-top: 40px;
+    margin-top: 7px;
     margin-bottom: -10px;
     background-image: url("../../assets/background_profile.jpg");
     background-size: cover;
@@ -192,7 +184,6 @@ export default {
 }
 
 .allMeetings {
-  margin-top: 40px;
   margin-bottom: -10px;
   background-image: url("../../assets/background_profile.jpg");
   background-size: cover;
@@ -203,13 +194,12 @@ export default {
 }
 
 .creationMeeting {
-  margin-top: 25px;
-  margin-bottom: -25px;
+  margin-top: px;
+  margin-bottom: px;
   background-image: url("../../assets/background_profile.jpg");
   background-size: cover;
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-position: top;
 }
-
 </style>
