@@ -112,6 +112,7 @@ public class MeetingFinderImpl implements MeetingFinder {
 
     @Override
     public List<MeetingEntity> filterMeetingsByCategory(final List<MeetingEntity> meetings, final Long categoryId) {
+        if (categoryId == null) return meetings;
         log.info("Filter meetings by category with id = {}", categoryId);
         List<MeetingEntity> filteredMeetings = new LinkedList<>();
         for (MeetingEntity meeting : meetings) {
@@ -123,6 +124,7 @@ public class MeetingFinderImpl implements MeetingFinder {
 
     @Override
     public List<MeetingEntity> filterMeetingsByLocality(final List<MeetingEntity> meetings, final String locality) {
+        if (locality == null) return meetings;
         log.info("Filter meetings with locality = {}", locality);
         List<MeetingEntity> filteredMeetings = new LinkedList<>();
         for (MeetingEntity meeting : meetings) {

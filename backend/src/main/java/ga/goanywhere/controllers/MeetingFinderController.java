@@ -30,7 +30,7 @@ public class MeetingFinderController {
     public @ResponseBody List<MeetingEntity> meetingsByCreator(@RequestParam Long id){
         return meetingFinder.findMeetingsCreatedByUser(id);
     }
-    
+
     @GetMapping("meeting/actual")
     public @ResponseBody List<MeetingEntity> meetingsByActuality(@RequestParam Long id){
         return meetingFinder.findActualMeetingsForUser(id);
