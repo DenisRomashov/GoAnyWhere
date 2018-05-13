@@ -1,108 +1,62 @@
-<template lang="html">
-<div class="profilepage">
-
-
-  <b-navbar toggleable="md" type="dark" variant="info" >
-
-    <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-
-    <b-navbar-brand href="#">NavBar</b-navbar-brand>
-
-    <b-collapse is-nav id="nav_collapse">
-
-      <b-navbar-nav>
-        <b-nav-item href="#">Link</b-nav-item>
-        <b-nav-item href="#" disabled>Disabled</b-nav-item>
-      </b-navbar-nav>
-
-      <!-- Right aligned nav items -->
-      <b-navbar-nav class="ml-auto">
-
-        <b-nav-form>
-          <b-form-input size="sm" class="mr-sm-2" type="text" placeholder="Search"/>
-          <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
-        </b-nav-form>
-
-        <b-nav-item-dropdown text="Lang" right>
-          <b-dropdown-item href="#">EN</b-dropdown-item>
-          <b-dropdown-item href="#">ES</b-dropdown-item>
-          <b-dropdown-item href="#">RU</b-dropdown-item>
-          <b-dropdown-item href="#">FA</b-dropdown-item>
-        </b-nav-item-dropdown>
-
-        <b-nav-item-dropdown right>
-          <!-- Using button-content slot -->
-          <template slot="button-content">
-            <em>User</em>
-          </template>
-          <b-dropdown-item href="#">Profile</b-dropdown-item>
-          <b-dropdown-item href="#">Signout</b-dropdown-item>
-        </b-nav-item-dropdown>
-      </b-navbar-nav>
-
-    </b-collapse>
-  </b-navbar>
-
-
-
-
-
-
-
-
-
-
-
-</div>
+<template>
+  <div role="tablist">
+    <b-card no-body class="mb-1">
+      <b-card-header header-tag="header" class="p-1" role="tab">
+        <b-btn block href="#" v-b-toggle.accordion1 variant="info">Accordion 1</b-btn>
+      </b-card-header>
+      <b-collapse id="accordion1" visible accordion="my-accordion" role="tabpanel">
+        <b-card-body>
+          <p class="card-text">
+            I start opened because <code>visible</code> is <code>true</code>
+          </p>
+          <p class="card-text">
+            {{ text }}
+          </p>
+        </b-card-body>
+      </b-collapse>
+    </b-card>
+    <b-card no-body class="mb-1">
+      <b-card-header header-tag="header" class="p-1" role="tab">
+        <b-btn block href="#" v-b-toggle.accordion2 variant="info">Accordion 2</b-btn>
+      </b-card-header>
+      <b-collapse id="accordion2" accordion="my-accordion" role="tabpanel">
+        <b-card-body>
+          <p class="card-text">
+            {{ text }}
+          </p>
+        </b-card-body>
+      </b-collapse>
+    </b-card>
+    <b-card no-body class="mb-1">
+      <b-card-header header-tag="header" class="p-1" role="tab">
+        <b-btn block href="#" v-b-toggle.accordion3 variant="info">Accordion 3</b-btn>
+      </b-card-header>
+      <b-collapse id="accordion3" accordion="my-accordion" role="tabpanel">
+        <b-card-body>
+          <p class="card-text">
+            {{ text }}
+          </p>
+        </b-card-body>
+      </b-collapse>
+    </b-card>
+  </div>
 </template>
 
-
-<!-- Script  -->
 <script>
-import footerone from './footerone'
 export default {
   data () {
     return {
-      form: {
-        name: ''
-      },
-        showCreation: true,
-        showAll: false,
-        showProfile: false,
-        ok: true
+      text: `
+        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+        richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor
+        brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon
+        tempor, sunt aliqua put a bird on it squid single-origin coffee nulla
+        assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore
+        wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher
+        vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic
+        synth nesciunt you probably haven't heard of them accusamus labore VHS.
+      `
     }
-  },
-  methods: {
-    created: function() {
-      alert("BOOM!");
-    }
-  },
-  components: {
-    footerone
   }
 }
 </script>
-
-<!-- Style -->
-<style lang="css">
-#FirstRow {
-    background-color: #343a40;
-    color: white;
-    margin-top: -4px;
-
-
-}
-
-#creationMeeting {
-  /* height: 10em; */
-  display: flex;
-  align-items: center;
-  justify-content: center
-}
-
-.profilepage {
-  margin-top: -4px;
-  background-color: #DCDCDC;
-}
-
-</style>

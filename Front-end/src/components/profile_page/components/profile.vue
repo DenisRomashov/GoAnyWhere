@@ -1,11 +1,17 @@
-bithday<template lang="html">
-  <div class="profile">
+<template lang="html">
+
+  <div class="profilepage">
+    <b-container>
+      <b-row>
+        <b-col></b-col>
+        <b-col cols="10">
+    <!-- Страница профайла -->
+
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
     <br>
     <b-container fluid class="profileInfo">
       <div class="profileInfodiv">
-
-      <b-card-header header-bg-variant="dark" header-text-variant="white" header-tag="header">
+      <b-card-header header-bg-variant="light" header-text-variant="dark" header-tag="header">
           Информация профиля
           <i class="fas fa-info-circle"></i>
       </b-card-header>
@@ -21,7 +27,7 @@ bithday<template lang="html">
 
                 <b-form-input  v-model.trim="form.username"
                 type="text"
-                :disabled="editform"></b-form-input>
+                disabled></b-form-input>
 
             </b-input-group>
           </div>
@@ -71,6 +77,11 @@ bithday<template lang="html">
                 v-model.trim="form.sex"
                 :disabled="editform"></b-form-input>
 
+                <!-- Доработать -->
+                <!-- <b-input-group-append>
+                  <b-btn variant="dark">Мужской</b-btn>
+                  <b-btn variant="outline-dark">Женский</b-btn>
+                </b-input-group-append> -->
             </b-input-group>
           </div>
         </b-col>
@@ -81,7 +92,11 @@ bithday<template lang="html">
                     <b-btn :variant="editInfoButton.variant_prepend"> Дата рождения <i class="fas fa-calendar-alt"></i></b-btn>
                 </b-input-group-prepend>
 
-                <b-form-input  :disabled="editform"></b-form-input>
+                <b-form-input
+                  v-model.trim="form.birthday"
+                  :disabled="editform"
+                  type="date">
+                </b-form-input>
 
             </b-input-group>
           </div>
@@ -111,7 +126,7 @@ bithday<template lang="html">
 
   <b-container fluid class="profileContactInfo">
     <div class="ContactInfo">
-        <b-card-header header-bg-variant="dark" header-text-variant="white">
+        <b-card-header header-bg-variant="light" header-text-variant="dark">
           Контактные данные <i class="fas fa-address-book"></i>
       </b-card-header>
     <b-card>
@@ -173,16 +188,7 @@ bithday<template lang="html">
 
     <b-row>
       <b-col>
-        <!-- <yandex-map
-          :coords="[59.9386300, 30.3141300]"
-          zoom="10"
-          style="width: auto; height: 300px;"
-          :cluster-options="{1: {clusterDisableClickZoom: true}}"
-          :behaviors="['ruler']"
-          :placemarks="placemarks"
-          map-type="map"
-          >
-        </yandex-map> -->
+
         <h1> <strong>КАРТА</strong> </h1>
       </b-col>
     </b-row>
@@ -271,19 +277,14 @@ bithday<template lang="html">
          </b-popover>
         </b-button-group>
     </b-card-footer>
-    <br>
     </div>
   </b-container>
-
-
-
-
-
-
-
-    <!-- test variable -->
-    <!-- <h1>{{ create }}</h1> -->
-  </div>
+      <br>
+      </b-col>
+      <b-col></b-col>
+    </b-row>
+  </b-container>
+</div>
 </template>
 
 <script>
@@ -292,29 +293,23 @@ import router from '../../../router'
 export default {
   data () {
     return {
-   //    placemarks: [
-   //   {
-   //     coords: [54.8, 39.8],
-   //     properties: {}, // define properties here
-   //     options: {}, // define options here
-   //     clusterName: "1",
-   //     balloonTemplate: '<div>"Your custom template"</div>',
-   //     callbacks: { click: function() {} }
-   //   }
-   // ],
-
       form: {
-          username: 'denisrom',
-          firstName: 'Denis',
-          lastName: 'Romashov',
+          id: '',
+          username: '',
+          firstName: '',
+          lastName: '',
           sex: '',
-          bithday: '',
-          email: 'qwerty@gmail.com',
-          phoneNumber: '+79110245391',
+          birthday: '',
+          email: '',
+          phoneNumber: '',
           vkReference: 'https://vk.com',
           facebookReference: 'https://www.facebook.com',
           twitterReference: 'https://twitter.com',
-          userAddress: 'Валерия Гаврилина 3 к 1'
+          // userAddress: ''
+      },
+
+      adress: {
+        userAddress: ''
       },
 
       editInfoButton: {
@@ -327,7 +322,7 @@ export default {
       editContactButton: {
         button_state: false,
         variant: 'dark',
-        title: 'Редактировать контактную информацию',
+        title: 'Редактировать данные',
         variant_prepend: 'dark'
       },
 
@@ -339,6 +334,21 @@ export default {
 
   },
   methods: {
+    sendInfo() {
+      axios.post("/user", this.form)
+      .then(response => {
+
+        if (response.status === 200) {
+
+          console.log(response);
+        }
+
+      }).catch(function (error) {
+        alert("Error...");
+        console.log(error);
+      });
+    },
+
     editinfo() {
       if (this.editInfoButton.button_state) {
         this.editInfoButton.variant_prepend = 'dark';
@@ -346,6 +356,9 @@ export default {
         this.editInfoButton.variant = 'dark';
         this.editInfoButton.title = 'Редактировать данные';
         this.editInfoButton.button_state = !this.editInfoButton.button_state;
+
+        this.sendInfo();
+
       }else {
         this.editInfoButton.variant_prepend = 'outline-dark'
         this.editform = !this.editform;
@@ -360,8 +373,11 @@ export default {
         this.editContactButton.variant_prepend = 'dark';
         this.editContactInfo = !this.editContactInfo;
         this.editContactButton.variant = 'dark';
-        this.editContactButton.title = 'Редактировать контактную информацию';
+        this.editContactButton.title = 'Редактировать данные';
         this.editContactButton.button_state = !this.editContactButton.button_state;
+
+        this.sendInfo();
+
       }else {
         this.editContactButton.variant_prepend = 'outline-dark'
         this.editContactInfo = !this.editContactInfo;
@@ -374,7 +390,7 @@ export default {
   },
 
   created: function () {
-   if (localStorage.getItem('STORAGE_USER_INFO') !== null) { //проверяем есть ли такой ключ, если нет отправляем на главную
+   if (localStorage.getItem('STORAGE_USER_INFO') !== null && JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userId != 0) { //проверяем есть ли такой ключ, если нет отправляем на главную
         var storageInfo = JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO'));
         //this.create = storageInfo;
         if (storageInfo.userId != 0) {
@@ -391,11 +407,12 @@ export default {
             //this.create = response.data.userContact.facebookReference;
 
             // Заполнение форм по респонсу
+            this.form.id = response.data.id;
             this.form.username = response.data.username;
             this.form.firstName = response.data.firstName;
             this.form.lastName = response.data.lastName;
             this.form.sex = response.data.sex;
-            this.form.bithday = response.data.bithday;
+            this.form.birthday = response.data.birthday;
             this.form.email = response.data.userContact.email;
             this.form.phoneNumber = response.data.userContact.phoneNumber;
             this.form.vkReference = response.data.userContact.vkReference;

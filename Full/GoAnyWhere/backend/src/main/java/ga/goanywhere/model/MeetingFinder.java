@@ -6,9 +6,12 @@ import ga.goanywhere.entities.MeetingEntity;
 import java.util.List;
 
 public interface MeetingFinder {
-    List<MeetingEntity> findMeetingsByCategory(String category);
-    List<MeetingEntity> findMeetingByUser(Long userId) ;
-    List<MeetingEntity> findMeetingCreatedByUser(Long userId);
-    List<MeetingEntity> findActualMeetingForUser(Long userId);
-    List<MeetingEntity> findMeetingByLocality(String locality);
+    MeetingEntity findMeetingById(Long meetingId);
+    List<MeetingEntity> findMeetingsByUser(Long userId) ;
+    List<MeetingEntity> findMeetingsCreatedByUser(Long userId);
+    List<MeetingEntity> findActualMeetingsForUser(Long userId);
+
+    List<MeetingEntity> meetingSearch(Long searcherId, Long categoryId, String locality);
+    List<MeetingEntity> filterMeetingsByCategory(List<MeetingEntity> meetings, Long categoryId);
+    List<MeetingEntity> filterMeetingsByLocality(List<MeetingEntity> meetings, String locality);
 }

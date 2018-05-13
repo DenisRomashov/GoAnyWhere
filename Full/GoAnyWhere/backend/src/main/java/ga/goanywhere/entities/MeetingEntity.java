@@ -1,14 +1,13 @@
 package ga.goanywhere.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -17,6 +16,7 @@ import java.util.Objects;
 @Table(name = "meeting", schema = "goanywhere", catalog = "")
 public class MeetingEntity {
     @Id
+    @GeneratedValue
     @Column(name = "id")
     private Long id;
 
@@ -26,6 +26,9 @@ public class MeetingEntity {
     @ManyToOne
     @JoinColumn(name = "address_id")
     private AddressEntity meetingAddress;
+
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "start_time")
     private Timestamp startTime;
@@ -37,14 +40,24 @@ public class MeetingEntity {
     private String description;
 
     @Column(name = "max_participants")
-    private Integer maxParticipants;
+    private Long maxParticipants;
 
     @Column(name = "min_age")
-    private Integer minAge;
+    private Long minAge;
 
     @Column(name = "attachment")
     private byte[] attachment;
 
-    @OneToMany(mappedBy = "userMeetingPK.participantMeeting")
+    @JsonIgnore
+    @OneToMany(mappedBy = "userMeetingPK.participantMeeting", cascade = CascadeType.ALL)
     private Collection<UserMeetingEntity> participants;
+
+    @Transient
+    private Integer numberOfParticipants;
+
+    public MeetingEntity setNumberOfParticipants() {
+        if (participants != null) numberOfParticipants = participants.size();
+        else numberOfParticipants = 0;
+        return this;
+    }
 }
