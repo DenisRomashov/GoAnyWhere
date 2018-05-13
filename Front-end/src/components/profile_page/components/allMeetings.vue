@@ -73,19 +73,6 @@
             </b-btn>
           </b-col>
         </b-row>
-        <!-- <b-button-group>
-            <b-btn class="showMoreMeetings"
-                   @click="limitMeeting += 2"
-                   :disabled="disabledShowMoreMeetings"
-                    variant="outline-secondary"> {{ countMeetingItems }}
-            </b-btn>
-            <b-btn  class="showMoreMeetings"
-                   @click="limitMeeting += 2"
-                   :disabled="disabledShowMoreMeetings"
-                    variant="outline-secondary"> {{ countMeetingItems }}
-            </b-btn>
-          </b-button-group> -->
-
       </b-card-footer>
     </b-container>
 
@@ -352,7 +339,7 @@ color: white;
 }
 
 .Meetings {
-    margin-top: 35px;
+    margin-top: 50px;
 }
 
 .allMeetingsSearch {

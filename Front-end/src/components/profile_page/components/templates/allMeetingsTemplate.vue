@@ -13,24 +13,24 @@
                 </b-badge>
                 <b-badge variant="info"> Возраст: {{ meeting.minAge }}+ </b-badge>
               </h5>
-
               <p>
-                  <b-badge variant="danger">
-                    Категория: {{ category[meeting.categoryId - 1].text }}
-                  </b-badge>
-                  <b-badge variant="warning">
-
-                Дата: {{ meeting.startTime }}
+                <b-badge variant="danger">
+                  Категория: {{ category[meeting.categoryId - 1].text }}
                 </b-badge>
-            </p>
+                <b-badge variant="warning">
+                  Дата: {{ meeting.startTime }}
+                </b-badge>
+              </p>
           </div>
-          </b-col>
-          <b-col sm="4">
-            <div>
-              <b-button-group vertical size="">
-                <b-button :variant="buttonSubscribeVariant" v-on:click="subscribe(index)" :disabled="addedButtonDisable">
-                  <i class="fas fa-plus" v-show="plus"></i>
-                  <i class="fas fa-check-circle" v-show="added" ></i> {{ butttonTitleSubscribe }}</b-button>
+        </b-col>
+
+        <b-col sm="4">
+          <div>
+            <b-button-group vertical size="">
+              <b-button :variant="buttonSubscribeVariant" v-on:click="subscribe(index)" :disabled="addedButtonDisable">
+                <i class="fas fa-plus" v-show="plus"></i>
+                <i class="fas fa-check-circle" v-show="added" ></i> {{ butttonTitleSubscribe }}
+              </b-button>
               </b-button-group>
             </div>
           </b-col>
@@ -38,7 +38,6 @@
 
         <b-row>
           <b-col>
-
               <b-btn block @click="showCollapseMethod()"
                   variant="outline-secondary"
                   :class="showCollapse ? 'collapsed' : null"
@@ -48,148 +47,107 @@
                   Детали события
               </b-btn>
 
-<!-- Все что в б кард можно забрать будет в другие темплейты -->
+    <!-- Все что в б кард можно забрать будет в другие темплейты -->
               <b-collapse class="mt-2" v-model="showCollapse" id="collapse4">
-              <b-card>
+                <b-card>
 
-                <b-row>
-                  <b-col>
-                      <!-- <p>Описание: {{ meeting.description }}</p> -->
-                      <b-card-group deck
-                        class="mb-3">
+                    <b-row>
+                      <b-col>
+                        <b-card-group deck
+                            class="mb-3">
 
-                    <b-card
-                        border-variant="dark"
-                        header-bg-variant=""
-                        header-text-variant=""
-                        bg-variant="light"
-                        text-variant="dark"
-                        header="Описание:"
-                        class="text-center">
-                      <p class="card-text">{{ meeting.description }}</p>
-
-
-                        <b-button block disabled variant="success"><i class="fas fa-clock"></i> Начало: {{ meeting.startTime }} </b-button>
-                        <b-button block disabled variant="danger"><i class="fas fa-clock"></i> Окончание: {{ meeting.endTime}} </b-button>
-
-                    </b-card>
-
-                  </b-card-group>
-                  </b-col>
-                  <b-col>
+                            <b-card
+                              border-variant="dark"
+                              header-bg-variant=""
+                              header-text-variant=""
+                              bg-variant="light"
+                              text-variant="dark"
+                              header="Описание:"
+                              class="text-center">
+                                <p class="card-text">{{ meeting.description }}</p>
 
 
-                <b-card-header
-                    border-variant="dark"
-                    header-bg-variant="secondary"
-                    header-text-variant="white">
-               <i class="fas fa-location-arrow"></i>  {{ meeting.meetingAddress.locality}}, {{meeting.meetingAddress.street}}, {{meeting.meetingAddress.house}}
-                </b-card-header>
-                <b-card
-                    border-variant="white"
-                    bg-variant="light"
-                    text-variant="dark"
-                    class="text-center">
-              <!--Вставка карты  -->
-                      <gmap-map
-                        :center="center"
-                        :zoom="14"
-                        style="width:100%;  height: 200px"
-                        >
+                                <b-button block disabled variant="success"><i class="fas fa-clock"></i> Начало: {{ meeting.startTime }} </b-button>
+                                <b-button block disabled variant="danger"><i class="fas fa-clock"></i> Окончание: {{ meeting.endTime}} </b-button>
 
-                        <gmap-marker
-                          :position="marker"
-                          @click="center=marker"
-                        ></gmap-marker>
+                              </b-card>
 
-                      </gmap-map>
-                </b-card>
+                        </b-card-group>
+                      </b-col>
 
-                    <!-- <p class="card-text">
-                      Адрес: {{ meeting.meetingAddress.locality}}, {{meeting.meetingAddress.street}}, {{meeting.meetingAddress.house}}
-                    </p>
+                      <b-col>
+                        <b-card-header
+                          border-variant="dark"
+                          header-bg-variant="secondary"
+                          header-text-variant="white">
+                          <i class="fas fa-location-arrow"></i>  {{ meeting.meetingAddress.locality}}, {{meeting.meetingAddress.street}}, {{meeting.meetingAddress.house}}
+                        </b-card-header>
+                        <b-card
+                          border-variant="white"
+                          bg-variant="light"
+                          text-variant="dark"
+                          class="text-center">
+                          <!--Вставка карты  -->
+                          <gmap-map
+                            :center="center"
+                            :zoom="14"
+                            style="width:100%;  height: 200px"
+                            >
 
-                    <gmap-map
-                      :center="center"
-                      :zoom="14"
-                      style="width:100%;  height: 200px;"
-                    >
-
-                      <gmap-marker
-                        :position="marker"
-                        @click="center=marker"
-                      ></gmap-marker>
-
-                    </gmap-map> -->
-                  </b-col>
-                </b-row>
-
-
-                <!-- <p>Описание: {{ meeting.description }}</p>
-                <p class="card-text">
-                  Адрес: {{ meeting.meetingAddress.locality}}, {{meeting.meetingAddress.street}}, {{meeting.meetingAddress.house}}
-                </p> -->
-                <!-- <p>  Максимальное количество участников: {{ meeting.maxParticipants }}</p>
-                <p> Минимальный возвраст: {{ meeting.minAge }}</p> -->
-                <!-- <br> -->
+                            <gmap-marker
+                              :position="marker"
+                              @click="center=marker">
+                            </gmap-marker>
+                          </gmap-map>
+                        </b-card>
+                      </b-col>
+                    </b-row>
 
                 <!-- Таблица с участниками -->
                 <div class="participantsInfo">
-
-
-                <b-btn block @click="showCollapseParticipants=!showCollapseParticipants"
-                    variant="secondary"
-                    :class="showCollapse ? 'collapsed' : null"
-                    aria-controls="collapse5"
-                    :aria-expanded="showCollapse ? 'true' : 'false'">
-                    <i class="fas fa-users"></i>
-                    Участники события
-                </b-btn>
+                    <b-btn block @click="showCollapseParticipantsMethod()"
+                        variant="secondary"
+                        :class="showCollapse ? 'collapsed' : null"
+                        aria-controls="collapse5"
+                        :aria-expanded="showCollapse ? 'true' : 'false'">
+                        <i class="fas fa-users"></i>
+                          Участники события
+                    </b-btn>
                 </div>
-                  <b-collapse class="mt-2" v-model="showCollapseParticipants" id="collapse5">
-                    <!-- <b-card> -->
-
-
-                       <b-table striped hover :items="items" :fields="fields"></b-table>
-                       *Подробные данные участников вы сможете увидеть, если присоеденитесь к этому событию
-                    <!-- </b-card> -->
-                  </b-collapse>
-              <br>
+                <b-collapse class="mt-2" v-model="showCollapseParticipants" id="collapse5">
+                    <b-table striped hover :items="items" :fields="fields"></b-table>
+                    <strong>*</strong>Подробные данные участников вы сможете увидеть, если присоеденитесь к этому событию
+                </b-collapse>
+                <br>
                 <b-button block :variant="buttonSubscribeVariant" v-on:click="subscribe(index)" :disabled="addedButtonDisable">
                   <i class="fas fa-plus" v-show="plus"></i>
                   <i class="fas fa-check-circle" v-show="added" ></i> {{ butttonTitleSubscribe }}</b-button>
               </b-card>
-              </b-collapse>
-
+            </b-collapse>
           </b-col>
         </b-row>
       </b-card>
-
-      <!-- <b-modal v-model="showEditingMeeting" centered size="lg" title="Large Modal">
-        Hello Modal!
-      </b-modal> -->
-
   </div>
-
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   props: ['meeting', 'index'],
   data() {
     return {
       fields: [
-  {
-    key: 'username',
-    label: 'Имя пользователя',
-    sortable: true
-  },
-  {
-    key: 'userAddress.locality',
-    label: 'Город',
-    sortable: true
-  }
-],
+        {
+          key: 'username',
+          label: 'Имя пользователя',
+          sortable: true
+        },
+        {
+          key: 'userAddress.locality',
+          label: 'Город',
+          sortable: true
+        }
+      ],
 
 items: [
     {
@@ -270,13 +228,6 @@ items: [
 ],
 
 
-
-
-
-
-
-
-
       center: {lat: 0, lng: 0},
       marker: {lat: 0, lng: 0},
       showCollapse: false,
@@ -328,6 +279,23 @@ items: [
       this.marker.lat = this.meeting.meetingAddress.latitude;
       this.marker.lng = this.meeting.meetingAddress.longitude;
 
+    },
+
+    showCollapseParticipantsMethod() {
+      this.showCollapseParticipants = !this.showCollapseParticipants;
+      if (this.showCollapseParticipants) {
+        axios.get("/meeting/participants?Id="+this.meeting.id)
+        .then(response => {
+          if (response.status === 200) {
+
+            this.items= response.data;
+            console.log(response);
+          }
+        }).catch(function (error) {
+          alert("Error /meeting/participants?Id");
+          console.log(error);
+        });
+      }
     }
   },
 
