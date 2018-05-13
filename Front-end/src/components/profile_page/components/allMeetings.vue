@@ -4,20 +4,24 @@
     <b-container fluid class="allMeetingsSearch">
       <div class="BlockAfterNavbar">
         <b-row id="FirstRow">
-          <b-col>
-            Выбирете город:
+          <b-col sm="2">
+            <p class="searchTitle">
+            <h5>Выберите город: </h5>
+          </p>
+          </b-col>
+          <b-col sm="3">
+           <b-form-select v-model="form.locality" :options="cities" class="mb-3" />
+          </b-col>
+          <b-col sm="2">
+            <p class="searchTitle">
+              <h5>Выберите категорию:</h5>
+            </p>
+          </b-col>
+          <b-col sm="3">
+           <b-form-select v-model="form.categoryId" :options="category" class="mb-3" />
           </b-col>
           <b-col>
-           <b-form-select  class="mb-3" />
-          </b-col>
-          <b-col>
-            <h5>Выбирете категорию:</h5>
-          </b-col>
-          <b-col>
-           <b-form-select :options="category" class="mb-3" />
-          </b-col>
-          <b-col>
-          <b-button size="" class="mb-2 mr-sm-2 mb-sm-0" variant="warning"> Поиск </b-button>
+          <b-button v-on:click="searchMeeting()" block size="" class="mb-2 mr-sm-2 mb-sm-0" variant="outline-warning"> Поиск </b-button>
           </b-col>
         </b-row>
       </div>
@@ -26,14 +30,10 @@
 <br>
 <br>
     <b-container  class="Meetings">
-
-      <b-card-header header-bg-variant="dark" header-text-variant="white" header-tag="header">
-          Найденные события <b-pagination-nav base-url="#" :number-of-pages="10" v-model="currentPage" variant="dark"/>
-          <input type="text" v-model="searchKey">
-
-
+      <b-card-header header-bg-variant="secondary" header-text-variant="white" header-tag="header">
+         Найденные события
           <i class="fas fa-search"></i>
-          <b-badge variant="secondary">
+          <b-badge variant="warning">
             Показано: {{ limitMeeting }} из {{ meetings.length }}
           </b-badge>
       </b-card-header>
@@ -43,24 +43,53 @@
       v-bind:key="meeting.id"
       v-bind:meeting="meeting"
       v-bind:index="index"
-      v-on:editmeeting="editMeeting"
-      v-on:deleteorunsubscribe="deleteOrUnsubscribe"
+      v-on:subscribe="subscribeMeeting"
+
 
       ></allMeetingsTemplate>
 
       <b-card-footer footer-bg-variant="white" footer-border-variant="dark">
-
+        <b-row>
+          <b-btn block class="showMoreMeetings" disabled
+                  variant="outline-secondary"
+                  v-show="showEndShowMore">
+                  {{ countMeetingItems }}
+          </b-btn>
+          <b-col>
             <b-btn block class="showMoreMeetings"
+                   @click="limitMeeting += 2"
+                   :disabled="disabledShowMoreMeetings"
+                    variant="outline-secondary"
+                    v-show="showMoreButtons">
+                    {{ countMeetingItems }}
+            </b-btn>
+          </b-col>
+          <b-col>
+            <b-btn block class="showMoreMeetings"
+                   @click="limitMeeting += meetings.length"
+                   :disabled="disabledShowMoreMeetings"
+                    variant="outline-secondary"
+                    v-show="showMoreButtons"> Показать все!
+            </b-btn>
+          </b-col>
+        </b-row>
+        <!-- <b-button-group>
+            <b-btn class="showMoreMeetings"
                    @click="limitMeeting += 2"
                    :disabled="disabledShowMoreMeetings"
                     variant="outline-secondary"> {{ countMeetingItems }}
             </b-btn>
+            <b-btn  class="showMoreMeetings"
+                   @click="limitMeeting += 2"
+                   :disabled="disabledShowMoreMeetings"
+                    variant="outline-secondary"> {{ countMeetingItems }}
+            </b-btn>
+          </b-button-group> -->
 
       </b-card-footer>
     </b-container>
 
-<br>
-
+    <br>
     <br>
   </div>
 </template>
@@ -69,17 +98,24 @@
 import axios from 'axios'
 import router from '../../../router'
 import allMeetingsTemplate from './templates/allMeetingsTemplate'
+import  { timeConverter }  from './timeconverter'
 export default {
   data() {
     return {
-      searchKey: '',
-      currentPage: 0,
-      itemsPerPage: 1,
-      resultCount: 0,
-
-
-      limitMeeting: 2,
+      form: {
+        searcherId: 1,
+        categoryId: null,
+        locality: null
+      },
+      subscribeForm: {
+        userId: null,
+        meetingId: null,
+        privilege: "participant"
+      },
+      limitMeeting: 3,
       disabledShowMoreMeetings: false,
+      showMoreButtons: true,
+      showEndShowMore: false,
       meeting: {name:""},
       meetings: [
         {
@@ -123,7 +159,7 @@ export default {
           "attachment": null
       },
       {
-          "id": 2,
+          "id": 3,
           "categoryId": 2,
           "meetingAddress": {
               "id": 5,
@@ -143,7 +179,7 @@ export default {
           "attachment": null
       },
       {
-          "id": 2,
+          "id": 4,
           "categoryId": 2,
           "meetingAddress": {
               "id": 5,
@@ -163,7 +199,7 @@ export default {
           "attachment": null
       },
       {
-          "id": 2,
+          "id": 5,
           "categoryId": 2,
           "meetingAddress": {
               "id": 5,
@@ -184,6 +220,7 @@ export default {
       }
     ],
     category: [
+      { value: null, text: 'Все категории'},
       { value: '1', text: 'Активный отдых и приключения' },
       { value: '2', text: 'Еда и напитки' },
       { value: '3', text: 'Здоровье' },
@@ -203,48 +240,99 @@ export default {
       { value: '17', text: 'Танцы'},
       { value: '18', text: 'Книги'},
       { value: '19', text: 'Другое'},
+    ],
+    cities: [
+      {value: null, text: 'Все города'},
+      { value: 'Москва', text: 'Москва'},
+      { value: 'Санкт-Петербург', text: 'Санкт-Петербург'},
+      { value: 'Новосибирск', text: 'Новосибирск'},
+      { value: 'Казань', text: 'Казань'}
     ]
     }
   },
   computed: {
     countMeetingItems() {
       if (this.meetings.length - this.limitMeeting > 0 ) {
+          this.disabledShowMoreMeetings = false;
           return "Показать еще! Осталось "+(this.meetings.length - this.limitMeeting)+" из "+this.meetings.length
       } else {
         if (this.limitMeeting > this.meetings.length) {
           this.limitMeeting = this.meetings.length;
         }
         this.disabledShowMoreMeetings = true;
+        this.showMoreButtons = false;
+        this.showEndShowMore = true;
         return "Показаны все созданные события!"
       }
     },
 
     limitedMeetings() {
       return this.meetings.slice(0, this.limitMeeting)
-    },
-
-    totalPages: function() {
-         return Math.ceil(this.resultCount / this.itemsPerPage)
-       }
+    }
   },
 
   methods: {
-      setPage: function(pageNumber) {
-        this.currentPage = pageNumber
-      }
+    searchMeeting() {
+      // alert("Поиск Начат");
+      this.form.searcherId = JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userId;
+      this.limitMeeting = 3;
+      this.disabledShowMoreMeetings = false;
+
+      axios.post("/meeting/search", this.form)
+      .then(response => {
+
+        if (response.status === 200) {
+          for (var i = 0; i < response.data.length; i++) {
+             response.data[i].startTime = timeConverter(response.data[i].startTime);
+             response.data[i].endTime = timeConverter(response.data[i].endTime);
+           }
+          this.meetings = response.data;
+          console.log(response);
+        }
+
+      }).catch(function (error) {
+        alert("Error searchMeeting");
+        console.log(error);
+      });
+    },
+
+    subscribeMeeting: function(index) {
+      this.subscribeForm.userId = JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userId;
+      this.subscribeForm.meetingId = this.meetings[index].id;
+      axios.post("/meeting/apply", this.subscribeForm)
+      .then(response => {
+        if (response.status === 200) {
+          console.log(response);
+        }
+      }).catch(function (error) {
+        alert("subscribe meeting error");
+        console.log(error);
+      });
+    }
+
   },
 
-  filters: {
-    paginate: function(list) {
-          this.resultCount = list.length
-          if (this.currentPage >= this.totalPages) {
-            this.currentPage = this.totalPages - 1
-          }
-          var index = this.currentPage * this.itemsPerPage
-          return list.slice(index, index + this.itemsPerPage)
-      }
-  },
+// Получаем вообще все события
+  created: function () {
+    this.form.searcherId = JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userId;
+    this.limitMeeting = 3;
+    this.disabledShowMoreMeetings = false;
 
+    axios.post("/meeting/search", this.form)
+    .then(response => {
+      if (response.status === 200) {
+        for (var i = 0; i < response.data.length; i++) {
+           response.data[i].startTime = timeConverter(response.data[i].startTime);
+           response.data[i].endTime = timeConverter(response.data[i].endTime);
+         }
+        this.meetings = response.data;
+        console.log(response);
+      }
+    }).catch(function (error) {
+      alert("Error ALLsearchMeeting");
+      console.log(error);
+    });
+  },
   components: {
     allMeetingsTemplate
   },
@@ -253,10 +341,14 @@ export default {
 </script>
 
 <style lang="css">
-#FirstRow {
+.allMeetingsSearch {
 background-color: #343a40;
 color: white;
 /* margin-top: -17px; */
+}
+
+.BlockAfterNavbar {
+  margin-top: 10px;
 }
 
 .Meetings {
@@ -264,10 +356,17 @@ color: white;
 }
 
 .allMeetingsSearch {
-margin-top: 11px;
+margin-top: 6px;
   position: fixed;
   z-index: 1000;
 }
 
+.searchHeader {
+  position: fixed;
+  z-index: 1000;
+}
 
+.searchTitle {
+  margin-top:  -10px;
+}
 </style>

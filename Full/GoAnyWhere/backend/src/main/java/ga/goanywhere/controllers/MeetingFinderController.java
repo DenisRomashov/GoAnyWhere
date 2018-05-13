@@ -3,10 +3,12 @@ package ga.goanywhere.controllers;
 import ga.goanywhere.entities.MeetingEntity;
 import ga.goanywhere.model.MeetingFinder;
 import ga.goanywhere.model.MeetingFinderImpl;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,19 +31,24 @@ public class MeetingFinderController {
         return meetingFinder.findMeetingsCreatedByUser(id);
     }
 
-    @GetMapping("meeting/category")
-    public @ResponseBody List<MeetingEntity> meetingsByCategory(@RequestParam Long id){
-        return meetingFinder.findMeetingsByCategory(id);
-    }
-
-    @GetMapping("meeting/locality")
-    public @ResponseBody List<MeetingEntity> meetingsByLocality(@RequestParam String locality){
-        return meetingFinder.findMeetingsByLocality(locality);
-    }
-
     @GetMapping("meeting/actual")
     public @ResponseBody List<MeetingEntity> meetingsByActuality(@RequestParam Long id){
         return meetingFinder.findActualMeetingsForUser(id);
+    }
+
+    @PostMapping("meeting/search")
+    public @ResponseBody List<MeetingEntity> searchMeetings(@RequestBody Search search) {
+        return meetingFinder.meetingSearch(search.getSearcherId(), search.getCategoryId(), search.getLocality());
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    private static class Search {
+        private Long searcherId;
+        private Long categoryId;
+        private String locality;
     }
 
 }
