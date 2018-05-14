@@ -26,7 +26,7 @@
           <b-btn block class="showMoreCreatedMeetings"
                  @click="limitCreatedMeeting += 2"
                  :disabled="disabledShowMoreCreatedMeetings"
-                  variant="outline-secondary"> {{ countCreatedMeetingItems }}
+                  variant="outline-dark"> {{ countCreatedMeetingItems }}
           </b-btn>
           <b-popover ref="popoverOne" target="editinfobutton"
            placement="left"
