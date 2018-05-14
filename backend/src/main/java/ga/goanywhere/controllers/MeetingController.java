@@ -45,8 +45,8 @@ public class MeetingController {
     }
 
     @GetMapping("/meeting/participants")
-    public @ResponseBody List<UserEntity> getMeetingParticipants(@RequestParam Long Id){
-        return meetingManger.getMeetingParticipants(Id);
+    public @ResponseBody List<UserEntity> getMeetingParticipants(@RequestParam Long id){
+        return meetingManger.getMeetingParticipants(id);
     }
 
     @GetMapping("/categories")
