@@ -149,21 +149,21 @@ export default {
         }
       ],
 
-items: [
-    {
-        "id": 101,
-        "username": "mglmdltdxl",
-        "firstName": "бЧХоДЫЯЩ",
-        "lastName": "биабйЙСы",
-        "sex": "m",
-        "birthday": "1983-08-22",
-        "userAddress": {
-            "id": 101,
-            "locality": "Санкт-Петербург",
-            "street": "Маяковская",
-            "house": "47",
-            "latitude": 33,
-            "longitude": 21
+      items: [
+        {
+          "id": 101,
+          "username": "mglmdltdxl",
+          "firstName": "бЧХоДЫЯЩ",
+          "lastName": "биабйЙСы",
+          "sex": "m",
+          "birthday": "1983-08-22",
+          "userAddress": {
+              "id": 101,
+              "locality": "Санкт-Петербург",
+              "street": "Маяковская",
+              "house": "47",
+              "latitude": 33,
+              "longitude": 21
         },
         "userContact": {
             "id": 101,
@@ -232,7 +232,6 @@ items: [
       marker: {lat: 0, lng: 0},
       showCollapse: false,
       showCollapseParticipants: false,
-      showEditingMeeting: false,
       buttonSubscribeVariant: "warning",
       butttonTitleSubscribe: "Присоединиться к событию!",
       plus: true,
@@ -278,7 +277,6 @@ items: [
       this.center.lng = this.meeting.meetingAddress.longitude;
       this.marker.lat = this.meeting.meetingAddress.latitude;
       this.marker.lng = this.meeting.meetingAddress.longitude;
-
     },
 
     showCollapseParticipantsMethod() {
