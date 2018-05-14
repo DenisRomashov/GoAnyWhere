@@ -64,7 +64,7 @@
           <b-btn block class="showMoreCreatedMeetings"
                  @click="limitParticipatedMeeting += 2"
                  :disabled="disabledShowMoreParticipatedMeetings"
-                  variant="outline-secondary"> {{ countParticipatedMeetingItems }}
+                  variant="outline-dark"> {{ countParticipatedMeetingItems }}
           </b-btn>
 
     </b-card-footer>
