@@ -324,7 +324,7 @@ export default {
           "attachment": null
       },
       {
-          "id": 2,
+          "id": 3,
           "categoryId": 2,
           "meetingAddress": {
               "id": 5,
@@ -344,7 +344,7 @@ export default {
           "attachment": null
       },
       {
-          "id": 2,
+          "id": 4,
           "categoryId": 2,
           "meetingAddress": {
               "id": 5,
@@ -364,7 +364,7 @@ export default {
           "attachment": null
       },
       {
-          "id": 2,
+          "id": 5,
           "categoryId": 2,
           "meetingAddress": {
               "id": 5,
@@ -407,7 +407,7 @@ export default {
         "attachment": null
     },
     {
-        "id": 2,
+        "id": 5,
         "categoryId": 2,
         "meetingAddress": {
             "id": 5,
@@ -427,7 +427,7 @@ export default {
         "attachment": null
     },
     {
-        "id": 2,
+        "id": 6,
         "categoryId": 2,
         "meetingAddress": {
             "id": 5,
@@ -447,7 +447,7 @@ export default {
         "attachment": null
     },
     {
-        "id": 2,
+        "id": 3,
         "categoryId": 2,
         "meetingAddress": {
             "id": 5,
@@ -467,7 +467,7 @@ export default {
         "attachment": null
     },
     {
-        "id": 2,
+        "id": 7,
         "categoryId": 2,
         "meetingAddress": {
             "id": 5,
@@ -652,7 +652,21 @@ export default {
                       response.data[i].startTime = timeConverter(response.data[i].startTime);
                       response.data[i].endTime = timeConverter(response.data[i].endTime);
                     }
-                    this.myMeetings = response.data;
+
+                    var meetingPart = [];
+                    var counter = 0;
+                    for (var i = 0; i < response.data.length; i++) {
+                    var onlyPart = true;
+                      for(var j = 0; j < this.meetings.length; j++) {
+                        if (response.data[i].id === this.meetings[j].id) {
+                          onlyPart = false;
+                          break;
+                        }
+                      }
+                    if (onlyPart) meetingPart[counter++] = response.data[i];
+                    }
+
+                    this.myMeetings = meetingPart;
                      console.log(response);
                     }
                }).catch(function (error) {
