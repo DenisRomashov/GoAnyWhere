@@ -298,6 +298,29 @@ export default {
   mounted() {
     this.geolocate();
 
+
+    //Подставляем текущую дату в старт и энд тайм митинга
+    var d = new Date();
+    var curr_date = d.getDate();
+    if ((Math.floor(curr_date / 10)) === 0) {
+      var buf = curr_date;
+      curr_date="";
+      curr_date = "0"+buf;
+      }
+      var curr_month = d.getMonth() + 1;
+      if ((Math.floor(curr_month / 10)) === 0) {
+        var buf = curr_month;
+        curr_month="";
+        curr_month = "0"+buf;
+      }
+      var curr_year = d.getFullYear();
+
+      var formatedDate = curr_year + "-" + curr_month + "-" + curr_date + "T" + new Date().toLocaleTimeString('en-US', { hour12: false,
+                                                                         hour: "numeric",
+                                                                         minute: "numeric"});
+      this.form.startTime = formatedDate;
+      this.form.endTime = formatedDate;
+
       if (window.localStorage.getItem('STORAGE_USER_INFO') !== null) {
       this.form.creatorId = JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userId;
     }
