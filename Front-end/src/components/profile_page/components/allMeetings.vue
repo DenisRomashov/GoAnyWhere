@@ -249,7 +249,7 @@ export default {
         this.disabledShowMoreMeetings = true;
         this.showMoreButtons = false;
         this.showEndShowMore = true;
-        return "Показаны все созданные события!"
+        return "Показаны все найденные события!"
       }
     },
 

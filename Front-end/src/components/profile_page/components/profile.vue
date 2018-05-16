@@ -72,16 +72,11 @@
                 <b-input-group-prepend>
                     <b-btn :variant="editInfoButton.variant_prepend"> Пол <i class="fas fa-male"></i> <i class="fas fa-female"></i></b-btn>
                 </b-input-group-prepend>
-
-                <b-form-input
-                v-model.trim="form.sex"
-                :disabled="editform"></b-form-input>
-
-                <!-- Доработать -->
-                <!-- <b-input-group-append>
-                  <b-btn variant="dark">Мужской</b-btn>
-                  <b-btn variant="outline-dark">Женский</b-btn>
-                </b-input-group-append> -->
+                <b-input-group-append>
+                  <b-btn @click="setMale()" v-show="showSexButtons" :variant="sexButtonMaleVariant">Мужской</b-btn>
+                  <b-btn @click="setFemale()" v-show="showSexButtons" :variant="sexButtonFemaleVariant">Женский</b-btn>
+                  <b-btn v-show="showSex" :pressed="true" variant="dark">{{ sexShow }}</b-btn>
+                </b-input-group-append>
             </b-input-group>
           </div>
         </b-col>
@@ -328,12 +323,44 @@ export default {
 
       create: ' [ Empty.. ]',
       editform: true,
-      editContactInfo: true
+      editContactInfo: true,
+      showSexButtons: false,
+      showSex: true,
+      sexButtonMaleVariant: "",
+      sexButtonFemaleVariant: ""
     }
 
 
   },
+
+    computed: {
+      sexShow() {
+        if (this.form.sex === 'm') {
+          this.sexButtonMaleVariant ="dark";
+          this.sexButtonFemaleVariant ="outline-dark";
+          return "Мужской"
+        } else {
+          this.sexButtonMaleVariant ="outline-dark";
+          this.sexButtonFemaleVariant ="dark";
+          return "Женский"
+        }
+      }
+    },
+
   methods: {
+    setMale() {
+      this.form.sex = 'm';
+      this.sexButtonMaleVariant = "dark";
+      this.sexButtonFemaleVariant = "outline-dark";
+    },
+
+    setFemale() {
+      this.form.sex = 'f';
+      this.sexButtonMaleVariant = "outline-dark";
+      this.sexButtonFemaleVariant = "dark";
+    },
+
+
     sendInfo() {
       axios.post("/user", this.form)
       .then(response => {
@@ -355,6 +382,8 @@ export default {
         this.editform = !this.editform;
         this.editInfoButton.variant = 'dark';
         this.editInfoButton.title = 'Редактировать данные';
+        this.showSex = !this.showSex;
+        this.showSexButtons = !this.showSexButtons;
         this.editInfoButton.button_state = !this.editInfoButton.button_state;
 
         this.sendInfo();
@@ -364,6 +393,8 @@ export default {
         this.editform = !this.editform;
         this.editInfoButton.variant = 'white';
         this.editInfoButton.title = 'Применить изменения';
+        this.showSex = !this.showSex;
+        this.showSexButtons = !this.showSexButtons;
         this.editInfoButton.button_state = !this.editInfoButton.button_state;
       }
     },

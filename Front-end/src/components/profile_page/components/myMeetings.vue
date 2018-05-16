@@ -26,7 +26,7 @@
           <b-btn block class="showMoreCreatedMeetings"
                  @click="limitCreatedMeeting += 2"
                  :disabled="disabledShowMoreCreatedMeetings"
-                  variant="outline-secondary"> {{ countCreatedMeetingItems }}
+                  variant="outline-dark"> {{ countCreatedMeetingItems }}
           </b-btn>
           <b-popover ref="popoverOne" target="editinfobutton"
            placement="left"
@@ -64,7 +64,7 @@
           <b-btn block class="showMoreCreatedMeetings"
                  @click="limitParticipatedMeeting += 2"
                  :disabled="disabledShowMoreParticipatedMeetings"
-                  variant="outline-secondary"> {{ countParticipatedMeetingItems }}
+                  variant="outline-dark"> {{ countParticipatedMeetingItems }}
           </b-btn>
 
     </b-card-footer>
@@ -272,6 +272,7 @@
 <script>
 import axios from 'axios'
 import router from '../../../router'
+import  { timeConverter }  from './timeconverter'
 import createdMeetingTemplate from './templates/createdMeetingTemplate'
 import participatedMeetingTemplate from './templates/participatedMeetingTemplate'
 export default {
@@ -323,7 +324,7 @@ export default {
           "attachment": null
       },
       {
-          "id": 2,
+          "id": 3,
           "categoryId": 2,
           "meetingAddress": {
               "id": 5,
@@ -343,7 +344,7 @@ export default {
           "attachment": null
       },
       {
-          "id": 2,
+          "id": 4,
           "categoryId": 2,
           "meetingAddress": {
               "id": 5,
@@ -363,7 +364,7 @@ export default {
           "attachment": null
       },
       {
-          "id": 2,
+          "id": 5,
           "categoryId": 2,
           "meetingAddress": {
               "id": 5,
@@ -406,7 +407,7 @@ export default {
         "attachment": null
     },
     {
-        "id": 2,
+        "id": 5,
         "categoryId": 2,
         "meetingAddress": {
             "id": 5,
@@ -426,7 +427,7 @@ export default {
         "attachment": null
     },
     {
-        "id": 2,
+        "id": 6,
         "categoryId": 2,
         "meetingAddress": {
             "id": 5,
@@ -446,7 +447,7 @@ export default {
         "attachment": null
     },
     {
-        "id": 2,
+        "id": 3,
         "categoryId": 2,
         "meetingAddress": {
             "id": 5,
@@ -466,7 +467,7 @@ export default {
         "attachment": null
     },
     {
-        "id": 2,
+        "id": 7,
         "categoryId": 2,
         "meetingAddress": {
             "id": 5,
@@ -540,7 +541,7 @@ export default {
           this.limitParticipatedMeeting = this.myMeetings.length;
         }
         this.disabledShowMoreParticipatedMeetings= true;
-        return "Показаны все созданные события!"
+        return "Показаны все события, где вы принимаете участие!"
       }
     },
 
@@ -629,22 +630,6 @@ export default {
       if (localStorage.getItem('STORAGE_USER_INFO') !== null && JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userId != 0) { //проверяем есть ли такой ключ, если нет отправляем на главную
            var storageInfo = JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO'));
 
-           function timeConverter(timestamp){
-             var a = new Date(timestamp);
-              var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-               var year = a.getFullYear();
-                var month = months[a.getMonth()];
-                 var date = a.getDate();
-                  var hour = a.getHours();
-                   var min = a.getMinutes();
-                    var sec = a.getSeconds();
-                    if (min === 0) {
-                      min += "0";
-                    }
-                     var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min;
-                      return time;
-                    }
-
                axios.get("/meeting/creator?id="+storageInfo.userId)
                .then(response => {
                  if (response.status === 200) {
@@ -667,7 +652,21 @@ export default {
                       response.data[i].startTime = timeConverter(response.data[i].startTime);
                       response.data[i].endTime = timeConverter(response.data[i].endTime);
                     }
-                    this.myMeetings = response.data;
+
+                    var meetingPart = [];
+                    var counter = 0;
+                    for (var i = 0; i < response.data.length; i++) {
+                    var onlyPart = true;
+                      for(var j = 0; j < this.meetings.length; j++) {
+                        if (response.data[i].id === this.meetings[j].id) {
+                          onlyPart = false;
+                          break;
+                        }
+                      }
+                    if (onlyPart) meetingPart[counter++] = response.data[i];
+                    }
+
+                    this.myMeetings = meetingPart;
                      console.log(response);
                     }
                }).catch(function (error) {
