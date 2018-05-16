@@ -21,7 +21,7 @@ public class MeetingController {
 
     @PostMapping("/meeting")
     public @ResponseBody Id createMeeting(@RequestBody Meeting meeting) throws ParseException{
-        return  new Id(meetingManger.createMeeting(meeting.getId(),meeting.getCreatorId(), meeting.getCategoryId(),
+        return  new Id(meetingManger.createOrUpdateMeeting(meeting.getId(),meeting.getCreatorId(), meeting.getCategoryId(),
                 meeting.getAddressId(), meeting.getName(), meeting.getStartTime(), meeting.getEndTime(),
                 meeting.getDescription(), meeting.getMaxParticipants(), meeting.getMinAge(), meeting.getAttachment()));
     }

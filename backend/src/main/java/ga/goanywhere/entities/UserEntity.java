@@ -6,7 +6,6 @@ import lombok.*;
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.Collection;
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -44,7 +43,7 @@ public class UserEntity {
     @JoinColumn(name = "address_id")
     private AddressEntity userAddress;
 
-    @OneToOne(mappedBy = "userId")
+    @OneToOne(mappedBy = "user")
     private UserContactEntity userContact;
 
     @JsonIgnore

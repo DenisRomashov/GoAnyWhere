@@ -23,7 +23,7 @@ public class MeetingMangerImpl implements MeetingManger {
     private final static String CREATOR_PRIVILEGE = "creator";
 
     @Override
-    public Long createMeeting(final Long id, final Long creatorId, final Long categoryId,
+    public Long createOrUpdateMeeting(final Long id, final Long creatorId, final Long categoryId,
                               final Long addressId, final String name, final String startTime,
                               final String endTime, final String description, final Long maxParticipants,
                               final Long minAge, final byte[] attachment) throws ParseException {
@@ -56,31 +56,8 @@ public class MeetingMangerImpl implements MeetingManger {
         }
     }
 
-    @Override
-    public void deleteMeeting(final Long userId, final Long meetingId) {
-        Session session = SessionFactoryUtil.getSession();
-        try {
-            log.info("Deleting meeting with id = {} by usr with id = {}", meetingId, userId);
-            MeetingEntity meeting = (MeetingEntity) session.get(MeetingEntity.class, meetingId);
-            if (userId != BigInteger.ZERO.longValue()) {
-                UserEntity user = (UserEntity) session.get(UserEntity.class, userId);
-                UserMeetingEntity userMeeting = (UserMeetingEntity)
-                        session.get(UserMeetingEntity.class, new UserMeetingEntity.UserMeetingPK(user, meeting));
-                PrivilegeEntity privilegeEntity = (PrivilegeEntity)
-                        session.get(PrivilegeEntity.class, userMeeting.getPrivilegeId());
-                if (!privilegeEntity.getType().equals(CREATOR_PRIVILEGE)) {
-                    throw new NotEnoughPrivilegesException("User with id = " + userId +
-                            " can't delete meeting with id = " + meetingId);
-                }
-            }
-            session.delete(meeting);
-            session.flush();
-        } finally {
-            session.close();
-        }
-    }
 
-    private Object applyMeetingLock = new Object();
+    private final Object applyMeetingLock = new Object();
 
     @Override
     public void applyMeeting(final Long userId, final Long meetingId, final String privilege) {
@@ -145,6 +122,30 @@ public class MeetingMangerImpl implements MeetingManger {
                     }
                 }
             }
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public void deleteMeeting(final Long userId, final Long meetingId) {
+        Session session = SessionFactoryUtil.getSession();
+        try {
+            log.info("Deleting meeting with id = {} by usr with id = {}", meetingId, userId);
+            MeetingEntity meeting = (MeetingEntity) session.get(MeetingEntity.class, meetingId);
+            if (userId != BigInteger.ZERO.longValue()) {
+                UserEntity user = (UserEntity) session.get(UserEntity.class, userId);
+                UserMeetingEntity userMeeting = (UserMeetingEntity)
+                        session.get(UserMeetingEntity.class, new UserMeetingEntity.UserMeetingPK(user, meeting));
+                PrivilegeEntity privilegeEntity = (PrivilegeEntity)
+                        session.get(PrivilegeEntity.class, userMeeting.getPrivilegeId());
+                if (!privilegeEntity.getType().equals(CREATOR_PRIVILEGE)) {
+                    throw new NotEnoughPrivilegesException("User with id = " + userId +
+                            " can't delete meeting with id = " + meetingId);
+                }
+            }
+            session.delete(meeting);
+            session.flush();
         } finally {
             session.close();
         }
