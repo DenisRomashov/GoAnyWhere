@@ -49,7 +49,6 @@
 
               <b-card bg-variant="white" >
                 <b-row>
-
                   <!-- Аватарка митинга -->
                   <b-col cols="4">
                     <!-- <b-img rounded="circle" :src="require('../../../assets/1.jpg')"  blank width="150" height="150"  alt="img" class="m-1" /> -->
@@ -163,7 +162,7 @@
         <b-col>
           <b-card-header header-bg-variant="secondary" header-text-variant="white" header-tag="header">
             <p>Где будет проходит ваше событие?</p>
-            <gmap-autocomplete
+            <gmap-autocomplete class="searchMapInput"
               @place_changed="setPlace">
 
             </gmap-autocomplete>
@@ -403,6 +402,15 @@ export default {
   margin-top: 15%;
 }
 
+.searchMapInput {
+    width: 80%;
+    padding: 10px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 50px;
+    box-sizing: border-box;
+ }
 
 
 
