@@ -540,7 +540,7 @@ export default {
           this.limitParticipatedMeeting = this.myMeetings.length;
         }
         this.disabledShowMoreParticipatedMeetings= true;
-        return "Показаны все созданные события!"
+        return "Показаны все события, где вы принимаете участие!"
       }
     },
 
