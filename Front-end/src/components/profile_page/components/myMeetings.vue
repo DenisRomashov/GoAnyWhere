@@ -272,6 +272,7 @@
 <script>
 import axios from 'axios'
 import router from '../../../router'
+import  { timeConverter }  from './timeconverter'
 import createdMeetingTemplate from './templates/createdMeetingTemplate'
 import participatedMeetingTemplate from './templates/participatedMeetingTemplate'
 export default {
@@ -628,22 +629,6 @@ export default {
     created: function () {
       if (localStorage.getItem('STORAGE_USER_INFO') !== null && JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userId != 0) { //проверяем есть ли такой ключ, если нет отправляем на главную
            var storageInfo = JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO'));
-
-           function timeConverter(timestamp){
-             var a = new Date(timestamp);
-              var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-               var year = a.getFullYear();
-                var month = months[a.getMonth()];
-                 var date = a.getDate();
-                  var hour = a.getHours();
-                   var min = a.getMinutes();
-                    var sec = a.getSeconds();
-                    if (min === 0) {
-                      min += "0";
-                    }
-                     var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min;
-                      return time;
-                    }
 
                axios.get("/meeting/creator?id="+storageInfo.userId)
                .then(response => {
