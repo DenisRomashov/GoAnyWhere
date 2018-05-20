@@ -152,7 +152,7 @@
         </div>
       </b-col>
     </b-row>
-    <br>
+          <br>
     <b-row>
       <b-col>
       </b-col>
@@ -163,8 +163,8 @@
                   <b-btn :variant="editContactButton.variant_prepend"> Адрес <i class="fas fa-map-marker"></i></b-btn>
               </b-input-group-prepend>
               <b-form-input
-              v-model.trim="form.userAddress"
-              :disabled="editContactInfo"></b-form-input>
+              v-model.trim="address"
+              disabled></b-form-input>
           </b-input-group>
         </div>
       </b-col>
@@ -172,19 +172,37 @@
       </b-col>
     </b-row>
     <br>
-    <b-row>
-      <b-col>Поиск по карте</b-col>
-    </b-row>
-    <br>
-    <b-row>
-      <b-col>Форма для широты</b-col>
-      <b-col>Форма для долготы</b-col>
-    </b-row>
-
-    <b-row>
+    <b-row v-if="showAutoComplete">
       <b-col>
+        <p>
+        <gmap-autocomplete class="MapInput" placeholder="Введите ваш адрес"
+          @place_changed="setPlace">
 
-        <h1> <strong>КАРТА</strong> </h1>
+        </gmap-autocomplete>
+        <b-button size="" variant="outline-dark"  @click="addAddress()" id="searchButton">
+            Добавить новый адрес <i class="fas fa-map-marker-alt"></i>
+        </b-button>
+      </p>
+      </b-col>
+      <br>
+    </b-row>
+
+
+    <b-row>
+      <b-col sm="">
+        <b-card bg-variant="white" >
+          <gmap-map
+            :center="center"
+            :zoom="14"
+            style="width:100%;  height: 250px;"
+          >
+            <gmap-marker
+              :position="marker"
+              @click="center=marker"
+            ></gmap-marker>
+          </gmap-map>
+
+        </b-card>
       </b-col>
     </b-row>
     <!-- Отсуп после карты -->
@@ -288,6 +306,12 @@ import router from '../../../router'
 export default {
   data () {
     return {
+      center: { lat: 0, lng: 0 },
+      marker: { lat: 0, lng: 0 },
+      place: { lat: 0, lng: 0 },
+      currentPlace: null,
+      showAutoComplete: false,
+      showAddressField: true,
       form: {
           id: '',
           username: '',
@@ -296,16 +320,22 @@ export default {
           sex: '',
           birthday: '',
           email: '',
-          phoneNumber: '',
+          phoneNumber: 'Телефон не указан',
           vkReference: 'https://vk.com',
           facebookReference: 'https://www.facebook.com',
           twitterReference: 'https://twitter.com',
-          // userAddress: ''
+          addressId: '',
+          userAddress: {
+                    id: 25,
+                    locality: "Санкт-Петербург",
+                    street: "Думская улица",
+                    house: "7",
+                    latitude: 59.933221,
+                    longitude: 30.327857999999992
+                  }
       },
 
-      adress: {
-        userAddress: ''
-      },
+      address: "Адрес не указан",
 
       editInfoButton: {
         button_state: false,
@@ -344,10 +374,81 @@ export default {
           this.sexButtonFemaleVariant ="dark";
           return "Женский"
         }
-      }
+      },
     },
 
   methods: {
+    geolocate: function() {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.center = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+      });
+    },
+
+    setPlace(place) {
+      this.currentPlace = place;
+      const marker = {
+        lat: this.currentPlace.geometry.location.lat(),
+        lng: this.currentPlace.geometry.location.lng()
+      };
+      this.marker = marker;
+      this.place = this.currentPlace;
+      this.center = marker;
+      this.currentPlace = null;
+
+    },
+    addAddress() {
+        //Обнуляем форму адреса
+        this.form.userAddress = {
+          id: null,
+          locality: "",
+          street: "",
+          house: "",
+          latitude: "",
+          longitude: ""
+        };
+
+        //Добавление в formAddress широты и долготы
+         this.form.userAddress.latitude = this.marker.lat;
+         this.form.userAddress.longitude = this.marker.lng;
+
+         //Добавление в formAddress города, улицы и номера
+         var json = this.place.address_components;
+
+         for (var i = 0; i < json.length; i++) {
+            var current_type = json[i].types[0];
+            switch(current_type) {
+              case ("street_number"):
+                   this.form.userAddress.house = json[i].long_name;
+                  break;
+             case ("route"):
+                   this.form.userAddress.street = json[i].long_name;
+                  break;
+            case ("locality"):
+                 this.form.userAddress.locality = json[i].long_name;
+                break;
+              }
+            }
+
+            // Отображение адреса в строке АДРЕС
+            this.address = this.form.userAddress.locality + ", " + this.form.userAddress.street + ", " + this.form.userAddress.house;
+
+       //Отправляем выбранный адресс и получаем addressId из базы
+        axios.post("/address", this.form.userAddress)
+        .then(response => {
+          if (response.status === 200) {
+            this.form.addressId = response.data.id;
+          }
+
+        }).catch(function (error) {
+          alert("Ошибка добавления адреса!");
+          console.log(error);
+        });
+    },
+
+
     setMale() {
       this.form.sex = 'm';
       this.sexButtonMaleVariant = "dark";
@@ -401,15 +502,27 @@ export default {
 
     editContactData() {
       if (this.editContactButton.button_state) {
+        this.showAddressField = true;
+        this.showAutoComplete = false;
+
         this.editContactButton.variant_prepend = 'dark';
         this.editContactInfo = !this.editContactInfo;
         this.editContactButton.variant = 'dark';
         this.editContactButton.title = 'Редактировать данные';
         this.editContactButton.button_state = !this.editContactButton.button_state;
 
+        // Востанавливаем метку на карте, если адрес не был обновлен
+        this.center.lat = this.form.userAddress.latitude;
+        this.center.lng = this.form.userAddress.longitude;
+        this.marker.lat = this.form.userAddress.latitude;
+        this.marker.lng = this.form.userAddress.longitude;
+
         this.sendInfo();
 
       }else {
+        this.showAddressField = false;
+        this.showAutoComplete = true;
+
         this.editContactButton.variant_prepend = 'outline-dark'
         this.editContactInfo = !this.editContactInfo;
         this.editContactButton.variant = 'white';
@@ -423,19 +536,18 @@ export default {
   created: function () {
    if (localStorage.getItem('STORAGE_USER_INFO') !== null && JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userId != 0) { //проверяем есть ли такой ключ, если нет отправляем на главную
         var storageInfo = JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO'));
-        //this.create = storageInfo;
-        if (storageInfo.userId != 0) {
+
             axios.get("/user?id="+storageInfo.userId)
             .then(response => {
+
+              //отображаем карту по геолокации
+               // this.geolocate();
             //Oбновляем сторедж
             var storage = {
               userId: response.data.id,
               userName: response.data.username
             }
             window.localStorage.setItem('STORAGE_USER_INFO', JSON.stringify(storage));
-
-            //this.create = response.data.userContact.email;
-            //this.create = response.data.userContact.facebookReference;
 
             // Заполнение форм по респонсу
             this.form.id = response.data.id;
@@ -451,15 +563,31 @@ export default {
             this.form.twitterReference = response.data.userContact.twitterReference;
 
 
+            if (response.data.userAddress === null) {
+              this.address = "Адрес не указан :(";
+            } else {
+
+              this.form.userAddress.id = response.data.userAddress.id;
+              this.form.userAddress.latitude = response.data.userAddress.latitude;
+              this.form.userAddress.longitude = response.data.userAddress.longitude;
+              this.form.userAddress.locality = response.data.userAddress.locality;
+              this.form.userAddress.street = response.data.userAddress.street;
+              this.form.userAddress.house = response.data.userAddress.house;
+
+              this.center.lat = this.form.userAddress.latitude;
+              this.center.lng = this.form.userAddress.longitude;
+              this.marker.lat = this.form.userAddress.latitude;
+              this.marker.lng = this.form.userAddress.longitude;
+
+              // Отображение адреса в строке АДРЕС
+              this.address = this.form.userAddress.locality + ", " + this.form.userAddress.street + ", " + this.form.userAddress.house;
+            }
+
             }).catch(function (error) {
               alert("OOPSSS!! Мы набАааагали!") //выключить в продакшене
               //router.push({ path: '/' }) //включить в продакшен
               console.log(error);
             });
-          } else {
-            router.push({ path: '/' })
-            alert("Вы не совершили вход!");
-          }
         } else {
           router.push({ path: '/' })
           alert("Вы не совершили вход!");
@@ -475,5 +603,17 @@ export default {
 </script>
 
 <style lang="css">
+.MapInput {
+    width: 70%;
+    padding: 6px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+ }
 
+ #searchButton {
+   border-radius: 5px;
+  }
 </style>
