@@ -38,7 +38,7 @@ public class ProfileManagerImpl implements ProfileManager {
     public void updateUserInfo(final Long userId, final Long addressId, final String email,
                                final String phoneNumber, final String facebookReference, final String twitterReference,
                                final String vkReference, final Date birthday, final String firstName,
-                               final String lastName, final String sex) {
+                               final String lastName, final String sex, String preferred) {
         log.info("Updating information about user with id = {}", userId);
         Session session = SessionFactoryUtil.getSession();
         try {
@@ -61,6 +61,7 @@ public class ProfileManagerImpl implements ProfileManager {
             userContact.setFacebookReference(facebookReference);
             userContact.setTwitterReference(twitterReference);
             userContact.setVkReference(vkReference);
+            userContact.setPreferred(preferred);
 
             session.update(user);
             session.update(userContact);
