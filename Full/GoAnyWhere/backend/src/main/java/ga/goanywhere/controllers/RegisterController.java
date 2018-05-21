@@ -23,21 +23,10 @@ public class RegisterController {
 
     @PostMapping("/register")
     public @ResponseBody Id register(@RequestBody UserRegistration user)
-            throws NoSuchAlgorithmException{
-        if (user.getEmail()!= null) {
-            if (user.getFirstName() != null) {
-                return new Id(registrationManager.createUser(user.getUsername(),
-                        user.getPassword(), user.getEmail(), user.getFirstName(),
-                        user.getLastName(), user.getSex()));
-
-            } else {
-                return new Id(registrationManager.createUser(user.getUsername(),
-                        user.getPassword(), user.getEmail()));
-            }
-        } else {
-            return new Id(registrationManager.createUser(user.getUsername(),
-                    user.getPassword()));
-        }
+            throws NoSuchAlgorithmException {
+        return new Id(registrationManager.createUser(user.getUsername(),
+                user.getPassword(), user.getEmail(), user.getFirstName(),
+                user.getLastName(), user.getSex()));
     }
 
     @Getter
@@ -58,6 +47,6 @@ public class RegisterController {
     @NoArgsConstructor
     @AllArgsConstructor
     private static class Id {
-        private BigInteger id;
+        private Long id;
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface MeetingManger {
 
-    Long createMeeting(Long id, Long creatorId, Long categoryId,
+    Long createOrUpdateMeeting(Long id, Long creatorId, Long categoryId,
                        Long addressId, String name, String startTime,
                        String endTime, String description, Long maxParticipants,
                        Long minAge, byte[] attachment) throws ParseException;
