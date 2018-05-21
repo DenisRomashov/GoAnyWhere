@@ -28,13 +28,6 @@
                  :disabled="disabledShowMoreCreatedMeetings"
                   variant="outline-dark"> {{ countCreatedMeetingItems }}
           </b-btn>
-          <b-popover ref="popoverOne" target="editinfobutton"
-           placement="left"
-           title="Нажми!"
-           triggers="hover focus"
-           content="И ты сможешь отредактировать информацию :)">
-         </b-popover>
-
     </b-card-footer>
   </b-container>
   <br>
