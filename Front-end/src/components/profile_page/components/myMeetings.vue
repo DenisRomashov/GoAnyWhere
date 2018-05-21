@@ -108,18 +108,23 @@
                    :rows="3"></b-form-textarea>
             </b-col>
           </b-row>
-          <!-- <br>
+          <br>
           <b-row>
             <b-col>
+            </b-col>
+            <b-col sm="8">
               <b-card
-              bg-variant="dark"
+              bg-variant="white"
                 text-variant="white"
+                header-text-variant="dark"
                 header="Категория вашего события:"
                 class="text-center">
-                  <b-form-select size="" v-model="meeting.categoryId" :options="options" class="mb-3" :select-size="3" />
+                  <b-form-select size="" v-model="meeting.categoryId" :options="options" class="mb-3" :select-size="4" style="text-align: center;" />
             </b-card>
             </b-col>
-          </b-row> -->
+            <b-col>
+            </b-col>
+          </b-row>
           <br>
 
 
@@ -645,20 +650,11 @@ export default {
       this.meeting.creatorId = JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userId;
       this.meeting.addressId = this.meeting.meetingAddress.id;
 
-       // this.showAlert ();
-       // первый аргумент - функция
-       // setTimeout(this.close_editing_window, 3000)
-       // this.showAlert ();
-       // this.submitButtonEditMeeting = true;
-      // this.showEditingMeeting = false;
-
         axios.post("/meeting", this.meeting)
         .then(response => {
-
           if (response.status === 200) {
             setTimeout(this.close_editing_window, 3000)
             this.showAlert ();
-            this.submitButtonEditMeeting = true;
             // alert("Событие Обновлено! Поздравляем!");
             // Принудительная перезагрузка страницы
             // location.reload();
@@ -666,7 +662,7 @@ export default {
             console.log(response);
           }
         }).catch(function (error) {
-          alert("Error upDateMeeting");
+          alert("Ошибка. Обновление события! upDateMeeting method");
           console.log(error);
         });
 
