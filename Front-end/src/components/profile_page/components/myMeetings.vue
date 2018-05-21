@@ -202,9 +202,23 @@
         </b-container>
 
       <div slot="modal-footer" class="w-100">
+        <b-alert :show="dismissCountDown"
+          dismissible
+          variant=""
+          @dismissed="dismissCountDown=0"
+          @dismiss-count-down="countDownChanged">
+          <h5>Событие обновлено! Поздравляем :) {{dismissCountDown}} секунд...</h5>
+            <b-progress variant="danger"
+                :max="dismissSecs"
+                :value="dismissCountDown"
+                height="10px">
+            </b-progress>
+            <br>
+        </b-alert>
         <b-btn  block size="lg"
                 variant="outline-danger"
                 @click="upDateMeeting()"
+                :disabled="submitButtonEditMeeting"
                 > Подтвердить изменения!
         </b-btn>
       </div>
@@ -288,6 +302,12 @@ export default {
       disabledShowMoreCreatedMeetings: false,
       limitParticipatedMeeting: 2,
       disabledShowMoreParticipatedMeetings: false,
+
+      dismissSecs: 3,
+      dismissCountDown: 0,
+      submitButtonEditMeeting: false,
+
+
       meetings: [
         {
           "id": 1,
@@ -562,6 +582,17 @@ export default {
   },
 
   methods: {
+     close_editing_window() {
+      this.showEditingMeeting = false
+    },
+
+    countDownChanged (dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
+    },
+    showAlert () {
+      this.dismissCountDown = this.dismissSecs
+    },
+
     setPlace(place) {
       this.currentPlace = place;
     },
@@ -570,6 +601,7 @@ export default {
     editMeeting: function(index) {
       this.meeting = this.meetings[index];
       this.showEditingMeeting = true;
+      this.submitButtonEditMeeting = false;
     },
 
     deleteOrUnsubscribe: function(index) {
@@ -619,13 +651,25 @@ export default {
     upDateMeeting: function() {
       this.meeting.creatorId = JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userId;
       this.meeting.addressId = this.meeting.meetingAddress.id;
+
+       // this.showAlert ();
+       // первый аргумент - функция
+       // setTimeout(this.close_editing_window, 3000)
+       // this.showAlert ();
+       // this.submitButtonEditMeeting = true;
+      // this.showEditingMeeting = false;
+
         axios.post("/meeting", this.meeting)
         .then(response => {
 
           if (response.status === 200) {
-            alert("Событие Обновлено! Поздравляем!");
+            setTimeout(this.close_editing_window, 3000)
+            this.showAlert ();
+            this.submitButtonEditMeeting = true;
+            // alert("Событие Обновлено! Поздравляем!");
             // Принудительная перезагрузка страницы
-            location.reload();
+            // location.reload();
+            // this.showEditingMeeting = false;
             console.log(response);
           }
         }).catch(function (error) {
