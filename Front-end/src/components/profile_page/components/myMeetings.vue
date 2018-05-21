@@ -654,6 +654,7 @@ export default {
         .then(response => {
           if (response.status === 200) {
             setTimeout(this.close_editing_window, 3000)
+            this.submitButtonEditMeeting = true;
             this.showAlert ();
             // alert("Событие Обновлено! Поздравляем!");
             // Принудительная перезагрузка страницы
