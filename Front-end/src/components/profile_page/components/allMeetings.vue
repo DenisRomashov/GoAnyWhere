@@ -92,7 +92,8 @@ export default {
       form: {
         searcherId: 1,
         categoryId: null,
-        locality: null
+        locality: null,
+        actuality: false
       },
       subscribeForm: {
         userId: null,
