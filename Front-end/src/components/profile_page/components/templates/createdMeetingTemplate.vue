@@ -307,7 +307,7 @@ export default {
     showCollapseParticipantsMethod() {
       this.showCollapseParticipants = !this.showCollapseParticipants;
       if (this.showCollapseParticipants) {
-        axios.get("/meeting/participants?Id="+this.meeting.id)
+        axios.get("/meeting/participants?id="+this.meeting.id)
         .then(response => {
           if (response.status === 200) {
             this.items= response.data;
