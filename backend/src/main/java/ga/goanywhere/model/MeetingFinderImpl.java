@@ -70,20 +70,7 @@ public class MeetingFinderImpl implements MeetingFinder {
     }
 
     @Override
-    public List<MeetingEntity> findActualMeetingsForUser(final Long userId) {
-        log.info("Finding actual meetings for user with id = {}", userId);
-        List<MeetingEntity> meetingsOfUser = findMeetingsByUser(userId);
-        List<MeetingEntity> response = new ArrayList<>();
-        Timestamp now = new Timestamp(System.currentTimeMillis());
-        for (MeetingEntity meetingOfUser : meetingsOfUser) {
-            if (meetingOfUser.getEndTime().after(now)) response.add(meetingOfUser.setNumberOfParticipants());
-        }
-        return response;
-
-    }
-
-    @Override
-    public List<MeetingEntity> meetingSearch(Long searcherId, Long categoryId, String locality) {
+    public List<MeetingEntity> meetingSearch(Long searcherId, Long categoryId, String locality, Boolean actuality) {
         Session session = SessionFactoryUtil.getSession();
         try {
             log.info("Search meetings without participantId = {}", searcherId);
@@ -99,6 +86,8 @@ public class MeetingFinderImpl implements MeetingFinder {
                 }
                 if (!searcherIsParticipant) response.add(meeting);
             }
+            if (actuality == null || actuality)
+            response = filterMeetingsByActuality(response, new Timestamp(System.currentTimeMillis()));
             response = filterMeetingsByCategory(response, categoryId);
             response = filterMeetingsByLocality(response, locality);
             for (MeetingEntity meeting : response) {
@@ -108,6 +97,17 @@ public class MeetingFinderImpl implements MeetingFinder {
         } finally {
             session.close();
         }
+    }
+
+    private List<MeetingEntity> filterMeetingsByActuality(final List<MeetingEntity> meetings, final Timestamp now) {
+        if (now == null) return meetings;
+        log.info("Filter meetings by actuality");
+        List<MeetingEntity> response = new ArrayList<>();
+        for (MeetingEntity meeting : meetings) {
+            if (meeting.getEndTime().after(now)) response.add(meeting.setNumberOfParticipants());
+        }
+        return response;
+
     }
 
     @Override

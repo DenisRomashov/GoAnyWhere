@@ -31,14 +31,10 @@ public class MeetingFinderController {
         return meetingFinder.findMeetingsCreatedByUser(id);
     }
 
-    @GetMapping("meeting/actual")
-    public @ResponseBody List<MeetingEntity> meetingsByActuality(@RequestParam Long id){
-        return meetingFinder.findActualMeetingsForUser(id);
-    }
-
     @PostMapping("meeting/search")
     public @ResponseBody List<MeetingEntity> searchMeetings(@RequestBody Search search) {
-        return meetingFinder.meetingSearch(search.getSearcherId(), search.getCategoryId(), search.getLocality());
+        return meetingFinder.meetingSearch(search.getSearcherId(), search.getCategoryId(),
+                search.getLocality(), search.getActuality());
     }
 
     @Getter
@@ -49,6 +45,7 @@ public class MeetingFinderController {
         private Long searcherId;
         private Long categoryId;
         private String locality;
+        private Boolean actuality;
     }
 
 }
