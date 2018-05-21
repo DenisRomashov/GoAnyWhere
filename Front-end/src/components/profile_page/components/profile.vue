@@ -136,6 +136,11 @@
               v-model.trim="form.email"
               type="email"
               :disabled="editContactInfo"></b-form-input>
+
+              <b-input-group-append>
+                  <b-btn @click="selectPreferred('e')" v-if="showEmail" :variant="prEmailVariant">*<i class="fas fa-bell"></i></b-btn>
+              </b-input-group-append>
+
           </b-input-group>
         </div>
       </b-col>
@@ -148,6 +153,11 @@
               <b-form-input
               v-model.trim="form.phoneNumber"
               :disabled="editContactInfo"></b-form-input>
+
+              <b-input-group-append>
+                  <b-btn @click="selectPreferred('p')" v-if="showPhone" :variant="prPhoneVariant">*<i class="fas fa-bell"></i></b-btn>
+              </b-input-group-append>
+
           </b-input-group>
         </div>
       </b-col>
@@ -224,6 +234,12 @@
               <b-form-input
               v-model.trim="form.vkReference"
               :disabled="editContactInfo"></b-form-input>
+
+              <b-input-group-append>
+                  <b-btn @click="selectPreferred('v')" v-if="showVk" :variant="prVkVariant">*<i class="fas fa-bell"></i></b-btn>
+              </b-input-group-append>
+
+
           </b-input-group>
         </div>
       </b-col>
@@ -247,6 +263,12 @@
               <b-form-input
               v-model.trim="form.facebookReference"
               :disabled="editContactInfo"></b-form-input>
+
+              <b-input-group-append>
+                  <b-btn @click="selectPreferred('f')" v-if="showFb" :variant="prFbVariant">*<i class="fas fa-bell"></i></b-btn>
+              </b-input-group-append>
+
+
           </b-input-group>
         </div>
       </b-col>
@@ -270,10 +292,22 @@
               <b-form-input
               v-model.trim="form.twitterReference"
               :disabled="editContactInfo"></b-form-input>
+
+              <b-input-group-append>
+                  <b-btn @click="selectPreferred('t')" v-if="showTw" :variant="prTwVariant">*<i class="fas fa-bell"></i></b-btn>
+              </b-input-group-append>
+
+
           </b-input-group>
         </div>
       </b-col>
       <b-col></b-col>
+    </b-row>
+    <br>
+    <b-row>
+          <b-col>
+              <h5><strong>*</strong><i class="fas fa-bell"></i> - Предпочтительный способ связи</h5>
+          </b-col>
     </b-row>
     </b-card>
     <b-card-footer footer-bg-variant="dark" footer-border-variant="dark">
@@ -312,12 +346,26 @@ export default {
       currentPlace: null,
       showAutoComplete: false,
       showAddressField: true,
+
+      prEmailVariant: "outline-dark",
+      prPhoneVariant: "outline-dark",
+      prVkVariant: "outline-dark",
+      prFbVariant: "outline-dark",
+      prTwVariant: "outline-dark",
+      showEmail: true,
+      showPhone: true,
+      showVk: true,
+      showFb: true,
+      showTw: true,
+
+
       form: {
           id: '',
           username: '',
           firstName: '',
           lastName: '',
           sex: '',
+          preferred: "e",
           birthday: '',
           email: '',
           phoneNumber: 'Телефон не указан',
@@ -378,6 +426,95 @@ export default {
     },
 
   methods: {
+    selectPreferred(typeOfContact) {
+      switch(typeOfContact) {
+        case ("e"):
+          this.form.preferred = "e";
+          this.prVkVariant = "outline-dark";
+          this.prFbVariant = "outline-dark";
+          this.prTwVariant = "outline-dark";
+          this.prPhoneVariant = "outline-dark";
+          this.prEmailVariant = "dark";
+          break;
+        case ("p"):
+          this.form.preferred = "p";
+          this.prVkVariant = "outline-dark";
+          this.prFbVariant = "outline-dark";
+          this.prTwVariant = "outline-dark";
+          this.prPhoneVariant = "dark";
+          this.prEmailVariant = "outline-dark";
+          break;
+        case ("v"):
+          this.form.preferred = "v";
+          this.prVkVariant = "dark";
+          this.prFbVariant = "outline-dark";
+          this.prTwVariant = "outline-dark";
+          this.prPhoneVariant = "outline-dark";
+          this.prEmailVariant = "outline-dark";
+          break;
+        case ("f"):
+          this.form.preferred = "f";
+          this.prVkVariant = "outline-dark";
+          this.prFbVariant = "dark";
+          this.prTwVariant = "outline-dark";
+          this.prPhoneVariant = "outline-dark";
+          this.prEmailVariant = "outline-dark";
+          break;
+        case ("t"):
+          this.form.preferred = "t";
+          this.prVkVariant = "outline-dark";
+          this.prFbVariant = "outline-dark";
+          this.prTwVariant = "dark";
+          this.prPhoneVariant = "outline-dark";
+          this.prEmailVariant = "outline-dark";
+          break;
+          }
+    },
+
+    showPreferred(typeOfContact){
+      this.showEmail = true;
+      this.showPhone = true;
+      this.showVk = true;
+      this.showFb = true;
+      this.showTw = true;
+    },
+
+    hidePreferred(typeOfContact){
+      switch(typeOfContact) {
+        case ("e"):
+        this.showPhone = false;
+        this.showVk = false;
+        this.showFb = false;
+        this.showTw = false;
+          break;
+        case ("p"):
+        this.showEmail = false;
+        this.showVk = false;
+        this.showFb = false;
+        this.showTw = false;
+
+          break;
+        case ("v"):
+        this.showEmail = false;
+        this.showPhone = false;
+        this.showFb = false;
+        this.showTw = false;
+          break;
+        case ("f"):
+        this.showEmail = false;
+        this.showPhone = false;
+        this.showVk = false;
+        this.showTw = false;
+          break;
+        case ("t"):
+        this.showEmail = false;
+        this.showPhone = false;
+        this.showVk = false;
+        this.showFb = false;
+          break;
+          }
+    },
+
     geolocate: function() {
       navigator.geolocation.getCurrentPosition(position => {
         this.center = {
@@ -518,6 +655,7 @@ export default {
         this.marker.lng = this.form.userAddress.longitude;
 
         this.sendInfo();
+        this.hidePreferred(this.form.preferred);
 
       }else {
         this.showAddressField = false;
@@ -528,6 +666,8 @@ export default {
         this.editContactButton.variant = 'white';
         this.editContactButton.title = 'Применить изменения';
         this.editContactButton.button_state = !this.editContactButton.button_state;
+
+        this.showPreferred();
       }
     }
 
@@ -561,6 +701,17 @@ export default {
             this.form.vkReference = response.data.userContact.vkReference;
             this.form.facebookReference = response.data.userContact.facebookReference;
             this.form.twitterReference = response.data.userContact.twitterReference;
+
+            if (response.data.userContact.preferred === null) {
+              this.form.preferred = "e";
+              this.sendInfo();
+              this.selectPreferred(this.form.preferred);
+              this.hidePreferred(this.form.preferred);
+            } else {
+              this.form.preferred = response.data.userContact.preferred;
+              this.selectPreferred(this.form.preferred);
+              this.hidePreferred(this.form.preferred);
+            }
 
 
             if (response.data.userAddress === null) {
