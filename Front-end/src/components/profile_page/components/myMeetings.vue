@@ -115,7 +115,7 @@
                    :rows="3"></b-form-textarea>
             </b-col>
           </b-row>
-          <br>
+          <!-- <br>
           <b-row>
             <b-col>
               <b-card
@@ -126,7 +126,7 @@
                   <b-form-select size="" v-model="meeting.categoryId" :options="options" class="mb-3" :select-size="3" />
             </b-card>
             </b-col>
-          </b-row>
+          </b-row> -->
           <br>
 
 
@@ -138,8 +138,7 @@
                     <b-btn  variant="success">Время начала: </b-btn>
                   </b-input-group-prepend>
 
-                  <b-form-input  v-model="meeting.startTime"
-                    type="datetime-local">
+                  <b-form-input disabled type="datetime-local" v-model="meeting.startTime">
                   </b-form-input>
 
               </b-input-group>
@@ -150,8 +149,7 @@
                     <b-btn  variant="danger">Время окончания: </b-btn>
                   </b-input-group-prepend>
 
-                  <b-form-input  v-model="meeting.endTime"
-                    type="datetime-local">
+                  <b-form-input type="datetime-local" v-model="meeting.endTime">
                   </b-form-input>
 
               </b-input-group>
@@ -170,7 +168,7 @@
                     <b-btn  variant="dark">Максимальное количество человек: </b-btn>
                   </b-input-group-prepend>
 
-                  <b-form-input  v-model.trim="meeting.maxParticipants"
+                  <b-form-input disabled v-model.trim="meeting.maxParticipants"
                     type="number">
                   </b-form-input>
 
@@ -189,7 +187,7 @@
                     <b-btn  variant="dark">Минимальный возвраст: </b-btn>
                   </b-input-group-prepend>
 
-                  <b-form-input  v-model.trim="meeting.minAge"
+                  <b-form-input disabled v-model.trim="meeting.minAge"
                     type="number">
                   </b-form-input>
 
@@ -198,6 +196,9 @@
             <b-col>
             </b-col>
           </b-row>
+
+
+
         </b-container>
 
       <div slot="modal-footer" class="w-100">
@@ -207,7 +208,6 @@
                 > Подтвердить изменения!
         </b-btn>
       </div>
-            {{ meeting }}
     </b-modal>
 
 
@@ -273,11 +273,17 @@
 import axios from 'axios'
 import router from '../../../router'
 import  { timeConverter }  from './timeconverter'
+import  { timeConverter2 }  from './timeconverter_edit'
 import createdMeetingTemplate from './templates/createdMeetingTemplate'
 import participatedMeetingTemplate from './templates/participatedMeetingTemplate'
 export default {
   data () {
     return {
+      center: { lat: 59.9342802, lng: 30.335098600000038  },
+      marker: {},
+      place: {},
+      currentPlace: null,
+
       limitCreatedMeeting: 2,
       disabledShowMoreCreatedMeetings: false,
       limitParticipatedMeeting: 2,
@@ -295,8 +301,8 @@ export default {
               "longitude": 30.314559700000018
           },
           "name": "Встреча на Невском",
-          "startTime": "1995-03-09",
-          "endTime": 200000,
+          "startTime": 1525512900000,
+          "endTime": 1526547600000,
           "description": "Клаасно провести время в большой компании",
           "maxParticipants": 25,
           "numberOfParticipants": 5,
@@ -556,6 +562,11 @@ export default {
   },
 
   methods: {
+    setPlace(place) {
+      this.currentPlace = place;
+    },
+
+
     editMeeting: function(index) {
       this.meeting = this.meetings[index];
       this.showEditingMeeting = true;
@@ -634,10 +645,11 @@ export default {
                .then(response => {
                  if (response.status === 200) {
                    for (var i = 0; i < response.data.length; i++) {
-                      response.data[i].startTime = timeConverter(response.data[i].startTime);
-                      response.data[i].endTime = timeConverter(response.data[i].endTime);
+                      response.data[i].startTime = timeConverter2(response.data[i].startTime);
+                      response.data[i].endTime = timeConverter2(response.data[i].endTime);
                     }
                     this.meetings = response.data;
+
                      console.log(response);
                     }
                }).catch(function (error) {

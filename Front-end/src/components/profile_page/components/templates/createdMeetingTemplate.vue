@@ -14,7 +14,8 @@
                     Категория: {{ category[meeting.categoryId - 1].text }}
                   </b-badge>
                   <b-badge variant="warning">
-                      Дата: {{ meeting.startTime }}
+                      <!-- Дата: {{ meeting.startTime }} -->
+                      Дата: {{ showDateReadFormatStartTime }}
                   </b-badge>
               </p>
           </div>
@@ -31,25 +32,6 @@
 
         <b-row>
           <b-col>
-
-<!--
-              <b-btn block @click="showCollapse = !showCollapse"
-                  :class="showCollapse ? 'collapsed' : null"
-                  aria-controls="collapse4"
-                  :aria-expanded="showCollapse ? 'true' : 'false'">
-                  Детали события
-              </b-btn>
-              <b-collapse class="mt-2" v-model="showCollapse" id="collapse4">
-              <b-card>
-                <p>Описание: {{ meeting.description }}</p>
-                <p class="card-text">
-                  Адрес: {{ meeting.meetingAddress.locality}}, {{meeting.meetingAddress.street}}, {{meeting.meetingAddress.house}}
-                </p>
-                <p>  Максимальное количество участников: {{ meeting.maxParticipants }}</p>
-                <p> Минимальный возвраст: {{ meeting.minAge }}</p>
-              </b-card>
-              </b-collapse> -->
-
               <b-btn block @click="showCollapseMethod()"
                   variant="secondary"
                   :class="showCollapse ? 'collapsed' : null"
@@ -78,8 +60,8 @@
                                 <p class="card-text">{{ meeting.description }}</p>
 
 
-                                <b-button block disabled variant="success"><i class="fas fa-clock"></i> Начало: {{ meeting.startTime }} </b-button>
-                                <b-button block disabled variant="danger"><i class="fas fa-clock"></i> Окончание: {{ meeting.endTime}} </b-button>
+                                <b-button block disabled variant="success"><i class="fas fa-clock"></i> Начало: {{ showDateReadFormatStartTime }} </b-button>
+                                <b-button block disabled variant="danger"><i class="fas fa-clock"></i> Окончание: {{ showDateReadFormatEndTime }} </b-button>
 
                               </b-card>
 
@@ -137,17 +119,13 @@
           </b-col>
         </b-row>
       </b-card>
-
-      <!-- <b-modal v-model="showEditingMeeting" centered size="lg" title="Large Modal">
-        Hello Modal!
-      </b-modal> -->
-
   </div>
 
 </template>
 
 <script>
 import axios from 'axios'
+import  { timeConverter }  from '../timeconverter'
 export default {
   props: ['meeting', 'index'],
   data() {
@@ -291,6 +269,17 @@ export default {
 
 
 
+    }
+  },
+
+
+  computed: {
+    // Показываем дату в удобном формате для прочтения
+    showDateReadFormatStartTime(){
+      return timeConverter(this.meeting.startTime)
+    },
+    showDateReadFormatEndTime(){
+      return timeConverter(this.meeting.endTime)
     }
   },
 
