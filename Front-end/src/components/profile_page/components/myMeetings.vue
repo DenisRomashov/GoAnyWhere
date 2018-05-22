@@ -11,6 +11,27 @@
         </b-badge>
     </b-card-header>
 
+    <!-- Когда нет событий отображаем -->
+    <b-card  bg-variant="white" text-variant="dark" v-if="showEmptySlot">
+            <b-row>
+              <!-- Sad smile -->
+              <b-col cols="4">
+                <b-img rounded="circle" :src="srcImage" width="230" height="230" alt="img" class="m-1" />
+               </b-col>
+               <b-col cols="7">
+                 <br>
+                 <br>
+                 <br>
+                   <h3>У вас еще нет созданных событий!</h3>
+
+                   <b-button @click="goToCreationMeeting()"  block size="lg" variant="warning">
+                       Создать событие, прямо сейчас!
+                   </b-button>
+
+              </b-col>
+            </b-row>
+    </b-card>
+
     <createdMeetingTemplate
     v-for="(meeting, index) in limitedMeetings"
     v-bind:key="meeting.id"
@@ -21,7 +42,7 @@
 
     ></createdMeetingTemplate>
 
-    <b-card-footer footer-bg-variant="white" footer-border-variant="white">
+    <b-card-footer footer-bg-variant="white" footer-border-variant="white" v-show="showFooterButton">
 
           <b-btn block class="showMoreCreatedMeetings"
                  @click="limitCreatedMeeting += 2"
@@ -42,6 +63,28 @@
         </b-badge>
     </b-card-header>
 
+
+    <!-- Когда нет событий отображаем -->
+    <b-card  bg-variant="white" text-variant="dark" v-if="showEmptySlot2">
+            <b-row>
+              <!-- Sad smile -->
+              <b-col cols="4">
+                <b-img rounded="circle" :src="srcImage2" width="230" height="230" alt="img" class="m-1" />
+               </b-col>
+               <b-col cols="7">
+                 <br>
+                 <br>
+                 <br>
+                   <h3>Вы еще не присоединились к событиям!</h3>
+
+                   <b-button @click="goToSearchMeeting()"  block size="lg" variant="warning">
+                      Найти событие по душе, прямо сейчас!
+                   </b-button>
+
+              </b-col>
+            </b-row>
+    </b-card>
+
     <participatedMeetingTemplate
     v-for="(meeting, index) in limitedMyMeetings"
     v-bind:key="meeting.id"
@@ -52,7 +95,7 @@
 
     ></participatedMeetingTemplate>
 
-    <b-card-footer footer-bg-variant="white" footer-border-variant="dark">
+    <b-card-footer footer-bg-variant="white" footer-border-variant="dark" v-show="showFooterButton2">
 
           <b-btn block class="showMoreCreatedMeetings"
                  @click="limitParticipatedMeeting += 2"
@@ -296,6 +339,9 @@ export default {
       place: {},
       currentPlace: null,
 
+      srcImage: require('../../../assets/sadsmile.png'),
+      srcImage2: require('../../../assets/sadsmile2.png'),
+
       limitCreatedMeeting: 2,
       disabledShowMoreCreatedMeetings: false,
       limitParticipatedMeeting: 2,
@@ -306,7 +352,7 @@ export default {
       submitButtonEditMeeting: false,
 
 
-      meetings: [
+      meetings:[
         {
           "id": 1,
           "categoryId": 1,
@@ -366,47 +412,48 @@ export default {
           "numberOfParticipants": 3,
           "minAge": 14,
           "attachment": null
-      },
-      {
-          "id": 4,
-          "categoryId": 2,
-          "meetingAddress": {
-              "id": 5,
-              "locality": "Москва",
-              "street": "Льва Толстого",
-              "house": "125",
-              "latitude": 59.93816109999999,
-              "longitude": 30.31553489999999
-          },
-          "name": "Майские",
-          "startTime": 100000,
-          "endTime": 200000,
-          "description": "Будем делать Шашлык!",
-          "maxParticipants": 10,
-          "numberOfParticipants": 3,
-          "minAge": 14,
-          "attachment": null
-      },
-      {
-          "id": 5,
-          "categoryId": 2,
-          "meetingAddress": {
-              "id": 5,
-              "locality": "Москва",
-              "street": "Льва Толстого",
-              "house": "125",
-              "latitude": 59.93816109999999,
-              "longitude": 30.31553489999999
-          },
-          "name": "Майские",
-          "startTime": 100000,
-          "endTime": 200000,
-          "description": "Будем делать Шашлык!",
-          "maxParticipants": 10,
-          "numberOfParticipants": 3,
-          "minAge": 14,
-          "attachment": null
       }
+      // ,
+      // {
+      //     "id": 4,
+      //     "categoryId": 2,
+      //     "meetingAddress": {
+      //         "id": 5,
+      //         "locality": "Москва",
+      //         "street": "Льва Толстого",
+      //         "house": "125",
+      //         "latitude": 59.93816109999999,
+      //         "longitude": 30.31553489999999
+      //     },
+      //     "name": "Майские",
+      //     "startTime": 100000,
+      //     "endTime": 200000,
+      //     "description": "Будем делать Шашлык!",
+      //     "maxParticipants": 10,
+      //     "numberOfParticipants": 3,
+      //     "minAge": 14,
+      //     "attachment": null
+      // },
+      // {
+      //     "id": 5,
+      //     "categoryId": 2,
+      //     "meetingAddress": {
+      //         "id": 5,
+      //         "locality": "Москва",
+      //         "street": "Льва Толстого",
+      //         "house": "125",
+      //         "latitude": 59.93816109999999,
+      //         "longitude": 30.31553489999999
+      //     },
+      //     "name": "Майские",
+      //     "startTime": 100000,
+      //     "endTime": 200000,
+      //     "description": "Будем делать Шашлык!",
+      //     "maxParticipants": 10,
+      //     "numberOfParticipants": 3,
+      //     "minAge": 14,
+      //     "attachment": null
+      // }
     ],
 
     myMeetings: [
@@ -575,11 +622,48 @@ export default {
 
     limitedMyMeetings() {
       return this.myMeetings.slice(0,this.limitParticipatedMeeting)
-    }
+    },
+
+    showEmptySlot() {
+        if (this.meetings.length === 0) {
+          return true
+        }
+        else {
+          return false
+        }
+    },
+
+    showFooterButton() {
+        if (this.meetings.length === 0) {
+          return false
+        }
+        else {
+          return true
+        }
+      },
+
+    showEmptySlot2() {
+        if (this.myMeetings.length === 0) {
+          return true
+                }
+        else {
+          return false
+        }
+    },
+
+    showFooterButton2() {
+        if (this.myMeetings.length === 0) {
+          return false
+        }
+        else {
+          return true
+        }
+      }
 
   },
 
   methods: {
+
      close_editing_window() {
       this.showEditingMeeting = false
     },
@@ -668,6 +752,14 @@ export default {
         });
 
     },
+
+    goToCreationMeeting() {
+      router.push({ path: '/profile/new_meeting' });
+    },
+
+    goToSearchMeeting() {
+      router.push({ path: '/profile/all_meetings' });
+    }
 
   },
 
