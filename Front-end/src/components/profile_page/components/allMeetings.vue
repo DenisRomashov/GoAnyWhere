@@ -268,7 +268,7 @@ export default {
       this.limitMeeting = 3;
       this.disabledShowMoreMeetings = false;
 
-      this.meetings = [{}, {}, {}, {}]
+       this.meetings = [{}, {}, {}, {}]
 
       axios.post("/meeting/search", this.form)
       .then(response => {

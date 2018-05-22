@@ -778,39 +778,70 @@ export default {
 
                      console.log(response);
                     }
+
+                    axios.get("/meeting/user?id="+storageInfo.userId)
+                    .then(response => {
+                      if (response.status === 200) {
+                        for (var i = 0; i < response.data.length; i++) {
+                           response.data[i].startTime = timeConverter(response.data[i].startTime);
+                           response.data[i].endTime = timeConverter(response.data[i].endTime);
+                         }
+
+                         var meetingPart = [];
+                         var counter = 0;
+                         for (var i = 0; i < response.data.length; i++) {
+                         var onlyPart = true;
+                           for(var j = 0; j < this.meetings.length; j++) {
+                             if (response.data[i].id === this.meetings[j].id) {
+                               onlyPart = false;
+                               break;
+                             }
+                           }
+                         if (onlyPart) meetingPart[counter++] = response.data[i];
+                         }
+
+                         this.myMeetings = meetingPart;
+                          console.log(response);
+                         }
+                    }).catch(function (error) {
+                      alert("OOPSSS!! participateMeetings получение митингов не сработало!")
+                      console.log(error);
+                    });
+
+
                }).catch(function (error) {
                  alert("OOPSSS!! createdMeetings получение митингов не сработало!")
                  console.log(error);
                });
 
-               axios.get("/meeting/user?id="+storageInfo.userId)
-               .then(response => {
-                 if (response.status === 200) {
-                   for (var i = 0; i < response.data.length; i++) {
-                      response.data[i].startTime = timeConverter(response.data[i].startTime);
-                      response.data[i].endTime = timeConverter(response.data[i].endTime);
-                    }
-
-                    var meetingPart = [];
-                    var counter = 0;
-                    for (var i = 0; i < response.data.length; i++) {
-                    var onlyPart = true;
-                      for(var j = 0; j < this.meetings.length; j++) {
-                        if (response.data[i].id === this.meetings[j].id) {
-                          onlyPart = false;
-                          break;
-                        }
-                      }
-                    if (onlyPart) meetingPart[counter++] = response.data[i];
-                    }
-
-                    this.myMeetings = meetingPart;
-                     console.log(response);
-                    }
-               }).catch(function (error) {
-                 alert("OOPSSS!! participateMeetings получение митингов не сработало!")
-                 console.log(error);
-               });
+               // axios.get("/meeting/user?id="+storageInfo.userId)
+               // .then(response => {
+               //   if (response.status === 200) {
+               //     for (var i = 0; i < response.data.length; i++) {
+               //        response.data[i].startTime = timeConverter(response.data[i].startTime);
+               //        response.data[i].endTime = timeConverter(response.data[i].endTime);
+               //      }
+               //
+               //      var meetingPart = [];
+               //      var counter = 0;
+               //      for (var i = 0; i < response.data.length; i++) {
+               //      var onlyPart = true;
+               //        for(var j = 0; j < this.meetings.length; j++) {
+               //          if (response.data[i].id === this.meetings[j].id) {
+               //            onlyPart = false;
+               //            break;
+               //          }
+               //        }
+               //      if (onlyPart) meetingPart[counter++] = response.data[i];
+               //      }
+               //
+               //      this.myMeetings = meetingPart;
+               //       console.log(response);
+               //      }
+               // }).catch(function (error) {
+               //   alert("OOPSSS!! participateMeetings получение митингов не сработало!")
+               //   console.log(error);
+               // });
 
       }
     },
