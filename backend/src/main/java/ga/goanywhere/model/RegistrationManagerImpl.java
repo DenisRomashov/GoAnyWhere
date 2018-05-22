@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
@@ -27,10 +26,7 @@ public class RegistrationManagerImpl implements RegistrationManager {
             throws NoSuchAlgorithmException {
         log.info("Creating user with username =  {}", username);
         Session session = SessionFactoryUtil.getSession();
-        Transaction tx = null;
         try {
-            //session.beginTransaction();
-            tx = session.beginTransaction();
 
             UserEntity user = new UserEntity();
             user.setUsername(username);
@@ -52,17 +48,11 @@ public class RegistrationManagerImpl implements RegistrationManager {
                 }
                 session.save(user);
                 session.save(userContact);
-                tx.commit();
-                //session.getTransaction().commit();
+                session.flush();
             }
 
             return user.getId();
-        }
-        catch (Exception e) {
-            if (tx != null) tx.rollback();
-            //session.getTransaction().rollback();
-            throw e;
-        }finally {
+        } finally {
             session.close();
         }
     }

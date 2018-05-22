@@ -102,7 +102,7 @@ public class MeetingFinderImpl implements MeetingFinder {
     private List<MeetingEntity> filterMeetingsByActuality(final List<MeetingEntity> meetings, final Timestamp now) {
         if (now == null) return meetings;
         log.info("Filter meetings by actuality");
-        List<MeetingEntity> response = new ArrayList<>();
+        List<MeetingEntity> response = new LinkedList<>();
         for (MeetingEntity meeting : meetings) {
             if (meeting.getEndTime().after(now)) response.add(meeting.setNumberOfParticipants());
         }

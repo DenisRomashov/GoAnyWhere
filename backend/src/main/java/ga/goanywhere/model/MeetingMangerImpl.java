@@ -23,14 +23,12 @@ public class MeetingMangerImpl implements MeetingManger {
     private final static Logger log = LogManager.getLogger(MeetingMangerImpl.class);
     private final static String CREATOR_PRIVILEGE = "creator";
     private Session currentSession;
-    private Transaction currentTransaction;
     private int methodsDepth;
 
     private Session getCurrentSession(){
         if (currentSession == null) {
             methodsDepth = 0;
             currentSession = SessionFactoryUtil.getSession();
-            currentTransaction = currentSession.beginTransaction();
         }
         methodsDepth++;
         return currentSession;
@@ -42,20 +40,6 @@ public class MeetingMangerImpl implements MeetingManger {
             currentSession = null;
         }
         methodsDepth--;
-    }
-
-    private void commitCurrentTransaction(){
-        currentSession.flush();
-        if (methodsDepth == 1) {
-            currentTransaction.commit();
-            currentTransaction = null;
-        }
-    }
-
-    private void rollbackCurrentTransation(){
-        if (currentTransaction != null)
-            currentTransaction.rollback();
-        currentTransaction = null;
     }
 
     @Override
@@ -88,15 +72,12 @@ public class MeetingMangerImpl implements MeetingManger {
             UserEntity creator = (UserEntity) session.get(UserEntity.class, creatorId);
 
             session.save(meetingEntity);
-            session.flush();
             if (id == null) applyMeeting(creator, meetingEntity, CREATOR_PRIVILEGE);
 
-            commitCurrentTransaction();
+            session.flush();
             return meetingEntity.getId();
-        } catch (Exception e) {
-            rollbackCurrentTransation();
-            throw e;
-        }  finally {
+
+        } finally {
             closeCurrentSession();
         }
     }
@@ -111,11 +92,8 @@ public class MeetingMangerImpl implements MeetingManger {
 
             applyMeeting(user, meeting, privilege);
 
-            commitCurrentTransaction();
-        } catch (Exception e) {
-            rollbackCurrentTransation();
-            throw e;
-        }finally {
+            session.flush();
+        } finally {
             closeCurrentSession();
         }
     }
@@ -136,7 +114,6 @@ public class MeetingMangerImpl implements MeetingManger {
                     privilegeEntity = new PrivilegeEntity();
                     privilegeEntity.setType(privilege);
                     session.save(privilegeEntity);
-                    commitCurrentTransaction();
                 }
             }
 
@@ -146,11 +123,8 @@ public class MeetingMangerImpl implements MeetingManger {
 
             session.save(userMeeting);
 
-            commitCurrentTransaction();
-        } catch (Exception e) {
-            rollbackCurrentTransation();
-            throw e;
-        }finally {
+            session.flush();
+        } finally {
             closeCurrentSession();
         }
     }
@@ -176,25 +150,26 @@ public class MeetingMangerImpl implements MeetingManger {
                 Query query = session.createQuery("from UserMeetingEntity where meeting_id = :meetingId")
                         .setParameter("meetingId", meetingId);
                 query.setFirstResult(0);
-                query.setMaxResults(1);
+                query.setMaxResults(2);
                 synchronized (exitMeetingLock) {
                     List<UserMeetingEntity> meetingFirstParticipant = query.list();
-                    if (meetingFirstParticipant.size() == 0) {
+                    if (meetingFirstParticipant.size() == 1) {
                         log.info("No other participants, delete meeting");
                         deleteMeeting(BigInteger.ZERO.longValue(), meetingId);
                     } else {
-                        UserMeetingEntity firstParticipant = meetingFirstParticipant.get(0);
-                        firstParticipant.setPrivilegeId(privilege.getId());
-                        session.save(firstParticipant);
+                        for (UserMeetingEntity participant : meetingFirstParticipant) {
+                            if (participant != userMeeting) {
+                                participant.setPrivilegeId(privilege.getId());
+                                session.save(participant);
+                                break;
+                            }
+                        }
                     }
                 }
             }
 
-            commitCurrentTransaction();
-        } catch (Exception e) {
-            rollbackCurrentTransation();
-            throw e;
-        }finally {
+            session.flush();
+        } finally {
             closeCurrentSession();
         }
     }
@@ -218,11 +193,9 @@ public class MeetingMangerImpl implements MeetingManger {
                             " can't delete meeting with id = " + meetingId);
                 }
             }
+
             session.delete(meeting);
-            commitCurrentTransaction();
-        } catch (Exception e) {
-            rollbackCurrentTransation();
-            throw e;
+            session.flush();
         }finally {
             closeCurrentSession();
         }
