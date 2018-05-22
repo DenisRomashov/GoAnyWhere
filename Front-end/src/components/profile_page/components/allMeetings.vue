@@ -92,7 +92,8 @@ export default {
       form: {
         searcherId: 1,
         categoryId: null,
-        locality: null
+        locality: null,
+        actuality: false
       },
       subscribeForm: {
         userId: null,
@@ -241,6 +242,8 @@ export default {
     countMeetingItems() {
       if (this.meetings.length - this.limitMeeting > 0 ) {
           this.disabledShowMoreMeetings = false;
+          this.showMoreButtons = true;
+          this.showEndShowMore = false;
           return "Показать еще! Осталось "+(this.meetings.length - this.limitMeeting)+" из "+this.meetings.length
       } else {
         if (this.limitMeeting > this.meetings.length) {
@@ -264,6 +267,8 @@ export default {
       this.form.searcherId = JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userId;
       this.limitMeeting = 3;
       this.disabledShowMoreMeetings = false;
+
+       this.meetings = [{}, {}, {}, {}]
 
       axios.post("/meeting/search", this.form)
       .then(response => {

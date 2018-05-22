@@ -21,23 +21,19 @@ public class AuthorizationManagerImpl implements AuthorizationManager {
     public BigInteger logIn(@NotNull final String username, @NotNull final String password)
             throws NoSuchAlgorithmException {
         log.info("Authorization of {}", username);
-        UserEntity userEntity;
         Session session = SessionFactoryUtil.getSession();
         try {
-            userEntity = (UserEntity) session.createQuery("from UserEntity where username = :username")
+            UserEntity userEntity = (UserEntity) session.createQuery("from UserEntity where username = :username")
                     .setString("username", username).uniqueResult();
+            if (userEntity == null)
+                throw new UserNotFoundException("There is no user with username = " + username);
+
+            if (!userEntity.getPassword().equals(HashUtil.hash(password)))
+                return BigInteger.ZERO;
+
+            return BigInteger.valueOf(userEntity.getId());
         } finally {
             session.close();
-        }
-        if (userEntity == null) {
-            log.info("No user with such username");
-            throw new UserNotFoundException("There is no user with username = " + username);
-        }
-        if (userEntity.getPassword().equals(HashUtil.hash(password))) {
-            return BigInteger.valueOf(userEntity.getId());
-        } else {
-            log.info("Incorrect password");
-            return BigInteger.ZERO;
         }
     }
 }

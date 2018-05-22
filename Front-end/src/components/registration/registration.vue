@@ -238,11 +238,6 @@ export default {
 </script>
 
 <style lang="css">
-.background {
-  background-image: url("../../assets/6.jpg");
-  background-size: cover;
-
-}
 
 .gridFullPage {
   margin-top: -4px;

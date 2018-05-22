@@ -18,65 +18,40 @@ import java.security.NoSuchAlgorithmException;
 public class RegistrationManagerImpl implements RegistrationManager {
     private final static Logger log = LogManager.getLogger(RegistrationManagerImpl.class);
 
+    private final Object createUserLock = new Object();
+
     @Override
-    public BigInteger createUser(@NotNull final String username, @NotNull final String password)
+    public Long createUser(final String username, final String password, final String email,
+                           final String firstName, final String lastName, final String sex)
             throws NoSuchAlgorithmException {
-        log.info("Creating user: {}", username);
+        log.info("Creating user with username =  {}", username);
         Session session = SessionFactoryUtil.getSession();
         try {
-            synchronized (this) {
+
+            UserEntity user = new UserEntity();
+            user.setUsername(username);
+            user.setPassword(HashUtil.hash(password));
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setSex(sex);
+
+            log.info("Adding email info of user with username = {}", username);
+            UserContactEntity userContact = new UserContactEntity();
+            userContact.setUser(user);
+            userContact.setEmail(email);
+
+            synchronized (createUserLock) {
                 if (session.createQuery("from UserEntity where username = :username")
                         .setString("username", username).uniqueResult() != null) {
                     log.info("Username {} already used", username);
                     throw new UsernameAlreadyUsedException();
                 }
-                UserEntity userEntity = new UserEntity();
-                userEntity.setUsername(username);
-                userEntity.setPassword(HashUtil.hash(password));
-                session.save(userEntity);
+                session.save(user);
+                session.save(userContact);
                 session.flush();
-                return BigInteger.valueOf(userEntity.getId());
             }
-        } finally {
-            session.close();
-        }
-    }
 
-    @Override
-    public BigInteger createUser(@NotNull final String username, @NotNull final String password,
-                                 @NotNull final String email)
-            throws NoSuchAlgorithmException {
-        BigInteger userId = createUser(username, password);
-        log.info("Adding email info of user with id = {}", userId);
-        UserContactEntity userContactEntity = new UserContactEntity();
-        userContactEntity.setUserId(new UserEntity(userId.longValue()));
-        userContactEntity.setEmail(email);
-        Session session = SessionFactoryUtil.getSession();
-        try {
-            session.save(userContactEntity);
-            session.flush();
-            return userId;
-        } finally {
-            session.close();
-        }
-    }
-
-    @Override
-    public BigInteger createUser(@NotNull final String username, @NotNull final String password,
-                                 @NotNull final String email, @NotNull final String firstName,
-                                 @NotNull final String lastName, @NotNull final String sex)
-            throws  NoSuchAlgorithmException{
-        BigInteger userId = createUser(username, password, email);
-        log.info("Adding info about user with id = {}", userId);
-        Session session = SessionFactoryUtil.getSession();
-        try {
-            UserEntity userEntity = (UserEntity) session.get(UserEntity.class, userId.longValue());
-            userEntity.setFirstName(firstName);
-            userEntity.setLastName(lastName);
-            userEntity.setSex(sex);
-            session.update(userEntity);
-            session.flush();
-            return userId;
+            return user.getId();
         } finally {
             session.close();
         }

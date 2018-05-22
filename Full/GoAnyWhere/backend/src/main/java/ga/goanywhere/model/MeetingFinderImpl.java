@@ -70,20 +70,7 @@ public class MeetingFinderImpl implements MeetingFinder {
     }
 
     @Override
-    public List<MeetingEntity> findActualMeetingsForUser(final Long userId) {
-        log.info("Finding actual meetings for user with id = {}", userId);
-        List<MeetingEntity> meetingsOfUser = findMeetingsByUser(userId);
-        List<MeetingEntity> response = new ArrayList<>();
-        Timestamp now = new Timestamp(System.currentTimeMillis());
-        for (MeetingEntity meetingOfUser : meetingsOfUser) {
-            if (meetingOfUser.getEndTime().after(now)) response.add(meetingOfUser.setNumberOfParticipants());
-        }
-        return response;
-
-    }
-
-    @Override
-    public List<MeetingEntity> meetingSearch(Long searcherId, Long categoryId, String locality) {
+    public List<MeetingEntity> meetingSearch(Long searcherId, Long categoryId, String locality, Boolean actuality) {
         Session session = SessionFactoryUtil.getSession();
         try {
             log.info("Search meetings without participantId = {}", searcherId);
@@ -99,8 +86,11 @@ public class MeetingFinderImpl implements MeetingFinder {
                 }
                 if (!searcherIsParticipant) response.add(meeting);
             }
+            if (actuality == null || actuality)
+            response = filterMeetingsByActuality(response, new Timestamp(System.currentTimeMillis()));
             response = filterMeetingsByCategory(response, categoryId);
             response = filterMeetingsByLocality(response, locality);
+            response = sortByStartDate(response);
             for (MeetingEntity meeting : response) {
                 meeting.setNumberOfParticipants();
             }
@@ -110,11 +100,23 @@ public class MeetingFinderImpl implements MeetingFinder {
         }
     }
 
-    @Override
-    public List<MeetingEntity> filterMeetingsByCategory(final List<MeetingEntity> meetings, final Long categoryId) {
+    private List<MeetingEntity> filterMeetingsByActuality(final List<MeetingEntity> meetings, final Timestamp now) {
+        if (meetings == null) return null;
+        if (now == null) return meetings;
+        log.info("Filter meetings by actuality");
+        List<MeetingEntity> response = new LinkedList<>();
+        for (MeetingEntity meeting : meetings) {
+            if (meeting.getEndTime().after(now)) response.add(meeting.setNumberOfParticipants());
+        }
+        return response;
+
+    }
+
+    private List<MeetingEntity> filterMeetingsByCategory(final List<MeetingEntity> meetings, final Long categoryId) {
+        if (meetings == null) return null;
         if (categoryId == null) return meetings;
         log.info("Filter meetings by category with id = {}", categoryId);
-        List<MeetingEntity> filteredMeetings = new LinkedList<>();
+        List<MeetingEntity> filteredMeetings = new ArrayList<>();
         for (MeetingEntity meeting : meetings) {
             if (meeting.getCategoryId().equals(categoryId))
                 filteredMeetings.add(meeting);
@@ -122,8 +124,8 @@ public class MeetingFinderImpl implements MeetingFinder {
         return filteredMeetings;
     }
 
-    @Override
-    public List<MeetingEntity> filterMeetingsByLocality(final List<MeetingEntity> meetings, final String locality) {
+    private List<MeetingEntity> filterMeetingsByLocality(final List<MeetingEntity> meetings, final String locality) {
+        if (meetings == null) return null;
         if (locality == null) return meetings;
         log.info("Filter meetings with locality = {}", locality);
         List<MeetingEntity> filteredMeetings = new LinkedList<>();
@@ -132,5 +134,25 @@ public class MeetingFinderImpl implements MeetingFinder {
                 filteredMeetings.add(meeting);
         }
         return filteredMeetings;
+    }
+
+    private List<MeetingEntity> sortByStartDate(List<MeetingEntity> meetings) {
+        if (meetings == null) return null;
+        log.info("Sorting meetings by start date");
+        List<MeetingEntity> sorted = new LinkedList<>();
+        boolean[] visited = new boolean[meetings.size()];
+        for (int i = 0; i < meetings.size(); i++){
+            Timestamp earliest = new Timestamp(Long.MAX_VALUE);
+            int current = -1;
+            for (int j = 0; j < meetings.size(); j++) {
+                if (!visited[j] && meetings.get(j).getStartTime().before(earliest)) {
+                    earliest = meetings.get(j).getStartTime();
+                    current = j;
+                }
+            }
+            sorted.add(meetings.get(current));
+            visited[current] = true;
+        }
+        return sorted;
     }
 }

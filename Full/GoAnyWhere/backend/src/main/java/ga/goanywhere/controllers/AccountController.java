@@ -10,7 +10,6 @@ import lombok.Setter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigInteger;
 import java.sql.Date;
 
 @Controller
@@ -27,7 +26,7 @@ public class AccountController {
         profileManager.updateUserInfo(userInfo.getId(), userInfo.getAddressId(), userInfo.getEmail(),
                 userInfo.getPhoneNumber(), userInfo.getFacebookReference(), userInfo.getTwitterReference(),
                 userInfo.getVkReference(), userInfo.getBirthday(), userInfo.getFirstName(), userInfo.getLastName(),
-                userInfo.getSex());
+                userInfo.getSex(), userInfo.getPreferred());
         return new Id(userInfo.getId());
     }
 
@@ -55,5 +54,6 @@ public class AccountController {
         private String firstName;
         private String lastName;
         private String sex;
+        private String preferred;
     }
 }

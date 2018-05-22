@@ -11,6 +11,27 @@
         </b-badge>
     </b-card-header>
 
+    <!-- Когда нет событий отображаем -->
+    <b-card  bg-variant="white" text-variant="dark" v-if="showEmptySlot">
+            <b-row>
+              <!-- Sad smile -->
+              <b-col cols="4">
+                <b-img rounded="circle" :src="srcImage" width="230" height="230" alt="img" class="m-1" />
+               </b-col>
+               <b-col cols="7">
+                 <br>
+                 <br>
+                 <br>
+                   <h3>У вас еще нет созданных событий!</h3>
+
+                   <b-button @click="goToCreationMeeting()"  block size="lg" variant="warning">
+                       Создать событие, прямо сейчас!
+                   </b-button>
+
+              </b-col>
+            </b-row>
+    </b-card>
+
     <createdMeetingTemplate
     v-for="(meeting, index) in limitedMeetings"
     v-bind:key="meeting.id"
@@ -21,20 +42,13 @@
 
     ></createdMeetingTemplate>
 
-    <b-card-footer footer-bg-variant="white" footer-border-variant="white">
+    <b-card-footer footer-bg-variant="white" footer-border-variant="white" v-show="showFooterButton">
 
           <b-btn block class="showMoreCreatedMeetings"
                  @click="limitCreatedMeeting += 2"
                  :disabled="disabledShowMoreCreatedMeetings"
                   variant="outline-dark"> {{ countCreatedMeetingItems }}
           </b-btn>
-          <b-popover ref="popoverOne" target="editinfobutton"
-           placement="left"
-           title="Нажми!"
-           triggers="hover focus"
-           content="И ты сможешь отредактировать информацию :)">
-         </b-popover>
-
     </b-card-footer>
   </b-container>
   <br>
@@ -49,6 +63,28 @@
         </b-badge>
     </b-card-header>
 
+
+    <!-- Когда нет событий отображаем -->
+    <b-card  bg-variant="white" text-variant="dark" v-if="showEmptySlot2">
+            <b-row>
+              <!-- Sad smile -->
+              <b-col cols="4">
+                <b-img rounded="circle" :src="srcImage2" width="230" height="230" alt="img" class="m-1" />
+               </b-col>
+               <b-col cols="7">
+                 <br>
+                 <br>
+                 <br>
+                   <h3>Вы еще не присоединились к событиям!</h3>
+
+                   <b-button @click="goToSearchMeeting()"  block size="lg" variant="warning">
+                      Найти событие по душе, прямо сейчас!
+                   </b-button>
+
+              </b-col>
+            </b-row>
+    </b-card>
+
     <participatedMeetingTemplate
     v-for="(meeting, index) in limitedMyMeetings"
     v-bind:key="meeting.id"
@@ -59,7 +95,7 @@
 
     ></participatedMeetingTemplate>
 
-    <b-card-footer footer-bg-variant="white" footer-border-variant="dark">
+    <b-card-footer footer-bg-variant="white" footer-border-variant="dark" v-show="showFooterButton2">
 
           <b-btn block class="showMoreCreatedMeetings"
                  @click="limitParticipatedMeeting += 2"
@@ -118,13 +154,18 @@
           <br>
           <b-row>
             <b-col>
+            </b-col>
+            <b-col sm="8">
               <b-card
-              bg-variant="dark"
+              bg-variant="white"
                 text-variant="white"
+                header-text-variant="dark"
                 header="Категория вашего события:"
                 class="text-center">
-                  <b-form-select size="" v-model="meeting.categoryId" :options="options" class="mb-3" :select-size="3" />
+                  <b-form-select size="" v-model="meeting.categoryId" :options="options" class="mb-3" :select-size="4" style="text-align: center;" />
             </b-card>
+            </b-col>
+            <b-col>
             </b-col>
           </b-row>
           <br>
@@ -138,8 +179,7 @@
                     <b-btn  variant="success">Время начала: </b-btn>
                   </b-input-group-prepend>
 
-                  <b-form-input  v-model="meeting.startTime"
-                    type="datetime-local">
+                  <b-form-input disabled type="datetime-local" v-model="meeting.startTime">
                   </b-form-input>
 
               </b-input-group>
@@ -150,8 +190,7 @@
                     <b-btn  variant="danger">Время окончания: </b-btn>
                   </b-input-group-prepend>
 
-                  <b-form-input  v-model="meeting.endTime"
-                    type="datetime-local">
+                  <b-form-input type="datetime-local" v-model="meeting.endTime">
                   </b-form-input>
 
               </b-input-group>
@@ -170,7 +209,7 @@
                     <b-btn  variant="dark">Максимальное количество человек: </b-btn>
                   </b-input-group-prepend>
 
-                  <b-form-input  v-model.trim="meeting.maxParticipants"
+                  <b-form-input disabled v-model.trim="meeting.maxParticipants"
                     type="number">
                   </b-form-input>
 
@@ -189,7 +228,7 @@
                     <b-btn  variant="dark">Минимальный возвраст: </b-btn>
                   </b-input-group-prepend>
 
-                  <b-form-input  v-model.trim="meeting.minAge"
+                  <b-form-input disabled v-model.trim="meeting.minAge"
                     type="number">
                   </b-form-input>
 
@@ -198,16 +237,32 @@
             <b-col>
             </b-col>
           </b-row>
+
+
+
         </b-container>
 
       <div slot="modal-footer" class="w-100">
+        <b-alert :show="dismissCountDown"
+          dismissible
+          variant=""
+          @dismissed="dismissCountDown=0"
+          @dismiss-count-down="countDownChanged">
+          <h5>Событие обновлено! Поздравляем :) {{dismissCountDown}} секунд...</h5>
+            <b-progress variant="danger"
+                :max="dismissSecs"
+                :value="dismissCountDown"
+                height="10px">
+            </b-progress>
+            <br>
+        </b-alert>
         <b-btn  block size="lg"
                 variant="outline-danger"
                 @click="upDateMeeting()"
+                :disabled="submitButtonEditMeeting"
                 > Подтвердить изменения!
         </b-btn>
       </div>
-            {{ meeting }}
     </b-modal>
 
 
@@ -273,16 +328,31 @@
 import axios from 'axios'
 import router from '../../../router'
 import  { timeConverter }  from './timeconverter'
+import  { timeConverter2 }  from './timeconverter_edit'
 import createdMeetingTemplate from './templates/createdMeetingTemplate'
 import participatedMeetingTemplate from './templates/participatedMeetingTemplate'
 export default {
   data () {
     return {
+      center: { lat: 59.9342802, lng: 30.335098600000038  },
+      marker: {},
+      place: {},
+      currentPlace: null,
+
+      srcImage: require('../../../assets/sadsmile.png'),
+      srcImage2: require('../../../assets/sadsmile2.png'),
+
       limitCreatedMeeting: 2,
       disabledShowMoreCreatedMeetings: false,
       limitParticipatedMeeting: 2,
       disabledShowMoreParticipatedMeetings: false,
-      meetings: [
+
+      dismissSecs: 3,
+      dismissCountDown: 0,
+      submitButtonEditMeeting: false,
+
+
+      meetings:[
         {
           "id": 1,
           "categoryId": 1,
@@ -295,8 +365,8 @@ export default {
               "longitude": 30.314559700000018
           },
           "name": "Встреча на Невском",
-          "startTime": "1995-03-09",
-          "endTime": 200000,
+          "startTime": 1525512900000,
+          "endTime": 1526547600000,
           "description": "Клаасно провести время в большой компании",
           "maxParticipants": 25,
           "numberOfParticipants": 5,
@@ -342,47 +412,48 @@ export default {
           "numberOfParticipants": 3,
           "minAge": 14,
           "attachment": null
-      },
-      {
-          "id": 4,
-          "categoryId": 2,
-          "meetingAddress": {
-              "id": 5,
-              "locality": "Москва",
-              "street": "Льва Толстого",
-              "house": "125",
-              "latitude": 59.93816109999999,
-              "longitude": 30.31553489999999
-          },
-          "name": "Майские",
-          "startTime": 100000,
-          "endTime": 200000,
-          "description": "Будем делать Шашлык!",
-          "maxParticipants": 10,
-          "numberOfParticipants": 3,
-          "minAge": 14,
-          "attachment": null
-      },
-      {
-          "id": 5,
-          "categoryId": 2,
-          "meetingAddress": {
-              "id": 5,
-              "locality": "Москва",
-              "street": "Льва Толстого",
-              "house": "125",
-              "latitude": 59.93816109999999,
-              "longitude": 30.31553489999999
-          },
-          "name": "Майские",
-          "startTime": 100000,
-          "endTime": 200000,
-          "description": "Будем делать Шашлык!",
-          "maxParticipants": 10,
-          "numberOfParticipants": 3,
-          "minAge": 14,
-          "attachment": null
       }
+      // ,
+      // {
+      //     "id": 4,
+      //     "categoryId": 2,
+      //     "meetingAddress": {
+      //         "id": 5,
+      //         "locality": "Москва",
+      //         "street": "Льва Толстого",
+      //         "house": "125",
+      //         "latitude": 59.93816109999999,
+      //         "longitude": 30.31553489999999
+      //     },
+      //     "name": "Майские",
+      //     "startTime": 100000,
+      //     "endTime": 200000,
+      //     "description": "Будем делать Шашлык!",
+      //     "maxParticipants": 10,
+      //     "numberOfParticipants": 3,
+      //     "minAge": 14,
+      //     "attachment": null
+      // },
+      // {
+      //     "id": 5,
+      //     "categoryId": 2,
+      //     "meetingAddress": {
+      //         "id": 5,
+      //         "locality": "Москва",
+      //         "street": "Льва Толстого",
+      //         "house": "125",
+      //         "latitude": 59.93816109999999,
+      //         "longitude": 30.31553489999999
+      //     },
+      //     "name": "Майские",
+      //     "startTime": 100000,
+      //     "endTime": 200000,
+      //     "description": "Будем делать Шашлык!",
+      //     "maxParticipants": 10,
+      //     "numberOfParticipants": 3,
+      //     "minAge": 14,
+      //     "attachment": null
+      // }
     ],
 
     myMeetings: [
@@ -551,14 +622,68 @@ export default {
 
     limitedMyMeetings() {
       return this.myMeetings.slice(0,this.limitParticipatedMeeting)
-    }
+    },
+
+    showEmptySlot() {
+        if (this.meetings.length === 0) {
+          return true
+        }
+        else {
+          return false
+        }
+    },
+
+    showFooterButton() {
+        if (this.meetings.length === 0) {
+          return false
+        }
+        else {
+          return true
+        }
+      },
+
+    showEmptySlot2() {
+        if (this.myMeetings.length === 0) {
+          return true
+                }
+        else {
+          return false
+        }
+    },
+
+    showFooterButton2() {
+        if (this.myMeetings.length === 0) {
+          return false
+        }
+        else {
+          return true
+        }
+      }
 
   },
 
   methods: {
+
+     close_editing_window() {
+      this.showEditingMeeting = false
+    },
+
+    countDownChanged (dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
+    },
+    showAlert () {
+      this.dismissCountDown = this.dismissSecs
+    },
+
+    setPlace(place) {
+      this.currentPlace = place;
+    },
+
+
     editMeeting: function(index) {
       this.meeting = this.meetings[index];
       this.showEditingMeeting = true;
+      this.submitButtonEditMeeting = false;
     },
 
     deleteOrUnsubscribe: function(index) {
@@ -608,21 +733,33 @@ export default {
     upDateMeeting: function() {
       this.meeting.creatorId = JSON.parse(window.localStorage.getItem('STORAGE_USER_INFO')).userId;
       this.meeting.addressId = this.meeting.meetingAddress.id;
+
         axios.post("/meeting", this.meeting)
         .then(response => {
-
           if (response.status === 200) {
-            alert("Событие Обновлено! Поздравляем!");
+            setTimeout(this.close_editing_window, 3000)
+            this.submitButtonEditMeeting = true;
+            this.showAlert ();
+            // alert("Событие Обновлено! Поздравляем!");
             // Принудительная перезагрузка страницы
-            location.reload();
+            // location.reload();
+            // this.showEditingMeeting = false;
             console.log(response);
           }
         }).catch(function (error) {
-          alert("Error upDateMeeting");
+          alert("Ошибка. Обновление события! upDateMeeting method");
           console.log(error);
         });
 
     },
+
+    goToCreationMeeting() {
+      router.push({ path: '/profile/new_meeting' });
+    },
+
+    goToSearchMeeting() {
+      router.push({ path: '/profile/all_meetings' });
+    }
 
   },
 
@@ -634,45 +771,77 @@ export default {
                .then(response => {
                  if (response.status === 200) {
                    for (var i = 0; i < response.data.length; i++) {
-                      response.data[i].startTime = timeConverter(response.data[i].startTime);
-                      response.data[i].endTime = timeConverter(response.data[i].endTime);
+                      response.data[i].startTime = timeConverter2(response.data[i].startTime);
+                      response.data[i].endTime = timeConverter2(response.data[i].endTime);
                     }
                     this.meetings = response.data;
+
                      console.log(response);
                     }
+
+                    axios.get("/meeting/user?id="+storageInfo.userId)
+                    .then(response => {
+                      if (response.status === 200) {
+                        for (var i = 0; i < response.data.length; i++) {
+                           response.data[i].startTime = timeConverter(response.data[i].startTime);
+                           response.data[i].endTime = timeConverter(response.data[i].endTime);
+                         }
+
+                         var meetingPart = [];
+                         var counter = 0;
+                         for (var i = 0; i < response.data.length; i++) {
+                         var onlyPart = true;
+                           for(var j = 0; j < this.meetings.length; j++) {
+                             if (response.data[i].id === this.meetings[j].id) {
+                               onlyPart = false;
+                               break;
+                             }
+                           }
+                         if (onlyPart) meetingPart[counter++] = response.data[i];
+                         }
+
+                         this.myMeetings = meetingPart;
+                          console.log(response);
+                         }
+                    }).catch(function (error) {
+                      alert("OOPSSS!! participateMeetings получение митингов не сработало!")
+                      console.log(error);
+                    });
+
+
                }).catch(function (error) {
                  alert("OOPSSS!! createdMeetings получение митингов не сработало!")
                  console.log(error);
                });
 
-               axios.get("/meeting/user?id="+storageInfo.userId)
-               .then(response => {
-                 if (response.status === 200) {
-                   for (var i = 0; i < response.data.length; i++) {
-                      response.data[i].startTime = timeConverter(response.data[i].startTime);
-                      response.data[i].endTime = timeConverter(response.data[i].endTime);
-                    }
-
-                    var meetingPart = [];
-                    var counter = 0;
-                    for (var i = 0; i < response.data.length; i++) {
-                    var onlyPart = true;
-                      for(var j = 0; j < this.meetings.length; j++) {
-                        if (response.data[i].id === this.meetings[j].id) {
-                          onlyPart = false;
-                          break;
-                        }
-                      }
-                    if (onlyPart) meetingPart[counter++] = response.data[i];
-                    }
-
-                    this.myMeetings = meetingPart;
-                     console.log(response);
-                    }
-               }).catch(function (error) {
-                 alert("OOPSSS!! participateMeetings получение митингов не сработало!")
-                 console.log(error);
-               });
+               // axios.get("/meeting/user?id="+storageInfo.userId)
+               // .then(response => {
+               //   if (response.status === 200) {
+               //     for (var i = 0; i < response.data.length; i++) {
+               //        response.data[i].startTime = timeConverter(response.data[i].startTime);
+               //        response.data[i].endTime = timeConverter(response.data[i].endTime);
+               //      }
+               //
+               //      var meetingPart = [];
+               //      var counter = 0;
+               //      for (var i = 0; i < response.data.length; i++) {
+               //      var onlyPart = true;
+               //        for(var j = 0; j < this.meetings.length; j++) {
+               //          if (response.data[i].id === this.meetings[j].id) {
+               //            onlyPart = false;
+               //            break;
+               //          }
+               //        }
+               //      if (onlyPart) meetingPart[counter++] = response.data[i];
+               //      }
+               //
+               //      this.myMeetings = meetingPart;
+               //       console.log(response);
+               //      }
+               // }).catch(function (error) {
+               //   alert("OOPSSS!! participateMeetings получение митингов не сработало!")
+               //   console.log(error);
+               // });
 
       }
     },

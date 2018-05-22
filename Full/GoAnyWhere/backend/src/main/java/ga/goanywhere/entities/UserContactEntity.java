@@ -22,7 +22,7 @@ public class UserContactEntity {
     @JsonIgnore
     @OneToOne
     @JoinColumn(name = "user_id")
-    private UserEntity userId;
+    private UserEntity user;
 
     @Column(name = "email")
     private String email;
