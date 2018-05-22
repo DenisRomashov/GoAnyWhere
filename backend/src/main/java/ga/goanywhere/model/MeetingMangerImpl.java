@@ -3,6 +3,7 @@ package ga.goanywhere.model;
 import ga.goanywhere.entities.*;
 import ga.goanywhere.dbutils.SessionFactoryUtil;
 import ga.goanywhere.exceptions.NotEnoughPrivilegesException;
+import ga.goanywhere.exceptions.TooManyParticipantsException;
 import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -117,13 +118,18 @@ public class MeetingMangerImpl implements MeetingManger {
                 }
             }
 
-            UserMeetingEntity userMeeting = new UserMeetingEntity();
-            userMeeting.setUserMeetingPK(new UserMeetingEntity.UserMeetingPK(user, meeting));
-            userMeeting.setPrivilegeId(privilegeEntity.getId());
-
-            session.save(userMeeting);
-
-            session.flush();
+            synchronized (applyMeetingLock) {
+                if (meeting.getParticipants() == null ||
+                        meeting.getParticipants().size() < meeting.getMaxParticipants()) {
+                    UserMeetingEntity userMeeting = new UserMeetingEntity();
+                    userMeeting.setUserMeetingPK(new UserMeetingEntity.UserMeetingPK(user, meeting));
+                    userMeeting.setPrivilegeId(privilegeEntity.getId());
+                    session.save(userMeeting);
+                    session.flush();
+                }
+                else
+                    throw new TooManyParticipantsException();
+            }
         } finally {
             closeCurrentSession();
         }
