@@ -42,7 +42,6 @@ public class ProfileManagerImpl implements ProfileManager {
         log.info("Updating information about user with id = {}", userId);
         Session session = SessionFactoryUtil.getSession();
         try {
-            session.beginTransaction();
 
             UserEntity user = (UserEntity) session.get(UserEntity.class, userId);
             if (user == null)
@@ -65,12 +64,9 @@ public class ProfileManagerImpl implements ProfileManager {
 
             session.update(user);
             session.update(userContact);
-            session.getTransaction().commit();
+            session.flush();
 
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            throw e;
-        }finally {
+        } finally {
             session.close();
         }
 

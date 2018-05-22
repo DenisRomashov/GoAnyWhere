@@ -27,10 +27,16 @@
         <b-col sm="4">
           <div>
             <b-button-group vertical size="">
-              <b-button :variant="buttonSubscribeVariant" v-on:click="subscribe(index)" :disabled="addedButtonDisable">
+              <b-button :variant="buttonSubscribeVariant" v-on:click="subscribe(index)" :disabled="addedButtonDisable" v-if="countMeetingParticipants">
                 <i class="fas fa-plus" v-show="plus"></i>
                 <i class="fas fa-check-circle" v-show="added" ></i> {{ butttonTitleSubscribe }}
               </b-button>
+
+              <b-button variant="dark"  disabled v-else>
+                <i class="fas fa-ban"></i></i> Больше нет мест :(
+              </b-button>
+
+
               </b-button-group>
             </div>
           </b-col>
@@ -119,9 +125,13 @@
                     <strong>*</strong>Подробные данные участников вы сможете увидеть, если присоеденитесь к этому событию
                 </b-collapse>
                 <br>
-                <b-button block :variant="buttonSubscribeVariant" v-on:click="subscribe(index)" :disabled="addedButtonDisable">
+                <b-button block :variant="buttonSubscribeVariant" v-on:click="subscribe(index)" :disabled="addedButtonDisable" v-if="countMeetingParticipants">
                   <i class="fas fa-plus" v-show="plus"></i>
-                  <i class="fas fa-check-circle" v-show="added" ></i> {{ butttonTitleSubscribe }}</b-button>
+                  <i class="fas fa-check-circle" v-show="added" ></i> {{ butttonTitleSubscribe }}
+                </b-button>
+                <b-button block variant="dark"  disabled v-else>
+                  <i class="fas fa-ban"></i></i> Больше нет мест :(
+                </b-button>
               </b-card>
             </b-collapse>
           </b-col>
@@ -259,6 +269,17 @@ export default {
         { value: '19', text: 'Другое'},
       ]
     }
+  },
+
+  computed: {
+    countMeetingParticipants() {
+      if (this.meeting.numberOfParticipants === this.meeting.maxParticipants) {
+        return false
+      }else {
+        return true
+      }
+    }
+
   },
 
   methods: {

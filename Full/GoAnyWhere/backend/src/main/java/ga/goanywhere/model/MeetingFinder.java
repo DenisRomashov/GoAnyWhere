@@ -11,6 +11,4 @@ public interface MeetingFinder {
     List<MeetingEntity> findMeetingsCreatedByUser(Long userId);
 
     List<MeetingEntity> meetingSearch(Long searcherId, Long categoryId, String locality, Boolean actuality);
-    List<MeetingEntity> filterMeetingsByCategory(List<MeetingEntity> meetings, Long categoryId);
-    List<MeetingEntity> filterMeetingsByLocality(List<MeetingEntity> meetings, String locality);
 }

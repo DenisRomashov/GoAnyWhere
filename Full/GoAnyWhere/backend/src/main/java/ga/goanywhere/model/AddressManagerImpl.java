@@ -17,7 +17,6 @@ public class AddressManagerImpl implements AddressManager {
         Session session = SessionFactoryUtil.getSession();
         try {
             synchronized (this) {
-                session.beginTransaction();
 
                 AddressEntity existingAddress = (AddressEntity) session.createQuery("from AddressEntity where locality = :locality and " +
                         "street = :street and house = :house and latitude = :latitude and longitude = :longitude")
@@ -27,14 +26,11 @@ public class AddressManagerImpl implements AddressManager {
                 if (existingAddress != null)
                     return existingAddress.getId();
                 session.save(addressEntity);
-                session.getTransaction().commit();
+                session.flush();
 
                 return addressEntity.getId();
             }
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            throw e;
-        }finally {
+        } finally {
             session.close();
         }
     }
